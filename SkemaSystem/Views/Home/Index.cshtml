@@ -1,4 +1,6 @@
-﻿@{
+﻿@model ICollection<String>
+
+@{
     ViewBag.Title = "Forsiden";
 }
 
@@ -8,6 +10,10 @@
 
 <div class="row">
     <div class="col-md-12">
-        <p>Lorem ipsum dolor bacon</p>
+        <h1>All the database items from the table test</h1>
+        @foreach (var item in Model)
+        {
+            <div class="alert alert-danger">@item</div>
+        }
     </div>
 </div>
