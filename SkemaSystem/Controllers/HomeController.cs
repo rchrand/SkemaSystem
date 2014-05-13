@@ -12,7 +12,7 @@ namespace SkemaSystem.Controllers
     {
         public ActionResult Index()
         {
-            var sqlCon = new SqlConnection(ConfigurationManager.ConnectionStrings["AppHarborDB"].ConnectionString);
+            var sqlCon = new SqlConnection(ConfigurationManager.ConnectionStrings["skeamsysdb"].ConnectionString);
             List<String> strings = new List<String>();
             var sql = "SELECT * FROM test";
 
