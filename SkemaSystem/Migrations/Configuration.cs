@@ -10,15 +10,17 @@ namespace SkemaSystem.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(SkemaSystem.Models.SkeamSystemDb context)
         {
             context.Teachers.AddOrUpdate(
-                t => t.Name,
-                new Teacher { Id = 1, Name = "Torben Krøjmand" },
-                new Teacher { Id = 2, Name = "Hanne Sommer" });
+              p => p.Name,
+              new Teacher { Name = "Torben Krøjmand" },
+              new Teacher { Name = "Hanne Sommer" },
+              new Teacher { Name = "Erik Jacobsen" }
+            );
         }
     }
 }
