@@ -26,7 +26,6 @@ namespace SkemaSystem.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "This is a quite awesome about page!";
-            ViewBag.DifferentMessage = "How are you doing?";
 
             return View();
         }
