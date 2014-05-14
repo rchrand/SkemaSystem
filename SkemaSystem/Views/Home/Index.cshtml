@@ -1,4 +1,4 @@
-﻿@model ICollection<String>
+﻿@model IEnumerable<SkemaSystem.Models.Teacher>
 
 @{
     ViewBag.Title = "Forsiden";
@@ -14,7 +14,7 @@
         <h1>All the database items from the table test</h1>
         @foreach (var item in Model)
         {
-            <div class="alert alert-danger">@item</div>
+            <div class="alert alert-danger">@item.Name </div>
         }
     </div>
 </div>

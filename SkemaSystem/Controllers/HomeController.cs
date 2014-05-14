@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SkemaSystem.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -10,24 +11,16 @@ namespace SkemaSystem.Controllers
 {
     public class HomeController : Controller
     {
+        SkeamSystemDb _db = new SkeamSystemDb();
+
         public ActionResult Index()
         {
-            var sqlCon = new SqlConnection(ConfigurationManager.ConnectionStrings["skeamsysdb"].ConnectionString);
-            List<String> strings = new List<String>();
-            var sql = "SELECT * FROM test";
+            var model =
+                from t in _db.Teachers
+                orderby t.Name ascending
+                select t;
 
-            sqlCon.Open();
-            var cmd = new SqlCommand(sql, sqlCon);
-            SqlDataReader reader = cmd.ExecuteReader();
-
-            while (reader.Read())
-            {
-                strings.Add(reader["test"] as String);
-            }
-
-            sqlCon.Close();
-            reader.Close();
-            return View(strings);
+            return View(model);
         }
 
         public ActionResult About()
