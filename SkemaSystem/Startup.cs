@@ -6,6 +6,8 @@ namespace SkemaSystem
 {
     public partial class Startup
     {
+        //hello
+
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
