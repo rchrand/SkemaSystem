@@ -10,7 +10,7 @@ namespace SkemaSystem.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(SkemaSystem.Models.SkeamSystemDb context)
