@@ -32,7 +32,7 @@ namespace SkemaSystem.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "This is a quite awesome about page!";
 
             return View();
         }
