@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SkemaSystem.Migrations;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -14,6 +15,11 @@ namespace SkemaSystem.Models
 
         }
         public DbSet<Teacher> Teachers { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
+        }
 
     }
 }
