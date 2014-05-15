@@ -14,7 +14,9 @@ namespace SkemaSystem.Models
         {
 
         }
+
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Education> Educations { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
