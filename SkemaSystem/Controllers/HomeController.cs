@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace SkemaSystem.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         SkeamSystemDb _db = new SkeamSystemDb();
 
