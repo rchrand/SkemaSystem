@@ -1,15 +1,23 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿@width: 1000px;
+@padding: 10px;
+@blue: #0099CC;
+
+html, body {
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
 }
 
 header {
-    background-color:#0099CC;
+    background-color:@blue;
 
     > div {
-        max-width:1000px;
-
-          }
+        width:@width;
+        max-width:@width;
+        margin:0 auto;
+        padding:@padding;
+    }
 }
 
 main {
