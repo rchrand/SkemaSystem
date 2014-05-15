@@ -11,12 +11,22 @@ namespace SkemaSystem.Controllers
 {
     public class HomeController : Controller
     {
-        SkeamSystemDb _db = new SkeamSystemDb();
+        ISkemaSystemDb _db; 
+
+        public HomeController()
+        {
+            _db = new SkeamSystemDb();
+        }
+
+        public HomeController(ISkemaSystemDb db)
+        {
+            _db = db;
+        }
 
         public ActionResult Index()
         {
             var model =
-                from t in _db.Teachers
+                from t in _db.Query<Teacher>()
                 orderby t.Name ascending
                 select t;
 
