@@ -9,7 +9,40 @@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <header>
+        <div>
+            <div id="logo" />
+            <nav class="subnav">
+                <ul>
+                    <li>
+                        @Html.Partial("_LoginPartial")
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <nav>
+            @foreach (var link in @ViewBag.Navigation)
+            {
+                <ul>
+                    @*<li>@Html.ActionLink(link.Title, link.Action, link.Controller)</li>*@
+                </ul>
+            }
+        </nav>
+    </header>
+
+    <main>
+
+        @if(IsSectionDefined("Subheader")) {
+            <section class="subheader">
+                @RenderSection("Subheader", required: false)
+            </section>
+        }
+        <section>
+            @RenderBody()
+        </section>
+
+    </main>
+    @*<div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -33,7 +66,7 @@
         <footer>
             <p>&copy; @DateTime.Now.Year - Skema System!</p>
         </footer>
-    </div>
+    </div>*@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
