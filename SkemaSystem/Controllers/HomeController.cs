@@ -13,8 +13,12 @@ namespace SkemaSystem.Controllers
     {
         SkeamSystemDb _db = new SkeamSystemDb();
 
-        public ActionResult Index()
+        public ActionResult Index(string education)
         {
+            if (education != null)
+            {
+                //RedirectToAction("Index", "Education");
+            }
             var model =
                 from t in _db.Teachers
                 orderby t.Name ascending

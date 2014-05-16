@@ -1,6 +1,10 @@
 ﻿@width: 1000px;
 @padding: 10px;
+
+/* colors */
 @blue: #0099CC;
+@borderLight: #EEEEEE;
+@borderDark: #DDDDDD;
 
 html, body {
     margin:0;
@@ -9,19 +13,98 @@ html, body {
     height:100%;
 }
 
+body {
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:12px;
+    display:table;
+}
+
+* {
+    box-sizing:border-box;
+}
+
+a {
+    color:@blue;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin:0;
+}
+
 header {
     background-color:@blue;
+    color:#FFFFFF;
 
-    > div {
+    #logo {
+        float:left;
+    }
+
+    > div, > nav {
         width:@width;
         max-width:@width;
         margin:0 auto;
-        padding:@padding;
+        padding:@padding 20px @padding 20px;
+
+        .clearfix();
+    }
+
+    nav ul {
+        list-style-type:none;
+        margin:0;
+        padding:0;
+
+        .clearfix();
+
+        > li {
+            padding:0;
+            display:inline;
+            float:left;
+            margin-right:10px;
+
+            &:last-child {
+                margin-right:0;
+            }
+        }
+    }
+
+    nav.subnav {
+        float:right;
+    }
+
+    a {
+        color:#FFFFFF;
+        text-decoration:none;
     }
 }
 
 main {
+    display:table-row;
+    height:100%;
 
+    .wrapper {
+        width:@width;
+        max-width:@width;
+        height:100%;
+        margin:0 auto;
+        border-left:1px solid @borderLight;
+        border-right:1px solid @borderLight;
+    }
+}
+
+.subheader {
+    background:#EEEEEE;
+    border-bottom:1px solid @borderDark;
+    padding:20px;
+}
+
+.body-content {
+    padding:20px;
+}
+
+.clearfix {
+  zoom:1;
+  &:before, &:after { content:""; display:table; }
+  &:after { clear: both; }
 }
 
 /* Set width on the form input elements since they're 100% wide by default */

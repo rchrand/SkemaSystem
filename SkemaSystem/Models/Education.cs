@@ -8,5 +8,6 @@ namespace SkemaSystem.Models
     public class Education
     {
         public int Id { get; set; }
+        public String Name { get; set; }
     }
 }

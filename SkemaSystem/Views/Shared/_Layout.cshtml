@@ -15,36 +15,37 @@
 <body>
     <header>
         <div>
-            <div id="logo" />
+            <div id="logo">SKEMASYS</div>
             <nav class="subnav">
                 <ul>
-                    <li>
-                        @Html.Partial("_LoginPartial")
-                    </li>
+                    @Html.Partial("_LoginPartial")
                 </ul>
             </nav>
         </div>
         <nav>
-            @*@foreach (var link in @ViewBag.Navigation)
-            {
-                <ul>
-                    <li>@Html.ActionLink(link.Title, link.Action, link.Controller)</li>
-                </ul>
-            }*@
+            <ul>
+                @foreach (var education in @EducationModel)
+                {
+                    <li>@Html.ActionLink(education.Name, "Details", "Education", new { name = education.Name }, null)</li>
+                }
+            </ul>
         </nav>
     </header>
 
     <main>
-
-        @if(IsSectionDefined("Subheader")) {
-            <section class="subheader">
-                @RenderSection("Subheader", required: false)
+        <div class="wrapper">
+            @if (IsSectionDefined("Subheader"))
+            {
+                <section class="subheader">
+                    @RenderSection("Subheader", required: false)
+                </section>
+            }
+            <section>
+                <div class="body-content">
+                    @RenderBody()
+                </div>
             </section>
-        }
-        <section>
-            @RenderBody()
-        </section>
-
+        </div>
     </main>
     @*<div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
