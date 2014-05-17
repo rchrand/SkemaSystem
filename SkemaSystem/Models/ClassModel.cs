@@ -6,12 +6,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SkemaSystem.Models
 {
-    public class Teacher
+    public class ClassModel
     {
         [Required]
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string ClassName { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SkemaSystem.Models
 {
-    public class Teacher
+    public class Education
     {
         [Required]
         public int Id { get; set; }
