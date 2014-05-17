@@ -6,6 +6,8 @@
 @borderLight: #EEEEEE;
 @borderDark: #DDDDDD;
 
+@import "Components/Bootstrap.css";
+
 html, body {
     margin:0;
     padding:0;
@@ -14,13 +16,15 @@ html, body {
 }
 
 body {
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:"Open Sans", "Helvetica Neue", Arial, Helvetica, Sans-Serif; // Arial, Helvetica, sans-serif
     font-size:12px;
     display:table;
 }
 
 * {
-    box-sizing:border-box;
+    -webkit-box-sizing: border-box; 
+	-moz-box-sizing: border-box; 
+	box-sizing: border-box;
 }
 
 a {
@@ -40,7 +44,7 @@ header {
     }
 
     > div, > nav {
-        width:@width;
+        width:100%;
         max-width:@width;
         margin:0 auto;
         padding:@padding 20px @padding 20px;
@@ -82,7 +86,7 @@ main {
     height:100%;
 
     .wrapper {
-        width:@width;
+        width:100%;
         max-width:@width;
         height:100%;
         margin:0 auto;
@@ -105,6 +109,12 @@ main {
   zoom:1;
   &:before, &:after { content:""; display:table; }
   &:after { clear: both; }
+}
+
+.box {
+    border:1px solid @borderDark;
+    background-color:#F5F5F5;
+    padding:@padding;
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
