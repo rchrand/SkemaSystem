@@ -9,6 +9,11 @@ namespace SkemaSystem.Tests.Controllers
 {
     class FakeSkemaSystemDb : ISkemaSystemDb
     {
+        public FakeSkemaSystemDb()
+        {
+
+        }
+
         public IQueryable<T> Query<T>() where T : class
         {
             return Sets[typeof(T)] as IQueryable<T>;
