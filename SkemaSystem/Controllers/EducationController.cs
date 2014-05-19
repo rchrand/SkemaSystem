@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -16,21 +15,21 @@ namespace SkemaSystem.Controllers
         private SkeamSystemDb db = new SkeamSystemDb();
 
         // GET: /Education/Details/5
-        public ActionResult Details(string education)
+        public ActionResult Details(string name)
         {
-            Debug.WriteLine(education);
+            Debug.WriteLine(name);
 
-            if (education == null)
+            if (name == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Education education = db.Educations.Find(name);
-            Education _education = db.Educations.First(e => e.Name == education);
-            if (_education == null)
+            Education education = db.Educations.First(e => e.Name == name);
+            if (education == null)
             {
                 return HttpNotFound();
             }
-            return View(_education);
+            return View(education);
         }
 
         // GET: /Education/Create
@@ -57,15 +56,15 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Education/Edit/5
-        public ActionResult Edit(string education)
+        public ActionResult Edit(string name)
         {
-            if (education == null)
+            if (name == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Education education = db.Educations.Find(id);
-            Education _education = db.Educations.First(e => e.Name == education);
-            if (_education == null)
+            Education education = db.Educations.First(e => e.Name == name);
+            if (education == null)
             {
                 return HttpNotFound();
             }

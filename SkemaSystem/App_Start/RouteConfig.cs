@@ -24,9 +24,9 @@ namespace SkemaSystem
 
             routes.MapRoute(
                 name: "Education",
-                url: "{education}/{action}",
+                url: "{name}/{action}",
                 defaults: new { controller = "Education", action = "Details", id = 0 },
-                constraints: new { education = @"\w+" }
+                constraints: new { name = @"\w+" }
             );
 
             routes.MapRoute(
