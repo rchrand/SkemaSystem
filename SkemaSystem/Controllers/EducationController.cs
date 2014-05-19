@@ -82,7 +82,7 @@ namespace SkemaSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(education).State = EntityState.Modified;
+                db.Entry(education).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
