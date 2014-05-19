@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace SkemaSystem.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         ISkemaSystemDb _db; 
 
@@ -23,8 +23,12 @@ namespace SkemaSystem.Controllers
             _db = db;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string education)
         {
+            if (education != null)
+            {
+                //RedirectToAction("Index", "Education");
+            }
             var model =
                 from t in _db.Query<Teacher>()
                 orderby t.Name ascending

@@ -21,6 +21,12 @@ namespace SkemaSystem.Migrations
               new Teacher { Name = "Hanne Sommer" },
               new Teacher { Name = "Erik Jacobsen" }
             );
+
+            context.Educations.AddOrUpdate(
+                e => e.Name,
+                new Education { Name = "DMU" },
+                new Education { Name = "MDU" }
+            );
         }
     }
 }
