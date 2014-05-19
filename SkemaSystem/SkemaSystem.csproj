@@ -166,9 +166,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EducationController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Models\ClassModel.cs" />
     <Compile Include="Models\Education.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -177,11 +177,11 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\DbContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\SkeamSystemDb.cs" />
     <Compile Include="Models\Teacher.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -232,6 +232,7 @@
     <Content Include="Views\Education\Details.cshtml" />
     <Content Include="Views\Education\Edit.cshtml" />
     <Content Include="Views\Education\Index.cshtml" />
+    <Content Include="Views\User\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
