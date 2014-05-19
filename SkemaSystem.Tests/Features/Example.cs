@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 // Skriv UserStory og tasks her!
 
-namespace SkemaSystem.Tests.Features
+namespace Tests.Features
 {
     [TestClass]
     public class Example
@@ -21,12 +21,12 @@ namespace SkemaSystem.Tests.Features
         {
             //Arrange
             var db = new FakeSkemaSystemDb();
-            db.AddSet(TestData.Teachers);
-
+            db.Teachers.Add(new Teacher() { Id = 1, Name = "Haso" });
+            
             HomeController controller = new HomeController(db);
 
             var model =
-                from t in db.Query<Teacher>()
+                from t in db.Teachers
                 orderby t.Name ascending
                 select t;
 
@@ -34,7 +34,7 @@ namespace SkemaSystem.Tests.Features
             IQueryable<Teacher> result = (IQueryable<Teacher>)(controller.Index("DMU") as ViewResult).Model;
 
             //Assert
-            Assert.AreEqual(model.Single(x => x.Name.Equals("Hanne1")), result.Single(x => x.Name.Equals("Hanne1")));
+            Assert.AreEqual(model.Single(t => t.Name.Equals("Haso")), result.Single(t => t.Name.Equals("Haso")));
         }
     }
 }
