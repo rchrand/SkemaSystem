@@ -16,21 +16,21 @@ namespace SkemaSystem.Controllers
         private SkeamSystemDb db = new SkeamSystemDb();
 
         // GET: /Education/Details/5
-        public ActionResult Details(string name)
+        public ActionResult Details(string education)
         {
-            Debug.WriteLine(name);
+            Debug.WriteLine(education);
 
-            if (name == null)
+            if (education == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Education education = db.Educations.Find(name);
-            Education education = db.Educations.First(e => e.Name == name);
-            if (education == null)
+            Education _education = db.Educations.First(e => e.Name == education);
+            if (_education == null)
             {
                 return HttpNotFound();
             }
-            return View(education);
+            return View(_education);
         }
 
         // GET: /Education/Create
@@ -57,15 +57,15 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Education/Edit/5
-        public ActionResult Edit(string name)
+        public ActionResult Edit(string education)
         {
-            if (name == null)
+            if (education == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Education education = db.Educations.Find(id);
-            Education education = db.Educations.First(e => e.Name == name);
-            if (education == null)
+            Education _education = db.Educations.First(e => e.Name == education);
+            if (_education == null)
             {
                 return HttpNotFound();
             }

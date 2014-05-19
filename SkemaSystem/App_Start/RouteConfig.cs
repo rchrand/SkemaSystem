@@ -13,11 +13,20 @@ namespace SkemaSystem
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            /*
             routes.MapRoute(
                 name: "Education",
-                url: "{name}/{action}",
+                url: "{education}/{controller}/{action}/{id}",
                 defaults: new { controller = "Education", action = "Details", id = 0 },
-                constraints: new { name = @"\w+" }
+                constraints: new { education = @"\w+" }
+            );
+            */
+
+            routes.MapRoute(
+                name: "Education",
+                url: "{education}/{action}",
+                defaults: new { controller = "Education", action = "Details", id = 0 },
+                constraints: new { education = @"\w+" }
             );
 
             routes.MapRoute(
