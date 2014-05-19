@@ -1,118 +1,128 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SkemaSystem.Models;
-using System.Diagnostics;
 
 namespace SkemaSystem.Controllers
 {
-    public class EducationController : BaseController
+    //[Authorize(Roles="teacher")]
+    [RouteArea("admin")]
+    [RoutePrefix("teachers")]
+    [Route("{action=index}")]
+    public class TeacherController : BaseController
     {
         private SkeamSystemDb db = new SkeamSystemDb();
 
-        // GET: /Education/Details/5
-        [Route("{education}")]
-        public ActionResult Details(string education)
+        // GET: /admin/teachers/
+        [Route("index")]
+        public ActionResult Index()
         {
-            Debug.WriteLine(education);
+            return View(db.Teachers.ToList());
+        }
 
-            if (education == null)
+        // GET: /admin/teachers/details/5
+        [Route("details")]
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Education education = db.Educations.Find(name);
-            Education _education = db.Educations.First(e => e.Name == education);
-            if (_education == null)
+            Teacher teacher = db.Teachers.Find(id);
+            if (teacher == null)
             {
                 return HttpNotFound();
             }
-            return View(_education);
+            return View(teacher);
         }
 
-        // GET: /Education/Create
+        // GET: /admin/teachers/create
+        [Route("create")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: /Education/Create
+        // POST: /admin/teachers/create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,Name")] Education education)
+        [Route("create")]
+        public ActionResult Create([Bind(Include="Id,Name")] Teacher teacher)
         {
             if (ModelState.IsValid)
             {
-                db.Educations.Add(education);
+                db.Teachers.Add(teacher);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(education);
+            return View(teacher);
         }
 
-        // GET: /Education/Edit/5
-        [Route("{education}/edit")]
-        public ActionResult Edit(string education)
+        // GET: /admin/teachers/edit/5
+        [Route("edit")]
+        public ActionResult Edit(int? id)
         {
-            if (education == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Education education = db.Educations.Find(id);
-            Education _education = db.Educations.First(e => e.Name == education);
-            if (_education == null)
+            Teacher teacher = db.Teachers.Find(id);
+            if (teacher == null)
             {
                 return HttpNotFound();
             }
-            return View(_education);
+            return View(teacher);
         }
 
-        // POST: /Education/Edit/5
+        // POST: /admin/teachers/edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name")] Education education)
+        [Route("edit")]
+        public ActionResult Edit([Bind(Include="Id,Name")] Teacher teacher)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(education).State = EntityState.Modified;
+                db.Entry(teacher).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(education);
+            return View(teacher);
         }
 
-        // GET: /Education/Delete/5
-        public ActionResult Delete(string education)
+        // GET: /admin/teachers/delete/5
+        [Route("delete")]
+        public ActionResult Delete(int? id)
         {
-            if (education == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Education education = db.Educations.Find(id);
-            Education _education = db.Educations.First(e => e.Name == education);
-            if (_education == null)
+            Teacher teacher = db.Teachers.Find(id);
+            if (teacher == null)
             {
                 return HttpNotFound();
             }
-            return View(_education);
+            return View(teacher);
         }
 
-        // POST: /Education/Delete/5
+        // POST: /admin/teachers/delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string education)
+        [Route("delete")]
+        public ActionResult DeleteConfirmed(int id)
         {
-            //Education education = db.Educations.Find(id);
-            Education _education = db.Educations.First(e => e.Name == education);
-            db.Educations.Remove(_education);
+            Teacher teacher = db.Teachers.Find(id);
+            db.Teachers.Remove(teacher);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

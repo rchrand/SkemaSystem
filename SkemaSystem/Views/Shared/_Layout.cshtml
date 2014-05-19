@@ -26,7 +26,7 @@
             <ul>
                 @foreach (var education in @EducationModel)
                 {
-                    <li>@Html.ActionLink(education.Name, "Details", "Education", new { name = education.Name }, null)</li>
+                    <li>@Html.ActionLink(education.Name, "Details", "Education", new { education = education }, null)</li>
                 }
             </ul>
         </nav>

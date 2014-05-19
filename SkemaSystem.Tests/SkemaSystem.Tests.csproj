@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\FakeSkemaSystemDb.cs" />
+    <Compile Include="Controllers\TeacherControllerTest.cs" />
     <Compile Include="Controllers\TestData.cs" />
     <Compile Include="Features\Example.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
