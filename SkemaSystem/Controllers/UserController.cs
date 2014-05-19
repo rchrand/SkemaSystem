@@ -8,7 +8,7 @@ using System.Web.Security;
 namespace SkemaSystem.Controllers
 {
     [RouteArea("admin")]
-    [Route("Login")]
+    [Route("{action=Login}")]
     public class UserController : BaseController
     {
         //
@@ -30,7 +30,7 @@ namespace SkemaSystem.Controllers
             {
                 if (model.IsValid(model.UserName, model.Password)){
                     FormsAuthentication.SetAuthCookie(model.UserName, true);
-                    return RedirectToAction("Index", "Home");
+                    return Redirect("/");
                 }
                 else {
                     ModelState.AddModelError("", "Login is invalid");
@@ -42,7 +42,13 @@ namespace SkemaSystem.Controllers
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
-            return RedirectToAction("Index", "Home");
+            return Redirect("/");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ContentResult TestingAdminRole()
+        {
+            return Content("Admin,");
         }
 
 
