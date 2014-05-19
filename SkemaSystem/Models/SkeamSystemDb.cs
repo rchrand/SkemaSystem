@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Web;
+using System.Data.Entity.Infrastructure;
 
 namespace SkemaSystem.Models
 {
@@ -18,6 +19,7 @@ namespace SkemaSystem.Models
         IDbSet<ClassModel> Classes { get; set; }
         IDbSet<Education> Educations { get; set; }
         int SaveChanges();
+        DbEntityEntry Entry(object entity);
     }
 
     public class SkeamSystemDb : DbContext, ISkemaSystemDb
@@ -30,8 +32,11 @@ namespace SkemaSystem.Models
         public IDbSet<Teacher> Teachers { get; set; }
         public IDbSet<Education> Educations { get; set; }
         public IDbSet<ClassModel> Classes { get; set; }
-        
 
+        public DbEntityEntry Entry(object entity)
+        {
+            return base.Entry(entity);
+        }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
