@@ -12,6 +12,6 @@ namespace SkemaSystem.Models
         public int ID { get; set; }
         
         [Required]
-        public string Room { get; set; }
+        public string RoomName { get; set; }
     }
 }
