@@ -1,0 +1,53 @@
+﻿@model SkemaSystem.Models.ClassModel
+
+@{
+    ViewBag.Title = "SubjectDistribution";
+}
+
+
+
+<h2>Fagfordeling for @Model.ClassName</h2>
+<div class="row">
+    <div class="col-sm-7">
+        @if (@Model.ActiveSchemes.Count() > 0)
+        {
+            <div>
+                @using (Ajax.BeginForm("ChangeScheme", "Class",
+                    new AjaxOptions
+                    {
+                        HttpMethod = "get",
+                        InsertionMode = InsertionMode.Replace,
+                        UpdateTargetId = "subject_dist"
+                    }))
+                {
+                    @Html.DropDownList("scheme", new SelectList(ViewBag.Schemes, "Value", "Text"), new { onchange = "$(this.form).submit();" })
+                }
+            </div>
+            
+            @Html.Partial("_SchemeSubjectDistribution", @Model.ActiveSchemes[0]);
+        }
+        else
+        {
+            <div>
+                Der er endnu ikke blevet oprettet et semester for denne klasse. <br />
+                Hvis du er klar til, at lige den første fagfordeling, kan du gøre det i højre side!
+            </div>
+        }
+    </div>
+
+    <div class="col-sm-5">
+        <div class="box">
+            <h2>Start nyt semester</h2>
+            <div>
+                Ved at starte et nyt semester, bliver fagfordelingen oprettet for næste semester for den valgte klasse.<br />
+                Når semesteret er startet og fagfordelingen lagt, kan skemalæggere gå ind på klassen og ligge skemaet for den pågældende klasse.
+            </div>
+            @using (@Html.BeginForm("StartNewSemester", "Class", FormMethod.Post))
+            {
+                <input type="hidden" name="id" value="@Model.Id" />
+                <input type="submit" value="Start nyt semester" />
+            }
+        </div>
+    </div>
+</div>
+

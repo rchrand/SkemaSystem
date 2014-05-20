@@ -48,7 +48,6 @@
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -168,6 +167,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\EducationController.cs" />
     <Compile Include="Models\ClassModel.cs" />
     <Compile Include="Models\Education.cs" />
@@ -181,6 +181,7 @@
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\Scheme.cs" />
     <Compile Include="Models\Semester.cs" />
+    <Compile Include="Models\SemesterSubjectBlock.cs" />
     <Compile Include="Models\SkeamSystemDb.cs" />
     <Compile Include="Models\Subject.cs" />
     <Compile Include="Models\SubjectDistBlock.cs" />
@@ -235,6 +236,10 @@
     <Content Include="Views\Education\Details.cshtml" />
     <Content Include="Views\Education\Edit.cshtml" />
     <Content Include="Views\Education\Index.cshtml" />
+    <Content Include="Views\Class\Create.cshtml" />
+    <Content Include="Views\Class\Index.cshtml" />
+    <Content Include="Views\Class\SubjectDistribution.cshtml" />
+    <Content Include="Views\Class\_SchemeSubjectDistribution.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

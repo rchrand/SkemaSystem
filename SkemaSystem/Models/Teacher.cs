@@ -13,5 +13,8 @@ namespace SkemaSystem.Models
 
         [Required]
         public string Name { get; set; }
+
+        [Required]
+        public virtual List<Education> Educations { get; set; }
     }
 }
