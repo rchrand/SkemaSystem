@@ -1,12 +1,12 @@
 ﻿using SkemaSystem.Migrations;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 using System.Web;
 using System.Data.Entity.Infrastructure;
 
@@ -35,25 +35,22 @@ namespace SkemaSystem.Models
             
         }
 
-        public IDbSet<Teacher> Teachers { get; set; }
-        public IDbSet<Education> Educations { get; set; }
-        public IDbSet<ClassModel> Classes { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Education> Educations { get; set; }
+        public DbSet<ClassModel> Classes { get; set; }
         public IDbSet<Subject> Subjects { get; set; }
         public IDbSet<Semester> Semesters { get; set; }
         public IDbSet<Scheme> Schemes { get; set; }
         public IDbSet<SemesterSubjectBlock> SemesterSubjectBlocks { get; set; }
 
-        //public DbEntityEntry Entry(object entity)
+        //public void StateModified(object entity) 
         //{
-        //    return base.Entry(entity);
+        //    this.Entry(entity).State = System.Data.Entity.EntityState.Modified;
         //}
 
-        public void StateModified(object entity) 
-        {
-            this.Entry(entity).State = System.Data.Entity.EntityState.Modified;
-        }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
             //Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
 
         }
@@ -72,6 +69,7 @@ namespace SkemaSystem.Models
 
         public void Dispose() { }
         public int SaveChanges(){
+            //this.Educations.Local = ()this.Educations.Local;
             return -1;
         }
 

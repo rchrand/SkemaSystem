@@ -7,32 +7,41 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SkemaSystem.Models;
+using System.Diagnostics;
 
 namespace SkemaSystem.Controllers
 {
-    public class ClassController : BaseController
+    [RouteArea("admin")]
+    [RoutePrefix("classes")]
+    [Route("{action=index}")]
+    public class ClassesController : BaseController
     {
         private SkeamSystemDb db;
 
-        public ClassController()
+        public ClassesController()
         {
            this.db = new SkeamSystemDb();
         }
 
-        // GET: /Class/
+        // GET: /Classes/
         public ActionResult Index()
         {
-            return View(db.Classes);
+            return View(db.Classes.ToList());
         }
 
-        // GET: /Class/Details/5
+        public ActionResult Index(string className)
+        {
+            return View(db.Classes.ToList());
+        }
+
+        // GET: /Classes/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClassModel classmodel = db.Classes.Single(x => x.Id == id);
+            ClassModel classmodel = db.Classes.SingleOrDefault(x => x.Id.Equals(id));
             if (classmodel == null)
             {
                 return HttpNotFound();
@@ -40,13 +49,13 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-        // GET: /Class/Create
+        // GET: /Classes/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: /Class/Create
+        // POST: /Classes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -63,14 +72,14 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-         //GET: /Class/Edit/5
+        // GET: /Classes/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClassModel classmodel = db.Classes.Find(id);
+            ClassModel classmodel = db.Classes.SingleOrDefault(x => x.Id.Equals(id));
             if (classmodel == null)
             {
                 return HttpNotFound();
@@ -78,7 +87,7 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-        // POST: /Class/Edit/5
+        // POST: /Classes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -94,14 +103,14 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-        //// GET: /Class/Delete/5
+        // GET: /Classes/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClassModel classmodel = db.Classes.Find(id);
+            ClassModel classmodel = db.Classes.SingleOrDefault(x => x.Id.Equals(id));
             if (classmodel == null)
             {
                 return HttpNotFound();
@@ -109,12 +118,12 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-        //// POST: /Class/Delete/5
+        // POST: /Classes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            ClassModel classmodel = db.Classes.Find(id);
+            ClassModel classmodel = db.Classes.Single(x => x.Id.Equals(id));
             db.Classes.Remove(classmodel);
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -128,65 +137,5 @@ namespace SkemaSystem.Controllers
             }
             base.Dispose(disposing);
         }
-
-        public ActionResult SubjectDistribution(int id)
-        {
-            ClassModel classmodel = db.Classes.Single(x => x.Id == id);
-            if (classmodel == null)
-            {
-                return HttpNotFound();
-            }
-            if (classmodel.ActiveSchemes.Count > 0)
-            {
-                IEnumerable<SelectListItem> items = from s in classmodel.ActiveSchemes
-                                                    select new SelectListItem 
-                                                    { Text = s.Semester.Number+". Semester", Value=""+s.Id, Selected = false};
-                ViewBag.Schemes = items;
-            }
-            return View(classmodel);
-        }
-
-        [HttpPost]
-        public ActionResult StartNewSemester(int id)
-        {
-            ClassModel classmodel = db.Classes.Single(x => x.Id == id);
-            if (classmodel == null)
-            {
-                return HttpNotFound();
-            }
-            classmodel.CreateNewSemester();
-            db.SaveChanges();
-            return RedirectToActionPermanent("SubjectDistribution", new { id = id});
-        }
-
-        [HttpGet]
-        public PartialViewResult ChangeScheme(string scheme)
-        {
-            int schemeId = Int32.Parse(scheme);
-            return PartialView("_SchemeSubjectDistribution", db.Schemes.Single(x => x.Id == schemeId));
-        }
-
-        [HttpPost]
-        public PartialViewResult AddSubjectDistBlock(int scheme, int add_subject, int add_teacher, int add_blockscount)
-        {
-            Scheme theScheme = db.Schemes.Single(x => x.Id == scheme);
-            if (theScheme.AddLessonBlock(db.Teachers.SingleOrDefault(x => x.Id == add_teacher), db.Subjects.SingleOrDefault(x => x.Id == add_subject), add_blockscount))
-            {
-                db.SaveChanges();
-            }
-            else
-            {
-                // Didn't succeed!
-                ViewBag.add_subject = add_subject;
-                ViewBag.add_teacher = add_teacher;
-                ViewBag.add_blockscount = add_blockscount;
-                ViewBag.Error = "- Der er ikke nok ledige blokke på semestret til, at udføre denne handling.";
-            }
-            
-            
-
-            return PartialView("_SchemeSubjectDistribution", theScheme);
-        }
-
     }
 }
