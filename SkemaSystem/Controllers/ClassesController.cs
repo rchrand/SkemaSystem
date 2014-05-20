@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SkemaSystem.Models;
+using System.Diagnostics;
 
 namespace SkemaSystem.Controllers
 {
@@ -44,7 +45,7 @@ namespace SkemaSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClassModel classmodel = db.Classes.Find(id);
+            ClassModel classmodel = db.Classes.SingleOrDefault(x => x.Id.Equals(id));
             if (classmodel == null)
             {
                 return HttpNotFound();
@@ -82,7 +83,7 @@ namespace SkemaSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClassModel classmodel = db.Classes.Find(id);
+            ClassModel classmodel = db.Classes.SingleOrDefault(x => x.Id.Equals(id));
             if (classmodel == null)
             {
                 return HttpNotFound();
@@ -99,6 +100,7 @@ namespace SkemaSystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                db.StateModified(classmodel);
                 //db.Entry(classmodel).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -113,7 +115,7 @@ namespace SkemaSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClassModel classmodel = db.Classes.Find(id);
+            ClassModel classmodel = db.Classes.SingleOrDefault(x => x.Id.Equals(id));
             if (classmodel == null)
             {
                 return HttpNotFound();
@@ -126,7 +128,7 @@ namespace SkemaSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            ClassModel classmodel = db.Classes.Find(id);
+            ClassModel classmodel = db.Classes.Single(x => x.Id.Equals(id));
             db.Classes.Remove(classmodel);
             db.SaveChanges();
             return RedirectToAction("Index");

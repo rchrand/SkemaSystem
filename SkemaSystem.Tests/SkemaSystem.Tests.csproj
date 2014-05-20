@@ -91,7 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\TestData.cs" />
-    <Compile Include="Features\CRUD class\UnitTest1.cs" />
+    <Compile Include="Features\CRUD class\ClassTest.cs" />
     <Compile Include="Features\CRUD educations\UnitTest1.cs" />
     <Compile Include="Features\Example.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
