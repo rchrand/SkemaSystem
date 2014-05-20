@@ -58,6 +58,7 @@ namespace SkemaSystem.Models
         public IDbSet<Teacher> Teachers { get; set; }
         public void Dispose() { }
         public int SaveChanges(){
+            //this.Educations.Local = ()this.Educations.Local;
             return -1;
         }
 
