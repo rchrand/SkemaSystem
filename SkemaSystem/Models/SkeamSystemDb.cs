@@ -19,7 +19,8 @@ namespace SkemaSystem.Models
         IDbSet<ClassModel> Classes { get; set; }
         IDbSet<Education> Educations { get; set; }
         int SaveChanges();
-        DbEntityEntry Entry(object entity);
+        //DbEntityEntry Entry(object entity);
+        void StateModified(object entity);
     }
 
     public class SkeamSystemDb : DbContext, ISkemaSystemDb
@@ -33,9 +34,14 @@ namespace SkemaSystem.Models
         public IDbSet<Education> Educations { get; set; }
         public IDbSet<ClassModel> Classes { get; set; }
 
-        public DbEntityEntry Entry(object entity)
+        //public DbEntityEntry Entry(object entity)
+        //{
+        //    return base.Entry(entity);
+        //}
+
+        public void StateModified(object entity) 
         {
-            return base.Entry(entity);
+            this.Entry(entity).State = System.Data.Entity.EntityState.Modified;
         }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -50,15 +56,14 @@ namespace SkemaSystem.Models
         public IDbSet<ClassModel> Classes { get; set; }
         public IDbSet<Education> Educations { get; set; }
         public IDbSet<Teacher> Teachers { get; set; }
-
         public void Dispose() { }
         public int SaveChanges(){
             return -1;
         }
 
-        public DbEntityEntry Entry(object entity)
+        public void StateModified(object entity)
         {
-            return null;
+
         }
 
         public FakeSkemaSystemDb()
