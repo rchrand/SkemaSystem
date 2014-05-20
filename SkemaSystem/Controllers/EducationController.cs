@@ -12,16 +12,11 @@ namespace SkemaSystem.Controllers
 {
     public class EducationController : BaseController
     {
-        private ISkemaSystemDb db;
+        private SkeamSystemDb db;
 
         public EducationController()
         {
             db = new SkeamSystemDb();
-        }
-
-        public EducationController(FakeSkemaSystemDb db)
-        {
-            this.db = db;
         }
 
         // GET: /Education/Details/5
@@ -109,8 +104,7 @@ namespace SkemaSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.StateModified(education);
-                //db.Entry(education).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(education).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

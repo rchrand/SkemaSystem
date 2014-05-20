@@ -23,26 +23,21 @@ namespace SkemaSystem.Models
         void StateModified(object entity);
     }
 
-    public class SkeamSystemDb : DbContext, ISkemaSystemDb
+    public class SkeamSystemDb : DbContext
     {
         public SkeamSystemDb() : base("name=skeamsysdb")
         {
             
         }
 
-        public IDbSet<Teacher> Teachers { get; set; }
-        public IDbSet<Education> Educations { get; set; }
-        public IDbSet<ClassModel> Classes { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Education> Educations { get; set; }
+        public DbSet<ClassModel> Classes { get; set; }
 
-        //public DbEntityEntry Entry(object entity)
+        //public void StateModified(object entity) 
         //{
-        //    return base.Entry(entity);
+        //    this.Entry(entity).State = System.Data.Entity.EntityState.Modified;
         //}
-
-        public void StateModified(object entity) 
-        {
-            this.Entry(entity).State = System.Data.Entity.EntityState.Modified;
-        }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
