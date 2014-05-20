@@ -16,17 +16,13 @@ namespace SkemaSystem.Controllers
     [Route("{action=index}")]
     public class ClassesController : BaseController
     {
-        private ISkemaSystemDb db;
+        private SkeamSystemDb db;
 
         public ClassesController()
         {
            this.db = new SkeamSystemDb();
         }
 
-        public ClassesController(ISkemaSystemDb db)
-        {
-            this.db = db;
-        }
         // GET: /Classes/
         public ActionResult Index()
         {
@@ -100,8 +96,7 @@ namespace SkemaSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.StateModified(classmodel);
-                //db.Entry(classmodel).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(classmodel).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

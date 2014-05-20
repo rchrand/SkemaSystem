@@ -12,16 +12,11 @@ namespace SkemaSystem.Controllers
 {
     public class ClassController : Controller
     {
-        private ISkemaSystemDb db;
+        private SkeamSystemDb db;
 
         public ClassController()
         {
            this.db = new SkeamSystemDb();
-        }
-
-        public ClassController(ISkemaSystemDb db)
-        {
-            this.db = db;
         }
 
         // GET: /Class/
@@ -92,8 +87,7 @@ namespace SkemaSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.StateModified(classmodel);
-                //db.Entry(classmodel).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(classmodel).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
