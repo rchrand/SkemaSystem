@@ -7,32 +7,41 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SkemaSystem.Models;
+using System.Diagnostics;
 
 namespace SkemaSystem.Controllers
 {
-    public class ClassController : Controller
+    [RouteArea("admin")]
+    [RoutePrefix("classes")]
+    [Route("{action=index}")]
+    public class ClassesController : BaseController
     {
         private SkeamSystemDb db;
 
-        public ClassController()
+        public ClassesController()
         {
            this.db = new SkeamSystemDb();
         }
 
-        // GET: /Class/
+        // GET: /Classes/
         public ActionResult Index()
         {
-            return View(db.Teachers);
+            return View(db.Classes.ToList());
         }
 
-        // GET: /Class/Details/5
+        public ActionResult Index(string className)
+        {
+            return View(db.Classes.ToList());
+        }
+
+        // GET: /Classes/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClassModel classmodel = db.Classes.Single(x => x.Id == id);
+            ClassModel classmodel = db.Classes.SingleOrDefault(x => x.Id.Equals(id));
             if (classmodel == null)
             {
                 return HttpNotFound();
@@ -40,13 +49,13 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-        // GET: /Class/Create
+        // GET: /Classes/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: /Class/Create
+        // POST: /Classes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -63,14 +72,14 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-         //GET: /Class/Edit/5
+        // GET: /Classes/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClassModel classmodel = db.Classes.Find(id);
+            ClassModel classmodel = db.Classes.SingleOrDefault(x => x.Id.Equals(id));
             if (classmodel == null)
             {
                 return HttpNotFound();
@@ -78,7 +87,7 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-        // POST: /Class/Edit/5
+        // POST: /Classes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -94,14 +103,14 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-        //// GET: /Class/Delete/5
+        // GET: /Classes/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClassModel classmodel = db.Classes.Find(id);
+            ClassModel classmodel = db.Classes.SingleOrDefault(x => x.Id.Equals(id));
             if (classmodel == null)
             {
                 return HttpNotFound();
@@ -109,12 +118,12 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-        //// POST: /Class/Delete/5
+        // POST: /Classes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            ClassModel classmodel = db.Classes.Find(id);
+            ClassModel classmodel = db.Classes.Single(x => x.Id.Equals(id));
             db.Classes.Remove(classmodel);
             db.SaveChanges();
             return RedirectToAction("Index");

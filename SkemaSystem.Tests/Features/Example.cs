@@ -11,30 +11,30 @@ using System.Collections.Generic;
 
 namespace Tests.Features
 {
-    [TestClass]
-    public class Example
-    {
+    //[TestClass]
+    //public class Example
+    //{
         
 
-        [TestMethod]
-        public void TestMethod1()
-        {
-            //Arrange
-            var db = new FakeSkemaSystemDb();
-            db.Teachers.Add(new Teacher() { Id = 1, Name = "Haso" });
+    //    [TestMethod]
+        //public void TestMethod1()
+        //{
+        //    //Arrange
+        //    var db = new FakeSkemaSystemDb();
+        //    db.Teachers.Add(new Teacher() { Id = 1, Name = "Haso" });
             
-            HomeController controller = new HomeController(db);
+        //    HomeController controller = new HomeController(db);
 
-            var model =
-                from t in db.Teachers
-                orderby t.Name ascending
-                select t;
+        //    var model =
+        //        from t in db.Teachers
+        //        orderby t.Name ascending
+        //        select t;
 
-            //Act
-            IQueryable<Teacher> result = (IQueryable<Teacher>)(controller.Index("DMU") as ViewResult).Model;
+        //    //Act
+        //    IQueryable<Teacher> result = (IQueryable<Teacher>)(controller.Index("DMU") as ViewResult).Model;
 
-            //Assert
-            Assert.AreEqual(model.Single(t => t.Name.Equals("Haso")), result.Single(t => t.Name.Equals("Haso")));
-        }
-    }
+        //    //Assert
+        //    Assert.AreEqual(model.Single(t => t.Name.Equals("Haso")), result.Single(t => t.Name.Equals("Haso")));
+        //}
+    //}
 }
