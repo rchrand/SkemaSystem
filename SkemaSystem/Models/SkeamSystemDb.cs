@@ -28,6 +28,13 @@ namespace SkemaSystem.Models
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
 
+            modelBuilder.Entity<Teacher>().HasMany(t => t.Educations).WithMany(e => e.Teachers).Map(m =>
+            {
+                m.MapLeftKey("TeacherId");
+                m.MapRightKey("EducationId");
+                m.ToTable("EducationTeachers");
+            });
+            base.OnModelCreating(modelBuilder);
         }
 
         IQueryable<T> ISkemaSystemDb.Query<T>()

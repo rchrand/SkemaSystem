@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SkemaSystem.Models;
+using System.Diagnostics;
+using System.Text;
 
 namespace SkemaSystem.Controllers
 {
@@ -19,7 +21,7 @@ namespace SkemaSystem.Controllers
         private SkeamSystemDb db = new SkeamSystemDb();
 
         // GET: /admin/teachers/
-        [Route("index")]
+        [Route("")]
         public ActionResult Index()
         {
             return View(db.Teachers.ToList());
@@ -79,24 +81,76 @@ namespace SkemaSystem.Controllers
             {
                 return HttpNotFound();
             }
-            return View(teacher);
+            //List<SelectListItem> educations = new List<SelectListItem>();
+            //educations.Add(new SelectListItem { Text = "DMU", Value = "1", Selected = false });
+
+            //teacher.Educations.Add(db.Educations.First());
+            //ViewBag.Educations = db.Educations.ToList();
+            return View(GetFruitsInitialModel(teacher));
+            //return View(new Test(teacher, educations));
         }
 
         // POST: /admin/teachers/edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         [Route("edit")]
-        public ActionResult Edit([Bind(Include="Id,Name")] Teacher teacher)
+        public ActionResult Edit(TeacherViewModel result)
         {
+            Debug.WriteLine(result);
+
+            Teacher teacher = result.Teacher;
+            if (result.PostedEducations != null && result.PostedEducations.EducationIds.Any())
+            {
+                IEnumerable<Education> educations = db.Educations;
+                teacher.Educations = educations
+                 .Where(x => result.PostedEducations.EducationIds.Any(s => x.EducationId.ToString().Equals(s)))
+                 .ToList();
+            }
+            else
+            {
+                teacher.Educations = new List<Education>();
+            }
+            Debug.WriteLine(db.Educations.First());
+
+            //  x => result.PostedEducations.EducationIds.Any(s => x.Id.ToString().Equals(s))
+
             if (ModelState.IsValid)
             {
+                /*foreach (Education education in teacher.Educations)
+                {
+                    education.Teachers.Clear();
+                    db.Entry(education).State = System.Data.Entity.EntityState.Modified;
+                }*/
+                //teacher.Educations.Add(db.Educations.FirstOrDefault());
+                Education education = teacher.Educations.FirstOrDefault<Education>();
+
+                teacher.Educations.Remove(education);
+
                 db.Entry(teacher).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                // TODO redirect
+                //return RedirectToAction("edit");
             }
-            return View(teacher);
+
+            return View(GetFruitsModel(teacher, result.PostedEducations));
+            /*var selectedServicesList = result.Educations.Where(s => s.Selected);
+
+            return HttpNotFound();*/
+            //teacher.Name = "Martin";
+
+            ///*var selectedFruits = FruitRepository.GetAll()
+            //   .Where(x => postedFruitIds.Any(s => x.Id.ToString().Equals(s)))
+            //   .ToList();*/
+
+            //if (ModelState.IsValid)
+            //{
+            //    db.Entry(teacher).State = System.Data.Entity.EntityState.Modified;
+            //    db.SaveChanges();
+            //    return RedirectToAction("Index");
+            //}
+            //return View(teacher);
         }
 
         // GET: /admin/teachers/delete/5
@@ -135,5 +189,97 @@ namespace SkemaSystem.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public class TeacherViewModel
+        {
+            public Teacher Teacher { get; set; }
+            public IEnumerable<Education> AvailableEducations { get; set; }
+            public IEnumerable<Education> SelectedEducations { get; set; }
+            public PostedEducations PostedEducations { get; set; }
+        }
+
+        public class PostedEducations
+        {
+            //this array will be used to POST values from the form to the controller
+            public string[] EducationIds { get; set; }
+        }
+
+        private TeacherViewModel GetFruitsModel(Teacher teacher, PostedEducations postedEducations)
+        {
+            // setup properties
+            var model = new TeacherViewModel();
+            var selectedEducations = new List<Education>();
+            var postedEducationIds = new string[0];
+            if (postedEducations == null) postedEducations = new PostedEducations();
+
+            // if a view model array of posted fruits ids exists
+            // and is not empty,save selected ids
+            if (postedEducations.EducationIds != null && postedEducations.EducationIds.Any())
+            {
+                postedEducationIds = postedEducations.EducationIds;
+            }
+
+            // if there are any selected ids saved, create a list of fruits
+            if (postedEducationIds.Any())
+            {
+                IEnumerable<Education> educations = db.Educations;
+                selectedEducations = /*FruitRepository.GetAll(db)*/educations
+                 .Where(x => postedEducationIds.Any(s => x.EducationId.ToString().Equals(s)))
+                 .ToList();
+            }
+
+            //setup a view model
+            model.Teacher = teacher;
+            model.AvailableEducations = db.Educations;//FruitRepository.GetAll(db).ToList();
+            model.SelectedEducations = selectedEducations;
+            model.PostedEducations = postedEducations;
+
+            return model;
+        }
+
+        /// <summary>
+        /// for setup initial view model for all fruits
+        /// </summary>
+        private TeacherViewModel GetFruitsInitialModel(Teacher teacher)
+        {
+            //setup properties
+            var model = new TeacherViewModel();
+            var selectedEducations = teacher.Educations;// new List<Education>();
+
+            //setup a view model
+            model.Teacher = teacher;
+            model.AvailableEducations = db.Educations;//FruitRepository.GetAll(db).ToList();
+            model.SelectedEducations = selectedEducations;
+
+            return model;
+        }
+
+        /*public static class FruitRepository
+        {
+            /// <summary>
+            /// for get fruit for specific id
+            /// </summary>
+            public static Education Get(SkeamSystemDb db, int id)
+            {
+                return GetAll(db).FirstOrDefault(x => x.Id.Equals(id));
+            }
+
+            /// <summary>
+            /// for get all fruits
+            /// </summary>
+            public static IEnumerable<Education> GetAll(SkeamSystemDb db)
+            {
+                return db.Educations;
+                //    new List<Education> {
+                //    new Education {Name = "Apple", Id = 1 },
+                //    new Education {Name = "Banana", Id = 2},
+                //    new Education {Name = "Cherry", Id = 3},
+                //    new Education {Name = "Pineapple", Id = 4},
+                //    new Education {Name = "Grape", Id = 5},
+                //    new Education {Name = "Guava", Id = 6},
+                //    new Education {Name = "Mango", Id = 7}
+                //};
+            }
+        }*/
     }
 }

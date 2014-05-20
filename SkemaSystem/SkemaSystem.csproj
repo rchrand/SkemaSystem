@@ -43,6 +43,9 @@
       <HintPath>..\packages\dotless.1.4.0.0\lib\dotless.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MvcCheckBoxList">
+      <HintPath>..\packages\MvcCheckBoxList.1.4.4.5\lib\net45\MvcCheckBoxList.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
@@ -178,6 +181,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\EducationTeacher.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\SkeamSystemDb.cs" />
@@ -235,8 +239,9 @@
     <Content Include="Views\Teacher\Create.cshtml" />
     <Content Include="Views\Teacher\Delete.cshtml" />
     <Content Include="Views\Teacher\Details.cshtml" />
-    <Content Include="Views\Teacher\Edit.cshtml" />
+    <Content Include="Views\Teacher\Edit2.cshtml" />
     <Content Include="Views\Teacher\Index.cshtml" />
+    <Content Include="Views\Teacher\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
