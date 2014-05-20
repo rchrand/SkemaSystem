@@ -10,7 +10,7 @@ using SkemaSystem.Models;
 
 namespace SkemaSystem.Controllers
 {
-    public class ClassController : Controller
+    public class ClassController : BaseController
     {
         private ISkemaSystemDb db;
 
@@ -27,7 +27,7 @@ namespace SkemaSystem.Controllers
         // GET: /Class/
         public ActionResult Index()
         {
-            return View(db.Teachers);
+            return View(db.Classes);
         }
 
         // GET: /Class/Details/5
@@ -135,6 +135,41 @@ namespace SkemaSystem.Controllers
             base.Dispose(disposing);
         }
 
+        public ActionResult SubjectDistribution(int id)
+        {
+            ClassModel classmodel = db.Classes.Single(x => x.Id == id);
+            if (classmodel == null)
+            {
+                return HttpNotFound();
+            }
+            if (classmodel.ActiveSchemes.Count > 0)
+            {
+                IEnumerable<SelectListItem> items = from s in classmodel.ActiveSchemes
+                                                    select new SelectListItem 
+                                                    { Text = s.Semester.Number+". Semester", Value=""+s.Id, Selected = false};
+                ViewBag.Schemes = items;
+            }
+            return View(classmodel);
+        }
+
+        [HttpPost]
+        public ActionResult StartNewSemester(int id)
+        {
+            ClassModel classmodel = db.Classes.Single(x => x.Id == id);
+            if (classmodel == null)
+            {
+                return HttpNotFound();
+            }
+            classmodel.CreateNewSemester();
+            db.SaveChanges();
+            return RedirectToActionPermanent("SubjectDistribution", new { id = id});
+        }
+
+        [HttpGet]
+        public PartialViewResult ChangeScheme(string scheme)
+        {
+            return PartialView("_SchemeSubjectDistribution", db.Schemes.Single(x => x.Id == Int32.Parse(scheme)));
+        }
 
     }
 }

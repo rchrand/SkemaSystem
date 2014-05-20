@@ -18,6 +18,11 @@ namespace SkemaSystem.Models
         IDbSet<Teacher> Teachers { get; set; }
         IDbSet<ClassModel> Classes { get; set; }
         IDbSet<Education> Educations { get; set; }
+        IDbSet<Subject> Subjects { get; set; }
+        IDbSet<Semester> Semesters { get; set; }
+        IDbSet<Scheme> Schemes { get; set; }
+        IDbSet<SemesterSubjectBlock> SemesterSubjectBlocks { get; set; }
+
         int SaveChanges();
         //DbEntityEntry Entry(object entity);
         void StateModified(object entity);
@@ -33,6 +38,10 @@ namespace SkemaSystem.Models
         public IDbSet<Teacher> Teachers { get; set; }
         public IDbSet<Education> Educations { get; set; }
         public IDbSet<ClassModel> Classes { get; set; }
+        public IDbSet<Subject> Subjects { get; set; }
+        public IDbSet<Semester> Semesters { get; set; }
+        public IDbSet<Scheme> Schemes { get; set; }
+        public IDbSet<SemesterSubjectBlock> SemesterSubjectBlocks { get; set; }
 
         //public DbEntityEntry Entry(object entity)
         //{
@@ -45,7 +54,7 @@ namespace SkemaSystem.Models
         }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
+            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
 
         }
         
@@ -56,6 +65,11 @@ namespace SkemaSystem.Models
         public IDbSet<ClassModel> Classes { get; set; }
         public IDbSet<Education> Educations { get; set; }
         public IDbSet<Teacher> Teachers { get; set; }
+        public IDbSet<Subject> Subjects { get; set; }
+        public IDbSet<Semester> Semesters { get; set; }
+        public IDbSet<Scheme> Schemes { get; set; }
+        public IDbSet<SemesterSubjectBlock> SemesterSubjectBlocks { get; set; }
+
         public void Dispose() { }
         public int SaveChanges(){
             return -1;
@@ -71,6 +85,10 @@ namespace SkemaSystem.Models
             Teachers = new FakeDbSet<Teacher>();
             Educations = new FakeDbSet<Education>();
             Classes = new FakeDbSet<ClassModel>();
+            Subjects = new FakeDbSet<Subject>();
+            Semesters = new FakeDbSet<Semester>();
+            Schemes = new FakeDbSet<Scheme>();
+            SemesterSubjectBlocks = new FakeDbSet<SemesterSubjectBlock>();
         }
     }
 
@@ -126,6 +144,11 @@ namespace SkemaSystem.Models
             }
 
             return keyQuery.SingleOrDefault();
+        }
+
+        public T FirstOrDefault()
+        {
+            return _data.FirstOrDefault();
         }
 
         public T Add(T item)
@@ -194,5 +217,7 @@ namespace SkemaSystem.Models
         {
             return Activator.CreateInstance<TDerivedEntity>();
         }
+
+        
     }
 }

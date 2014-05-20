@@ -1,0 +1,34 @@
+﻿@model SkemaSystem.Models.Scheme
+
+<div id="subject_dist">
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fag</th>
+                    <th>Lærer</th>
+                    <th>Antal blokke</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var sdb in Model.SubjectDistBlocks)
+                {
+                    <tr>
+                        <td>@sdb.Subject.Name</td>
+                        <td>@sdb.Teacher.Name</td>
+                        <td>@sdb.BlocksCount / @Model.Semester.Blocks.SingleOrDefault(x => x.Subject.Equals(sdb.Subject)).BlocksCount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="box">
+        <h2>Tilføj fag</h2>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label">hej</label>
+                <input type="text" class="form-control" />
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -7,9 +8,16 @@ namespace SkemaSystem.Models
 {
     public class Scheme
     {
-        public ClassModel ClassModel { get; set; }
-        public Semester Semester { get; set; }
-        public List<SubjectDistBlock> SubjectDistBlocks { get; set; }
+        [Required]
+        public int Id { get; set; }
+        
+        [Required]
+        public virtual ClassModel ClassModel { get; set; }
+
+        [Required]
+        public virtual Semester Semester { get; set; }
+
+        public virtual List<SubjectDistBlock> SubjectDistBlocks { get; set; }
 
         public Scheme()
         {
@@ -19,8 +27,9 @@ namespace SkemaSystem.Models
         public List<Subject> NeededSubjects() {
             List<Subject> subjects = new List<Subject>();
 
-            foreach (Subject s in Semester.Blocks.Keys) {
-                subjects.Add(s);
+            foreach (SemesterSubjectBlock s in Semester.Blocks) 
+            {
+                subjects.Add(s.Subject);
             }
 
             return subjects;
@@ -44,7 +53,7 @@ namespace SkemaSystem.Models
                                     where sdb.Subject.Equals(s)
                                     select sdb;
 
-            int highestBlocksCount = Semester.Blocks[s];
+            int highestBlocksCount = Semester.Blocks.SingleOrDefault(x => x.Subject.Equals(s)).BlocksCount;
             int totalBlocksCount = 0;
             foreach (SubjectDistBlock sdb in subjectDistBlocks)
             {
