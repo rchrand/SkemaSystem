@@ -12,7 +12,7 @@ namespace SkemaSystem.Models.ViewModels
             public IEnumerable<Education> SelectedEducations { get; set; }
             public PostedEducations PostedEducations { get; set; }
 
-        private TeacherViewModel GetFruitsModel(Teacher teacher, PostedEducations postedEducations, ISkemaSystemDb db)
+        public TeacherViewModel GetFruitsModel(Teacher teacher, PostedEducations postedEducations, ISkemaSystemDb db)
         {
             // setup properties
             var model = new TeacherViewModel();
@@ -48,7 +48,7 @@ namespace SkemaSystem.Models.ViewModels
         /// <summary>
         /// for setup initial view model for all fruits
         /// </summary>
-        private TeacherViewModel GetFruitsInitialModel(Teacher teacher)
+        public TeacherViewModel GetFruitsInitialModel(Teacher teacher, ISkemaSystemDb db)
         {
             //setup properties
             var model = new TeacherViewModel();

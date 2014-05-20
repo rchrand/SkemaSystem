@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using SkemaSystem.Models;
 using System.Diagnostics;
 using System.Text;
+using SkemaSystem.Models.ViewModels;
 
 namespace SkemaSystem.Controllers
 {
@@ -83,10 +84,11 @@ namespace SkemaSystem.Controllers
             }
             //List<SelectListItem> educations = new List<SelectListItem>();
             //educations.Add(new SelectListItem { Text = "DMU", Value = "1", Selected = false });
+            TeacherViewModel tvm = new TeacherViewModel();
 
             //teacher.Educations.Add(db.Educations.First());
             //ViewBag.Educations = db.Educations.ToList();
-            return View(GetFruitsInitialModel(teacher));
+            return View(tvm.GetFruitsInitialModel(teacher, db));
             //return View(new Test(teacher, educations));
         }
 
@@ -126,7 +128,7 @@ namespace SkemaSystem.Controllers
                 // TODO redirect
             }
 
-            return View(GetFruitsModel(teacher, result.PostedEducations));
+            return View(result.GetFruitsModel(teacher, result.PostedEducations, db));
         }
 
         // GET: /admin/teachers/delete/5
@@ -165,33 +167,5 @@ namespace SkemaSystem.Controllers
             }
             base.Dispose(disposing);
         }
-
-        /*public static class FruitRepository
-        {
-            /// <summary>
-            /// for get fruit for specific id
-            /// </summary>
-            public static Education Get(SkeamSystemDb db, int id)
-            {
-                return GetAll(db).FirstOrDefault(x => x.Id.Equals(id));
-            }
-
-            /// <summary>
-            /// for get all fruits
-            /// </summary>
-            public static IEnumerable<Education> GetAll(SkeamSystemDb db)
-            {
-                return db.Educations;
-                //    new List<Education> {
-                //    new Education {Name = "Apple", Id = 1 },
-                //    new Education {Name = "Banana", Id = 2},
-                //    new Education {Name = "Cherry", Id = 3},
-                //    new Education {Name = "Pineapple", Id = 4},
-                //    new Education {Name = "Grape", Id = 5},
-                //    new Education {Name = "Guava", Id = 6},
-                //    new Education {Name = "Mango", Id = 7}
-                //};
-            }
-        }*/
     }
 }
