@@ -11,16 +11,11 @@ namespace SkemaSystem.Controllers
 {
     public class HomeController : BaseController
     {
-        ISkemaSystemDb _db; 
-
+        SkeamSystemDb _db;
+        
         public HomeController()
         {
             _db = new SkeamSystemDb();
-        }
-
-        public HomeController(ISkemaSystemDb db)
-        {
-            _db = db;
         }
 
         public ActionResult Index(string education)
@@ -30,7 +25,7 @@ namespace SkemaSystem.Controllers
                 //RedirectToAction("Index", "Education");
             }
             var model =
-                from t in _db.Query<Teacher>()
+                from t in _db.Teachers
                 orderby t.Name ascending
                 select t;
 
