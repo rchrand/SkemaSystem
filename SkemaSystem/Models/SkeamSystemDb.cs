@@ -50,9 +50,15 @@ namespace SkemaSystem.Models
         public IDbSet<ClassModel> Classes { get; set; }
         public IDbSet<Education> Educations { get; set; }
         public IDbSet<Teacher> Teachers { get; set; }
+
         public void Dispose() { }
         public int SaveChanges(){
             return -1;
+        }
+
+        public DbEntityEntry Entry(object entity)
+        {
+            return null;
         }
 
         public FakeSkemaSystemDb()

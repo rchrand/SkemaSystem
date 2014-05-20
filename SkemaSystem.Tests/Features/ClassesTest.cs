@@ -55,9 +55,9 @@ namespace SkemaSystem.Tests.Features
 
             Assert.IsTrue(scheme.AddLessonBlock(Teachers[0], Subjects[2], 30));
 
-            Assert.IsFalse(scheme.IsSubjectFull(Subjects[0], 5)); // Is the subject full if I was to try and add an additional 5? Should not be!
+            Assert.IsFalse(scheme.IsSubjectFull(Subjects[2], 5)); // Is the subject full if I was to try and add an additional 5? Should not be!
             
-            Assert.IsTrue(scheme.IsSubjectFull(Subjects[0], 6)); // What I was to try and add 6? Should be!
+            Assert.IsTrue(scheme.IsSubjectFull(Subjects[2], 6)); // What I was to try and add 6? Should be!
 
             Assert.IsTrue(scheme.AddLessonBlock(Teachers[1], Subjects[0], 20));
 

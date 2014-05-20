@@ -38,10 +38,10 @@ namespace SkemaSystem.Models
             return false;
         }
 
-        public bool IsSubjectFull(Subject s, int tryingToAdd = 0)
+        public bool IsSubjectFull(Subject s, int tryingToAdd = 1)
         {
             var subjectDistBlocks = from sdb in SubjectDistBlocks
-                                    where sdb.Subject == s
+                                    where sdb.Subject.Equals(s)
                                     select sdb;
 
             int highestBlocksCount = Semester.Blocks[s];
