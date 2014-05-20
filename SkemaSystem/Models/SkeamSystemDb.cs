@@ -1,5 +1,4 @@
-﻿using SkemaSystem.Migrations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -35,26 +34,24 @@ namespace SkemaSystem.Models
             
         }
 
-        public DbSet<Teacher> Teachers { get; set; }
-        public DbSet<Education> Educations { get; set; }
-        public DbSet<ClassModel> Classes { get; set; }
+        public IDbSet<Teacher> Teachers { get; set; }
+        public IDbSet<Education> Educations { get; set; }
+        public IDbSet<ClassModel> Classes { get; set; }
         public IDbSet<Subject> Subjects { get; set; }
         public IDbSet<Semester> Semesters { get; set; }
         public IDbSet<Scheme> Schemes { get; set; }
         public IDbSet<SemesterSubjectBlock> SemesterSubjectBlocks { get; set; }
 
-        //public void StateModified(object entity) 
-        //{
-        //    this.Entry(entity).State = System.Data.Entity.EntityState.Modified;
-        //}
+        public void StateModified(object entity) 
+        {
+            this.Entry(entity).State = System.Data.Entity.EntityState.Modified;
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
             //Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
-
         }
-        
     }
 
     public class FakeSkemaSystemDb : ISkemaSystemDb

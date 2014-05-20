@@ -17,17 +17,14 @@ namespace SkemaSystem.Migrations
 
         protected override void Seed(SkemaSystem.Models.SkeamSystemDb context)
         {
+            Teacher t1 = new Teacher { Name = "Hanne Sommer" };
+            Teacher t2 = new Teacher { Name = "Torben Krøjmand" };
+            Teacher t3 = new Teacher { Name = "Erik Jacobsen" };
+            Teacher t4 = new Teacher { Name = "Jörn Hujak" };
+            Teacher t5 = new Teacher { Name = "Karsten ITO" };
 
-            
-
-            Teacher t1 = new Teacher { Name = "Hanne Sommer"};
-            Teacher t2 = new Teacher { Name = "Torben Krøjmand"};
-            Teacher t3 = new Teacher { Name = "Erik Jacobsen"};
-            Teacher t4 = new Teacher { Name = "Jörn Hujak"};
-            Teacher t5 = new Teacher { Name = "Karsten ITO"};
-
-            ClassModel c1 = new ClassModel { ClassName = "12t"};
-            ClassModel c2 = new ClassModel { ClassName = "12s"};
+            ClassModel c1 = new ClassModel { ClassName = "12t" };
+            ClassModel c2 = new ClassModel { ClassName = "12s" };
 
             Subject su1 = new Subject { Name = "SK" };
             Subject su2 = new Subject { Name = "SD" };
@@ -63,7 +60,7 @@ namespace SkemaSystem.Migrations
             List<Semester> sList = new List<Semester>();
             sList.Add(s1);
             sList.Add(s2);
-            
+
             e1.Semesters = sList;
 
             c1.Education = e1;
@@ -76,7 +73,7 @@ namespace SkemaSystem.Migrations
 
             context.Teachers.AddOrUpdate(
                 t => t.Name,
-                t1,t2,t3,t4,t5
+                t1, t2, t3, t4, t5
             );
 
             context.Classes.AddOrUpdate(

@@ -54,10 +54,10 @@ namespace SkemaSystem.Tests.Features
 
             Semester = new Semester { Number = 1 };
             
-            Dictionary<Subject, int> blocks = new Dictionary<Subject,int>();
-            blocks.Add(Subjects[0], 20);
-            blocks.Add(Subjects[1], 40);
-            blocks.Add(Subjects[2], 35);
+            List<SemesterSubjectBlock> blocks = new List<SemesterSubjectBlock>();
+            blocks.Add(new SemesterSubjectBlock { Subject = Subjects[0], BlocksCount = 20 });
+            blocks.Add(new SemesterSubjectBlock { Subject = Subjects[1], BlocksCount = 40 });
+            blocks.Add(new SemesterSubjectBlock { Subject = Subjects[2], BlocksCount = 35 });
 
             Semester.Blocks = blocks;
         }
