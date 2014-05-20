@@ -19,6 +19,8 @@ namespace SkemaSystem.Models
         IDbSet<ClassModel> Classes { get; set; }
         IDbSet<Education> Educations { get; set; }
         int SaveChanges();
+        //DbEntityEntry Entry(object entity);
+        void StateModified(object entity);
     }
 
     public class SkeamSystemDb : DbContext, ISkemaSystemDb
@@ -32,6 +34,10 @@ namespace SkemaSystem.Models
         public IDbSet<Education> Educations { get; set; }
         public IDbSet<ClassModel> Classes { get; set; }
 
+        public void StateModified(object entity) 
+        {
+            this.Entry(entity).State = System.Data.Entity.EntityState.Modified;
+        }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
@@ -54,7 +60,13 @@ namespace SkemaSystem.Models
         public IDbSet<Teacher> Teachers { get; set; }
         public void Dispose() { }
         public int SaveChanges(){
+            //this.Educations.Local = ()this.Educations.Local;
             return -1;
+        }
+
+        public void StateModified(object entity)
+        {
+
         }
 
         public FakeSkemaSystemDb()
