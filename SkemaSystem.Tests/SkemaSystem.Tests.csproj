@@ -33,6 +33,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -42,6 +49,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
@@ -82,7 +90,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\FakeSkemaSystemDb.cs" />
     <Compile Include="Controllers\TestData.cs" />
     <Compile Include="Controllers\UserControllerTest.cs" />
     <Compile Include="Features\Example.cs" />
@@ -97,7 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SkemaSystem\SkemaSystem.csproj">
-      <Project>{A030965F-E148-47AF-8C7E-58F785352DCB}</Project>
+      <Project>{a030965f-e148-47af-8c7e-58f785352dcb}</Project>
       <Name>SkemaSystem</Name>
     </ProjectReference>
   </ItemGroup>
