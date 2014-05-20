@@ -18,6 +18,7 @@ namespace SkemaSystem.Models
         IDbSet<Teacher> Teachers { get; set; }
         IDbSet<ClassModel> Classes { get; set; }
         IDbSet<Education> Educations { get; set; }
+        IDbSet<Room> Rooms { get; set; }
         int SaveChanges();
         DbEntityEntry Entry(object entity);
     }
@@ -34,18 +35,59 @@ namespace SkemaSystem.Models
         public DbSet<Teacher> Teachers { get; set; }
 
         public DbSet<Education> Educations { get; set; }
+
+        public DbSet<Room> Rooms { get; set; }
+
         //public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
-        public DbEntityEntry Entry(object entity)
-        {
-            return base.Entry(entity);
-        }
+        //public DbEntityEntry Entry(object entity)
+        //{
+        //    throw new NotImplementedException();
+        //    //return base.Entry(entity);
+        //}
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
 
         }
-        
+
+
+        IDbSet<Teacher> ISkemaSystemDb.Teachers
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public IDbSet<ClassModel> Classes
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        IDbSet<Education> ISkemaSystemDb.Educations
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 
     public class FakeSkemaSystemDb : ISkemaSystemDb
@@ -53,6 +95,8 @@ namespace SkemaSystem.Models
         public IDbSet<ClassModel> Classes { get; set; }
         public IDbSet<Education> Educations { get; set; }
         public IDbSet<Teacher> Teachers { get; set; }
+
+        public IDbSet<Room> Rooms { get; set; }
         public void Dispose() { }
         public int SaveChanges(){
             return -1;
@@ -63,6 +107,13 @@ namespace SkemaSystem.Models
             Teachers = new FakeDbSet<Teacher>();
             Educations = new FakeDbSet<Education>();
             Classes = new FakeDbSet<ClassModel>();
+        }
+
+
+        public DbEntityEntry Entry(object entity)
+        {
+            //throw new NotImplementedException();
+            return DbEntityEntry;
         }
     }
 
