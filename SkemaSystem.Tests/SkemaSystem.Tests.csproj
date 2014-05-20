@@ -90,7 +90,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\FakeSkemaSystemDb.cs" />
     <Compile Include="Controllers\TeacherControllerTest.cs" />
     <Compile Include="Controllers\TestData.cs" />
     <Compile Include="Features\CRUD educations\US4CreateEducation.cs" />

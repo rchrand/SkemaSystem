@@ -1,5 +1,4 @@
-﻿@using MvcCheckBoxList.Model
-@model SkemaSystem.Controllers.TeacherController.TeacherViewModel
+﻿@model SkemaSystem.Models.Teacher
 
 @{
     ViewBag.Title = "Edit";
@@ -7,34 +6,29 @@
 
 <h2>Edit</h2>
 
-
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-
+    
     <div class="form-horizontal">
         <h4>Teacher</h4>
         <hr />
         @Html.ValidationSummary(true)
-        @Html.HiddenFor(model => model.Teacher.TeacherId)
+        @Html.HiddenFor(model => model.TeacherId)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Teacher.Name, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Teacher.Name)
-                @Html.ValidationMessageFor(model => model.Teacher.Name)
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.Label("Test", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.EducationID, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.CheckBoxListFor(model => model.PostedEducations.EducationIds,
-                                  model => model.AvailableEducations,
-                                  education => education.EducationId,
-                                  education => education.Name,
-                                  model => model.SelectedEducations,
-                                  Position.Horizontal)
+                @Html.EditorFor(model => model.EducationID)
+                @Html.ValidationMessageFor(model => model.EducationID)
             </div>
         </div>
 
@@ -49,28 +43,3 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
-
-
-
-
-@*<section class="checkBoxListFor">
-    <p>
-        <label>Please Select Fruits:</label>
-        @using (Html.BeginForm("Index", "Home", FormMethod.Post))
-        {
-            @Html.CheckBoxListFor(model => model.PostedEducations.EducationIds,
-                                  model => model.AvailableEducations,
-                                  education => education.Id,
-                                  education => education.Name,
-                                  model => model.SelectedEducations,
-                                  Position.Horizontal)
-
-
-            <input class="green" type="submit" value="POST to Controller" />
-        }
-    </p>
-</section>*@

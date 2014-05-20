@@ -30,7 +30,7 @@ namespace SkemaSystem.Controllers
                 //RedirectToAction("Index", "Education");
             }
             var model =
-                from t in _db.Teachers
+                from t in _db.Educations
                 orderby t.Name ascending
                 select t;
 

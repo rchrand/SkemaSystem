@@ -19,16 +19,16 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Educations)
+            @Html.DisplayNameFor(model => model.EducationID)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Educations)
+            @Html.DisplayFor(model => model.EducationID)
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TeacherId }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

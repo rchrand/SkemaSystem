@@ -27,7 +27,7 @@ namespace SkemaSystem.Controllers
         // GET: /Class/
         public ActionResult Index()
         {
-            return View(db.Teachers);
+            return View(); // db.Teachers
         }
 
         // GET: /Class/Details/5

@@ -22,6 +22,10 @@ namespace SkemaSystem.Migrations
                 new Education { Name = "DMU" },
                 new Education { Name = "FIBCA" },
                 new Education { Name = "MDU" }
+                [RouteArea("admin")]
+                [RoutePrefix("teachers")]
+                [Route("{action=index}")]
+
             );*/
 
             /*var teacher = new Teacher() { Name = "Hanne Sommer", Educations = new List<Education>() { context.Educations.FirstOrDefault() } };
@@ -45,7 +49,7 @@ namespace SkemaSystem.Migrations
                 new Education { Name = "FIBCA" },
                 new Education { Name = "MDU" }
             );
-            
+
             context.Teachers.AddOrUpdate(
                 t => t.Name,
                 new Teacher { Name = "Hanne Sommer" },

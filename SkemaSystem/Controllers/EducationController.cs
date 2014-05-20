@@ -57,7 +57,7 @@ namespace SkemaSystem.Controllers
         [Authorize (Roles = "Admin")]
         public ActionResult Create([Bind(Include="Id,Name")] Education education)
         {
-            if (ModelState.IsValid && CheckIfNameIsAvailable(education.Name) && CheckIfIdIsAvailable(education.Id))
+            if (ModelState.IsValid && CheckIfNameIsAvailable(education.Name) && CheckIfIdIsAvailable(education.EducationId))
             {
                 db.Educations.Add(education);
                 db.SaveChanges();
@@ -69,7 +69,7 @@ namespace SkemaSystem.Controllers
 
         private bool CheckIfIdIsAvailable(int id)
         {
-            if (db.Educations.SingleOrDefault(x => x.Id == id) != null)
+            if (db.Educations.SingleOrDefault(x => x.EducationId == id) != null)
             {
                 return false;
             }
@@ -94,7 +94,7 @@ namespace SkemaSystem.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Education education = db.Educations.Find(id);
-            Education _education = db.Educations.First(e => e.Name == education);
+            Education _education = db.Educations.FirstOrDefault(e => e.Name == education);
             if (_education == null)
             {
                 return HttpNotFound();
