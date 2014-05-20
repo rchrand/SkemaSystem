@@ -101,6 +101,7 @@ namespace SkemaSystem.Controllers
             Debug.WriteLine(result);
 
             Teacher teacher = result.Teacher;
+
             if (result.PostedEducations != null && result.PostedEducations.EducationIds.Any())
             {
                 IEnumerable<Education> educations = db.Educations;
@@ -114,16 +115,8 @@ namespace SkemaSystem.Controllers
             }
             Debug.WriteLine(db.Educations.First());
 
-            //  x => result.PostedEducations.EducationIds.Any(s => x.Id.ToString().Equals(s))
-
             if (ModelState.IsValid)
             {
-                /*foreach (Education education in teacher.Educations)
-                {
-                    education.Teachers.Clear();
-                    db.Entry(education).State = System.Data.Entity.EntityState.Modified;
-                }*/
-                //teacher.Educations.Add(db.Educations.FirstOrDefault());
                 Education education = teacher.Educations.FirstOrDefault<Education>();
 
                 teacher.Educations.Remove(education);
@@ -131,26 +124,9 @@ namespace SkemaSystem.Controllers
                 db.Entry(teacher).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 // TODO redirect
-                //return RedirectToAction("edit");
             }
 
             return View(GetFruitsModel(teacher, result.PostedEducations));
-            /*var selectedServicesList = result.Educations.Where(s => s.Selected);
-
-            return HttpNotFound();*/
-            //teacher.Name = "Martin";
-
-            ///*var selectedFruits = FruitRepository.GetAll()
-            //   .Where(x => postedFruitIds.Any(s => x.Id.ToString().Equals(s)))
-            //   .ToList();*/
-
-            //if (ModelState.IsValid)
-            //{
-            //    db.Entry(teacher).State = System.Data.Entity.EntityState.Modified;
-            //    db.SaveChanges();
-            //    return RedirectToAction("Index");
-            //}
-            //return View(teacher);
         }
 
         // GET: /admin/teachers/delete/5
