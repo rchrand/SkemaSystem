@@ -9,32 +9,32 @@ using System.Collections.Generic;
 
 // Skriv UserStory og tasks her!
 
-namespace SkemaSystem.Tests.Features
+namespace Tests.Features
 {
-    [TestClass]
-    public class Example
-    {
+    //[TestClass]
+    //public class Example
+    //{
         
 
-        [TestMethod]
-        public void TestMethod1()
-        {
-            //Arrange
-            var db = new FakeSkemaSystemDb();
-            db.AddSet(TestData.Teachers);
+    //    [TestMethod]
+        //public void TestMethod1()
+        //{
+        //    //Arrange
+        //    var db = new FakeSkemaSystemDb();
+        //    db.Teachers.Add(new Teacher() { Id = 1, Name = "Haso" });
+            
+        //    HomeController controller = new HomeController(db);
 
-            HomeController controller = new HomeController(db);
+        //    var model =
+        //        from t in db.Teachers
+        //        orderby t.Name ascending
+        //        select t;
 
-            var model =
-                from t in db.Query<Teacher>()
-                orderby t.Name ascending
-                select t;
+        //    //Act
+        //    IQueryable<Teacher> result = (IQueryable<Teacher>)(controller.Index("DMU") as ViewResult).Model;
 
-            //Act
-            IQueryable<Teacher> result = (IQueryable<Teacher>)(controller.Index("DMU") as ViewResult).Model;
-
-            //Assert
-            Assert.AreEqual(model.Single(x => x.Name.Equals("Hanne1")), result.Single(x => x.Name.Equals("Hanne1")));
-        }
-    }
+        //    //Assert
+        //    Assert.AreEqual(model.Single(t => t.Name.Equals("Haso")), result.Single(t => t.Name.Equals("Haso")));
+        //}
+    //}
 }
