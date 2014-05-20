@@ -20,7 +20,10 @@ namespace SkemaSystem.Models
 
         }
 
+        public DbSet<Room> Rooms { get; set; }
+
         public DbSet<Teacher> Teachers { get; set; }
+
         public DbSet<Education> Educations { get; set; }
         //public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
