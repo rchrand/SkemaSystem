@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SkemaSystem.Models;
 
 namespace SkemaSystem.Tests.Controllers
 {
@@ -9,6 +10,7 @@ namespace SkemaSystem.Tests.Controllers
         [TestMethod]
         public void Index()
         {
+            var db = new FakeSkemaSystemDb();
         }
     }
 }

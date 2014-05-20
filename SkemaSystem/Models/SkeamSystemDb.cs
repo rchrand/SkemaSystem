@@ -18,6 +18,7 @@ namespace SkemaSystem.Models
         IDbSet<Teacher> Teachers { get; set; }
         IDbSet<ClassModel> Classes { get; set; }
         IDbSet<Education> Educations { get; set; }
+        IDbSet<UserModel> Users { get; set; }
         int SaveChanges();
         DbEntityEntry Entry(object entity);
     }
@@ -32,6 +33,7 @@ namespace SkemaSystem.Models
         public IDbSet<Teacher> Teachers { get; set; }
         public IDbSet<Education> Educations { get; set; }
         public IDbSet<ClassModel> Classes { get; set; }
+        public IDbSet<UserModel> Users { get; set; }
 
         public DbEntityEntry Entry(object entity)
         {
@@ -50,6 +52,7 @@ namespace SkemaSystem.Models
         public IDbSet<ClassModel> Classes { get; set; }
         public IDbSet<Education> Educations { get; set; }
         public IDbSet<Teacher> Teachers { get; set; }
+        public IDbSet<UserModel> Users { get; set; }
         public void Dispose() { }
         public int SaveChanges(){
             return -1;
@@ -60,6 +63,7 @@ namespace SkemaSystem.Models
             Teachers = new FakeDbSet<Teacher>();
             Educations = new FakeDbSet<Education>();
             Classes = new FakeDbSet<ClassModel>();
+            Users = new FakeDbSet<UserModel>();
         }
     }
 

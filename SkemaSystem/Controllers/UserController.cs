@@ -50,7 +50,5 @@ namespace SkemaSystem.Controllers
         {
             return Content("Admin,");
         }
-
-
 	}
 }
