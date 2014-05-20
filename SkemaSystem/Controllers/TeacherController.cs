@@ -96,61 +96,30 @@ namespace SkemaSystem.Controllers
         [HttpPost]
         //[ValidateAntiForgeryToken]
         [Route("edit")]
-        public ActionResult Edit(TeacherViewModel result)
+        public ActionResult Edit([Bind(Include="Teacher,PostedEducations")] TeacherViewModel result)
         {
-            Debug.WriteLine(result);
-
             Teacher teacher = result.Teacher;
             if (result.PostedEducations != null && result.PostedEducations.EducationIds.Any())
             {
                 IEnumerable<Education> educations = db.Educations;
                 teacher.Educations = educations
-                 .Where(x => result.PostedEducations.EducationIds.Any(s => x.EducationId.ToString().Equals(s)))
+                 .Where(x => result.PostedEducations.EducationIds.Any(s => x.Id.ToString().Equals(s)))
                  .ToList();
             }
             else
             {
                 teacher.Educations = new List<Education>();
             }
-            Debug.WriteLine(db.Educations.First());
-
-            //  x => result.PostedEducations.EducationIds.Any(s => x.Id.ToString().Equals(s))
 
             if (ModelState.IsValid)
             {
-                /*foreach (Education education in teacher.Educations)
-                {
-                    education.Teachers.Clear();
-                    db.Entry(education).State = System.Data.Entity.EntityState.Modified;
-                }*/
-                //teacher.Educations.Add(db.Educations.FirstOrDefault());
-                Education education = teacher.Educations.FirstOrDefault<Education>();
-
-                teacher.Educations.Remove(education);
-
-                db.Entry(teacher).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                // TODO redirect
-                //return RedirectToAction("edit");
+                    Teacher _teacher = db.Teachers.FirstOrDefault(t => t.Id == teacher.Id);
+                    _teacher.Name = teacher.Name;
+                    _teacher.Educations = teacher.Educations;
+                    db.SaveChanges();
             }
 
-            return View(GetFruitsModel(teacher, result.PostedEducations));
-            /*var selectedServicesList = result.Educations.Where(s => s.Selected);
-
-            return HttpNotFound();*/
-            //teacher.Name = "Martin";
-
-            ///*var selectedFruits = FruitRepository.GetAll()
-            //   .Where(x => postedFruitIds.Any(s => x.Id.ToString().Equals(s)))
-            //   .ToList();*/
-
-            //if (ModelState.IsValid)
-            //{
-            //    db.Entry(teacher).State = System.Data.Entity.EntityState.Modified;
-            //    db.SaveChanges();
-            //    return RedirectToAction("Index");
-            //}
-            //return View(teacher);
+                return RedirectToAction("index");
         }
 
         // GET: /admin/teachers/delete/5
@@ -224,7 +193,7 @@ namespace SkemaSystem.Controllers
             {
                 IEnumerable<Education> educations = db.Educations;
                 selectedEducations = /*FruitRepository.GetAll(db)*/educations
-                 .Where(x => postedEducationIds.Any(s => x.EducationId.ToString().Equals(s)))
+                 .Where(x => postedEducationIds.Any(s => x.Id.ToString().Equals(s)))
                  .ToList();
             }
 

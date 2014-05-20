@@ -10,18 +10,12 @@ namespace SkemaSystem.Models
     public class Education
     {
         [Required]
-        public int EducationId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
 
-        public int TeacherId { get; set; }
-        public virtual ICollection<Teacher> Teachers { get; set; }
-
-        public Education()
-        {
-            //Teachers = new HashSet<Teacher>();
-        }
+        public virtual List<Teacher> Teachers { get; set; }
 
         public override string ToString()
         {

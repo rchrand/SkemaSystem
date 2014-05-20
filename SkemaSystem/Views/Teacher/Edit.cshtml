@@ -16,7 +16,7 @@
         <h4>Teacher</h4>
         <hr />
         @Html.ValidationSummary(true)
-        @Html.HiddenFor(model => model.Teacher.TeacherId)
+        @Html.HiddenFor(model => model.Teacher.Id)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Teacher.Name, new { @class = "control-label col-md-2" })
@@ -31,7 +31,7 @@
             <div class="col-md-10">
                 @Html.CheckBoxListFor(model => model.PostedEducations.EducationIds,
                                   model => model.AvailableEducations,
-                                  education => education.EducationId,
+                                  education => education.Id,
                                   education => education.Name,
                                   model => model.SelectedEducations,
                                   Position.Horizontal)
