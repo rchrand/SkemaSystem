@@ -9,12 +9,26 @@ using System.Web.Mvc;
 
 namespace SkemaSystem.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        SkeamSystemDb _db = new SkeamSystemDb();
-
-        public ActionResult Index()
+        ISkemaSystemDb _db;
+        
+        public HomeController()
         {
+            _db = new SkeamSystemDb();
+        }
+
+        public HomeController(FakeSkemaSystemDb db)
+        {
+            _db = db;
+        }
+
+        public ActionResult Index(string education)
+        {
+            if (education != null)
+            {
+                //RedirectToAction("Index", "Education");
+            }
             var model =
                 from t in _db.Teachers
                 orderby t.Name ascending
