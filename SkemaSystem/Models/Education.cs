@@ -14,7 +14,8 @@ namespace SkemaSystem.Models
         [Required]
         public string Name { get; set; }
 
-        [Required]
         public virtual List<Teacher> Teachers { get; set; }
+
+        public virtual List<Semester> Semesters { get; set; }
     }
 }

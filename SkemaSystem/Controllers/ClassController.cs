@@ -168,7 +168,30 @@ namespace SkemaSystem.Controllers
         [HttpGet]
         public PartialViewResult ChangeScheme(string scheme)
         {
-            return PartialView("_SchemeSubjectDistribution", db.Schemes.Single(x => x.Id == Int32.Parse(scheme)));
+            int schemeId = Int32.Parse(scheme);
+            return PartialView("_SchemeSubjectDistribution", db.Schemes.Single(x => x.Id == schemeId));
+        }
+
+        [HttpPost]
+        public PartialViewResult AddSubjectDistBlock(int scheme, int add_subject, int add_teacher, int add_blockscount)
+        {
+            Scheme theScheme = db.Schemes.Single(x => x.Id == scheme);
+            if (theScheme.AddLessonBlock(db.Teachers.SingleOrDefault(x => x.Id == add_teacher), db.Subjects.SingleOrDefault(x => x.Id == add_subject), add_blockscount))
+            {
+                db.SaveChanges();
+            }
+            else
+            {
+                // Didn't succeed!
+                ViewBag.add_subject = add_subject;
+                ViewBag.add_teacher = add_teacher;
+                ViewBag.add_blockscount = add_blockscount;
+                ViewBag.Error = "- Der er ikke nok ledige blokke på semestret til, at udføre denne handling.";
+            }
+            
+            
+
+            return PartialView("_SchemeSubjectDistribution", theScheme);
         }
 
     }

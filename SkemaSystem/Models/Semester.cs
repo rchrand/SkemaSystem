@@ -14,7 +14,6 @@ namespace SkemaSystem.Models
         [Required]
         public int Number { get; set; }
 
-        [Required]
         public virtual List<SemesterSubjectBlock> Blocks { get; set; }
     }
 }

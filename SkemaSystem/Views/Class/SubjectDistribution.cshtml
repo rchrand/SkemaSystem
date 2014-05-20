@@ -4,27 +4,19 @@
     ViewBag.Title = "SubjectDistribution";
 }
 
-
-
 <h2>Fagfordeling for @Model.ClassName</h2>
 <div class="row">
     <div class="col-sm-7">
         @if (@Model.ActiveSchemes.Count() > 0)
         {
             <div>
-                @using (Ajax.BeginForm("ChangeScheme", "Class",
-                    new AjaxOptions
-                    {
-                        HttpMethod = "get",
-                        InsertionMode = InsertionMode.Replace,
-                        UpdateTargetId = "subject_dist"
-                    }))
-                {
+                <form method="get" action="@Url.Action("ChangeScheme")" data-schemesys-ajax="true" data-schemesys-target="#subject_dist">
                     @Html.DropDownList("scheme", new SelectList(ViewBag.Schemes, "Value", "Text"), new { onchange = "$(this.form).submit();" })
-                }
+                </form>
             </div>
-            
-            @Html.Partial("_SchemeSubjectDistribution", @Model.ActiveSchemes[0]);
+            <div id="subject_dist">
+                @Html.Partial("_SchemeSubjectDistribution", @Model.ActiveSchemes[0]);
+            </div>
         }
         else
         {

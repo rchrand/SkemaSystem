@@ -14,23 +14,24 @@ namespace SkemaSystem.Models
         [Required]
         public string ClassName { get; set; }
 
+        [Required]
+        public virtual Education Education { get; set; }
+
         public virtual List<Scheme> ActiveSchemes { get; set; }
 
         public ClassModel()
         {
-            if (ActiveSchemes == null)
-                ActiveSchemes = new List<Scheme>();
         }
 
         public bool CreateNewSemester() { // TODODODODODODODODODODODODODODODODODODODODODO
-            var scheme = from s in ActiveSchemes
+            /*var scheme = from s in ActiveSchemes
                          orderby s.Semester.Number descending
                          select s;
             Scheme theScheme = scheme.FirstOrDefault();
-
+            */
             if (CanCreateNewSemester())
             {
-                ActiveSchemes.Add(new Scheme { Semester = new Semester { Number = 2 }, ClassModel = this });
+                ActiveSchemes.Add(new Scheme { Semester = Education.Semesters[0], ClassModel = this });
                 return true;
             }
             return false;

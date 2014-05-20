@@ -1,34 +1,77 @@
 ﻿@model SkemaSystem.Models.Scheme
 
-<div id="subject_dist">
-    <div>
-        <table>
-            <thead>
+
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Fag</th>
+                <th>Lærer</th>
+                <th>Antal blokke</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sdb in Model.SubjectDistBlocks)
+            {
                 <tr>
-                    <th>Fag</th>
-                    <th>Lærer</th>
-                    <th>Antal blokke</th>
+                    <td>@sdb.Subject.Name</td>
+                    <td>@sdb.Teacher.Name</td>
+                    <td>@sdb.BlocksCount / @Model.Semester.Blocks.SingleOrDefault(x => x.Subject.Equals(sdb.Subject)).BlocksCount</td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var sdb in Model.SubjectDistBlocks)
-                {
-                    <tr>
-                        <td>@sdb.Subject.Name</td>
-                        <td>@sdb.Teacher.Name</td>
-                        <td>@sdb.BlocksCount / @Model.Semester.Blocks.SingleOrDefault(x => x.Subject.Equals(sdb.Subject)).BlocksCount</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <div class="box">
-        <h2>Tilføj fag</h2>
-        <form class="form-horizontal">
-            <div class="form-group">
-                <label class="control-label">hej</label>
-                <input type="text" class="form-control" />
+            }
+        </tbody>
+    </table>
+</div>
+<div class="box">
+    <h2>Tilføj fag</h2>
+    <form class="form-horizontal" method="post" action="@Url.Action("AddSubjectDistBlock")" data-schemesys-ajax="true" data-schemesys-target="#subject_dist">
+        @Html.Hidden("scheme", @Model.Id)
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-4"><label class="control-label">Fag</label></div>
+                <div class="col-sm-8">
+                    <select class="form-control" name="add_subject" id="add_subject">
+                        @foreach (var semesterSubject in Model.Semester.Blocks)
+                        {
+                            <option value="@semesterSubject.Subject.Id" @((ViewBag.add_subject != null && ViewBag.add_subject == @semesterSubject.Subject.Id) ? "selected" :"") >@semesterSubject.Subject.Name</option>
+                        }
+                    </select>
+                </div>
             </div>
-        </form>
-    </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-4"><label class="control-label">Lærer</label></div>
+                <div class="col-sm-8">
+                    <select class="form-control" name="add_teacher" id="add_teacher">
+                        @foreach (var teacher in Model.ClassModel.Education.Teachers)
+                        {
+                            <option value="@teacher.Id" @((ViewBag.add_teacher != null && ViewBag.add_teacher == @teacher.Id) ? "selected" : "")>@teacher.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-4"><label class="control-label">Antal blokke</label></div>
+                <div class="col-sm-8">
+                    <input type="number" placeholder="Antal blokke" class="form-control" name="add_blockscount" id="add_blockscount" value="@((ViewBag.add_blockscount != null) ? @ViewBag.add_blockscount : "")" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Tilføj" class="form-control" />
+        </div>
+        @if (ViewBag.Error != null)
+        {
+            <div>
+                @ViewBag.Error
+            </div>
+        }
+    </form>
 </div>
