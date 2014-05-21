@@ -31,7 +31,7 @@ namespace SkemaSystem.Migrations
                 new Teacher { Name = "Torben Kroejmand", UserName = "eaatk", Password = "torben5" }
             );
 
-            if (!Roles.RoleExists("Admin"))
+            /*if (!Roles.RoleExists("Admin"))
             {
                 Roles.CreateRole("Admin");
             }
@@ -48,7 +48,7 @@ namespace SkemaSystem.Migrations
             if (Roles.GetRolesForUser("eaasommer").ToList().Count == 0)
             {
                 Roles.AddUserToRole("eaasommer", "Teacher");
-            }
+            }*/
         }
     }
 }
