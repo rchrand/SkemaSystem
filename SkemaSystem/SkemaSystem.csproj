@@ -172,6 +172,7 @@
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\EducationController.cs" />
+    <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Models\ClassModel.cs" />
     <Compile Include="Models\Education.cs" />
@@ -268,6 +269,10 @@
     <Content Include="Views\Education\Details.cshtml" />
     <Content Include="Views\Education\Edit.cshtml" />
     <Content Include="Views\Education\Index.cshtml" />
+    <Content Include="Views\Room\Create.cshtml" />
+    <Content Include="Views\Room\Delete.cshtml" />
+    <Content Include="Views\Room\Edit.cshtml" />
+    <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Teacher\Login.cshtml" />
     <Content Include="Views\Teacher\Create.cshtml" />
     <Content Include="Views\Teacher\Delete.cshtml" />

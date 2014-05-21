@@ -25,6 +25,21 @@ namespace SkemaSystem.Migrations
                 new Education { Name = "MDU" }
             );
 
+            //context.Teachers.AddOrUpdate(
+            //    t => t.Name,
+            //    new Teacher { Name = "Hanne Sommer" },
+            //    new Teacher { Name = "Torben Kroejmand" }
+            //);
+
+            //context.Rooms.AddOrUpdate(
+            //    r => r.RoomName,
+            //    new Room { RoomName = "A1.1" },
+            //    new Room { RoomName = "A1.12" },
+            //    new Room { RoomName = "A1.13" },
+            //    new Room { RoomName = "A1.14" },
+            //    new Room { RoomName = "A1.15" }
+            //);
+
             context.Teachers.AddOrUpdate(
                 t => t.Name,
                 new Teacher { Name = "Hanne Sommer", UserName = "eaasommer", Password = "fisk123" },
