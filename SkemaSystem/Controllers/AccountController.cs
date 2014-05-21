@@ -1,4 +1,5 @@
 ﻿using SkemaSystem.Models;
+using SkemaSystem.Models.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,11 +43,29 @@ namespace SkemaSystem.Controllers
             return Redirect("/");
         }
 
-        [Authorize(Roles = "Admin")]
         [Route("adminonly")]
         public ContentResult TestingAdminRole()
         {
-            return Content("Admin,");
+            if (IsRole(UserRoles.Admin))
+            {
+                return Content("Admin,");
+            }
+
+            return Content("Teacher,");
+        }
+
+        private bool IsRole(UserRoles role)
+        {
+            var db = new SkeamSystemDb();
+            var user = User.Identity.Name;
+            var userName = db.Teachers.SingleOrDefault(t => t.UserName == user && t.Role == role);
+
+            if (userName != null)
+            {
+                return true;
+            }
+            
+            return false;
         }
     }
 }
