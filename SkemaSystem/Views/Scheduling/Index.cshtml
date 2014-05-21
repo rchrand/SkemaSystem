@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    }
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box">
+            <div class="item">
+                @Html.DropDownList("education", new SelectList(ViewBag._educations, "Value", "Text"));
+            </div>
+        </div>
+    </div>
+</div>
