@@ -10,6 +10,7 @@ using SkemaSystem.Models;
 using System.Diagnostics;
 using System.Text;
 using SkemaSystem.Models.ViewModels;
+using System.Web.Security;
 
 namespace SkemaSystem.Controllers
 {
@@ -178,6 +179,42 @@ namespace SkemaSystem.Controllers
             }
 
             return selectedEducations;
+        }
+
+        [HttpGet]
+        [Route("~/admin/login")]
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("~/admin/login")]
+        public ActionResult Login(Teacher model)
+        {
+            if (model.IsValid(model.UserName, model.Password)){
+                FormsAuthentication.SetAuthCookie(model.UserName, true);
+                return Redirect("/");
+            }
+            else {
+                ModelState.AddModelError("", "Login is invalid");
+            }
+
+            return View(model);
+        }
+
+        [Route("~/admin/logout")]
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            return Redirect("/");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [Route("~/admin/adminonly")]
+        public ContentResult TestingAdminRole()
+        {
+            return Content("Admin,");
         }
     }
 }

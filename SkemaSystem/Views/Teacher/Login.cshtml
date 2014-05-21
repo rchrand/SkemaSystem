@@ -1,0 +1,48 @@
+﻿@model SkemaSystem.Models.Teacher
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="row">
+    <h2>Login</h2>
+
+    <div class="col-sm-12">
+        @using (Html.BeginForm("Login", "Teacher"))
+        {
+            @Html.ValidationSummary(true, "Login failed. Check your login details.");
+            @Html.AntiForgeryToken();
+            <div class="form">
+                    <label>
+                        @Html.LabelFor(u => u.UserName)
+                    </label>
+                    <div class="field">
+                        @Html.TextBoxFor(u => u.UserName)
+                        @Html.ValidationMessageFor(u => u.UserName)
+                    </div>
+
+                    <label>
+                        @Html.LabelFor(u => u.Password)
+                    </label>
+                    <div class="field">
+                        @Html.PasswordFor(u => u.Password)
+                        @Html.ValidationMessageFor(u => u.Password)
+                    </div>
+
+                    <input type="submit" value="Log In" />
+            </div>
+        }
+
+
+        <div class="box">
+            UserName: eaatk |
+            Password: torben5 |
+            Role: Admin
+        </div>
+
+        <div class="box">
+            UserName: eaasommer |
+            Password: fisk123 | 
+            Role: Teacher
+        </div>
+    </div>
+</div>

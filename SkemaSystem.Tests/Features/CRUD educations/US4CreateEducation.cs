@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SkemaSystem.Models;
 using System.Collections.Generic;
 using System.Linq;
-using SkemaSystem.Tests.Controllers;
 using SkemaSystem.Controllers;
 using System.Data.Entity;
 
