@@ -1,0 +1,13 @@
+﻿@model SkemaSystem.Models.Education
+
+@{
+    ViewBag.Title = "ModifyTeachers";
+}
+
+<h2>Tilføj eller fjern lærer til @Model.Name</h2>
+
+@Html.Partial("_PartialModifyTeachers", @Model.Teachers)
+
+
+
+
