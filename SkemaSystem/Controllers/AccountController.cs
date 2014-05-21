@@ -30,6 +30,7 @@ namespace SkemaSystem.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
+        [Route("{education}/account/login")]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
