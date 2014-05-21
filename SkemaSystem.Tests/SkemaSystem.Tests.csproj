@@ -90,12 +90,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\TestData.cs" />
     <Compile Include="Features\CRUD class\ClassTest.cs" />
     <Compile Include="Features\CRUD educations\US4CreateEducation.cs" />
+    <Compile Include="Features\CRUD Teacher\TeacherTest.cs" />
     <Compile Include="Features\Example.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
