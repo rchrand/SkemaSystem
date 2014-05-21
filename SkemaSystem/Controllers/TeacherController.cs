@@ -97,7 +97,7 @@ namespace SkemaSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("edit/{id}")]
+        [Route("edit")]
         public ActionResult Edit([Bind(Include = "Teacher,PostedEducations")] TeacherViewModel result)
         {
             // 
