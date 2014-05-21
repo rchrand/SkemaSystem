@@ -14,7 +14,6 @@ namespace SkemaSystem.Models
         [Required]
         public string ClassName { get; set; }
 
-        [Required]
         public virtual Education Education { get; set; }
 
         public virtual List<Scheme> ActiveSchemes { get; set; }

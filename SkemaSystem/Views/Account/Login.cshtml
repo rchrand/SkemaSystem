@@ -13,11 +13,11 @@
             @Html.AntiForgeryToken();
             <div class="form">
                     <label>
-                        @Html.LabelFor(u => u.UserName)
+                        @Html.LabelFor(u => u.Username)
                     </label>
                     <div class="field">
-                        @Html.TextBoxFor(u => u.UserName)
-                        @Html.ValidationMessageFor(u => u.UserName)
+                        @Html.TextBoxFor(u => u.Username)
+                        @Html.ValidationMessageFor(u => u.Username)
                     </div>
 
                     <label>

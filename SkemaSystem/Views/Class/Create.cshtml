@@ -1,11 +1,10 @@
-﻿@model SkemaSystem.Models.ClassModel
+﻿@model SkemaSystem.Models.ViewModels.ClassViewModel
 
 @{
     ViewBag.Title = "Create";
 }
 
 <h2>Create</h2>
-
 
 @using (Html.BeginForm()) 
 {
@@ -15,12 +14,19 @@
         <h4>ClassModel</h4>
         <hr />
         @Html.ValidationSummary(true)
-
         <div class="form-group">
-            @Html.LabelFor(model => model.ClassName, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ClassModel.ClassName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ClassName)
-                @Html.ValidationMessageFor(model => model.ClassName)
+                @Html.TextBoxFor(model => model.ClassModel.ClassName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ClassModel.ClassName)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Education, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Education, new SelectList(@ViewBag.Educations, "Value", "Text"), "- Vælg uddannelse -", new { @class = "form-control" })
+                @*@Html.DropDownList("Education", new SelectList(@ViewBag.Educations, "Value", "Text"), "- Vælg uddannelse -", new { @class = "form-control" })*@
+                @Html.ValidationMessageFor(model => model.Education)
             </div>
         </div>
 
@@ -35,7 +41,3 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

@@ -13,7 +13,7 @@ namespace SkemaSystem.Models
         public int Id { get; set; }
 
         [Required]
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -31,7 +31,7 @@ namespace SkemaSystem.Models
         {
             var db = new SkeamSystemDb();
 
-            if (db.Teachers.Any(u => (u.UserName == _username && u.Password == _password)))
+            if (db.Teachers.Any(u => (u.Username == _username && u.Password == _password)))
             {
                 return true;
             }
