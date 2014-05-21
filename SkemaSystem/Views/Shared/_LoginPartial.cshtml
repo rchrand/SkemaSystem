@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("Logout", "admin", FormMethod.Get, new { id = "logoutForm"}))
+    using (Html.BeginForm("Logout", "Admin", FormMethod.Get, new { id = "logoutForm"}))
     {
     @Html.AntiForgeryToken()
 

@@ -18,11 +18,11 @@ namespace SkemaSystem.Migrations
 
         protected override void Seed(SkemaSystem.Models.SkeamSystemDb context)
         {
-            Teacher t1 = new Teacher { Name = "Hanne Sommer", UserName = "eaasommer", Password = "fisk123" };
-            Teacher t2 = new Teacher { Name = "Torben Krøjmand", UserName = "eaatk", Password = "fisk123" };
-            Teacher t3 = new Teacher { Name = "Erik Jacobsen", UserName = "eaaej", Password = "fisk123" };
-            Teacher t4 = new Teacher { Name = "Jörn Hujak", UserName = "eaajh", Password = "fisk123" };
-            Teacher t5 = new Teacher { Name = "Karsten ITO", UserName = "eaakarsten", Password = "fisk123" };
+            Teacher t1 = new Teacher { Name = "Hanne Sommer", UserName = "eaasommer", Password = "fisk123", Role = Models.Enum.UserRoles.Teacher };
+            Teacher t2 = new Teacher { Name = "Torben Krøjmand", UserName = "eaatk", Password = "fisk123" , Role = Models.Enum.UserRoles.Teacher};
+            Teacher t3 = new Teacher { Name = "Erik Jacobsen", UserName = "eaaej", Password = "fisk123", Role = Models.Enum.UserRoles.Admin };
+            Teacher t4 = new Teacher { Name = "Jörn Hujak", UserName = "eaajh", Password = "fisk123" , Role = Models.Enum.UserRoles.Teacher};
+            Teacher t5 = new Teacher { Name = "Karsten ITO", UserName = "eaakarsten", Password = "fisk123" , Role = Models.Enum.UserRoles.Teacher};
 
             ClassModel c1 = new ClassModel { ClassName = "12t" };
             ClassModel c2 = new ClassModel { ClassName = "12s" };
@@ -89,22 +89,6 @@ namespace SkemaSystem.Migrations
             context.Semesters.AddOrUpdate(
                 s => s.Id,
                 s1, s2);
-
-            //context.Teachers.AddOrUpdate(
-            //    t => t.Name,
-            //    new Teacher { Name = "Hanne Sommer" },
-            //    new Teacher { Name = "Torben Kroejmand" }
-            //);
-
-            //context.Rooms.AddOrUpdate(
-            //    r => r.RoomName,
-            //    new Room { RoomName = "A1.1" },
-            //    new Room { RoomName = "A1.12" },
-            //    new Room { RoomName = "A1.13" },
-            //    new Room { RoomName = "A1.14" },
-            //    new Room { RoomName = "A1.15" }
-            //);
-
         }
     }
 }
