@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Features\CRUD class\ClassTest.cs" />
     <Compile Include="Features\CRUD educations\US4CreateEducation.cs" />
+    <Compile Include="Features\CRUD Teacher\TeacherTest.cs" />
     <Compile Include="Features\Example.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

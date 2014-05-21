@@ -1,4 +1,4 @@
-﻿@model SkemaSystem.Models.UserModel
+﻿@model SkemaSystem.Models.Teacher
 @{
     ViewBag.Title = "Login";
 }
@@ -7,7 +7,7 @@
     <h2>Login</h2>
 
     <div class="col-sm-12">
-        @using (Html.BeginForm("Login", "User"))
+        @using (Html.BeginForm("Login", "Teacher"))
         {
             @Html.ValidationSummary(true, "Login failed. Check your login details.");
             @Html.AntiForgeryToken();

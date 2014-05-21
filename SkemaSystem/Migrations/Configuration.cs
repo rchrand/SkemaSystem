@@ -18,7 +18,7 @@ namespace SkemaSystem.Migrations
 
         protected override void Seed(SkemaSystem.Models.SkeamSystemDb context)
         {
-            /*context.Educations.AddOrUpdate(
+            context.Educations.AddOrUpdate(
                 e => e.Name,
                 new Education { Name = "DMU" },
                 new Education { Name = "FIBCA" },
@@ -27,14 +27,8 @@ namespace SkemaSystem.Migrations
 
             context.Teachers.AddOrUpdate(
                 t => t.Name,
-                new Teacher { Name = "Hanne Sommer" },
-                new Teacher { Name = "Torben Kroejmand" }
-            );
-
-            context.Users.AddOrUpdate(
-                u => u.UserName,
-                new UserModel { UserName = "eaasommer", Password = "fisk123" },
-                new UserModel { UserName = "eaatk", Password = "torben5" }
+                new Teacher { Name = "Hanne Sommer", UserName = "eaasommer", Password = "fisk123" },
+                new Teacher { Name = "Torben Kroejmand", UserName = "eaatk", Password = "torben5" }
             );
 
             if (!Roles.RoleExists("Admin"))
@@ -55,8 +49,6 @@ namespace SkemaSystem.Migrations
             {
                 Roles.AddUserToRole("eaasommer", "Teacher");
             }
-
-            );*/
         }
     }
 }
