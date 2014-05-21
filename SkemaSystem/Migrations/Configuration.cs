@@ -6,6 +6,7 @@ namespace SkemaSystem.Migrations
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using System.Web.Security;
 
     internal sealed class Configuration : DbMigrationsConfiguration<SkemaSystem.Models.SkeamSystemDb>
     {
@@ -67,9 +68,25 @@ namespace SkemaSystem.Migrations
             c2.Education = e1;
 
             context.Educations.AddOrUpdate(
+            context.Educations.AddOrUpdate(
                 e => e.Name,
                 e1, e2
             );
+
+            //context.Teachers.AddOrUpdate(
+            //    t => t.Name,
+            //    new Teacher { Name = "Hanne Sommer" },
+            //    new Teacher { Name = "Torben Kroejmand" }
+            //);
+
+            //context.Rooms.AddOrUpdate(
+            //    r => r.RoomName,
+            //    new Room { RoomName = "A1.1" },
+            //    new Room { RoomName = "A1.12" },
+            //    new Room { RoomName = "A1.13" },
+            //    new Room { RoomName = "A1.14" },
+            //    new Room { RoomName = "A1.15" }
+            //);
 
             context.Teachers.AddOrUpdate(
                 t => t.Name,
@@ -88,6 +105,28 @@ namespace SkemaSystem.Migrations
             context.Semesters.AddOrUpdate(
                 s => s.Id,
                 s1, s2);
+                new Teacher { Name = "Hanne Sommer", UserName = "eaasommer", Password = "fisk123" },
+                new Teacher { Name = "Torben Kroejmand", UserName = "eaatk", Password = "torben5" }
+            );
+
+            if (!Roles.RoleExists("Admin"))
+            {
+                Roles.CreateRole("Admin");
+            }
+            if (!Roles.RoleExists("Teacher"))
+            {
+                Roles.CreateRole("Teacher");
+            }
+
+            if (Roles.GetRolesForUser("eaatk").ToList().Count == 0)
+            {
+                Roles.AddUserToRole("eaatk", "Admin");
+            }
+
+            if (Roles.GetRolesForUser("eaasommer").ToList().Count == 0)
+            {
+                Roles.AddUserToRole("eaasommer", "Teacher");
+            }
         }
     }
 }
