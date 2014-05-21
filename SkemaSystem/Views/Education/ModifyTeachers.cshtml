@@ -1,12 +1,58 @@
-﻿@model SkemaSystem.Models.Education
+﻿@using MvcCheckBoxList.Model
+@model SkemaSystem.Models.ViewModels.EducationViewModel
 
 @{
     ViewBag.Title = "ModifyTeachers";
 }
 
-<h2>Tilføj eller fjern lærer til @Model.Name</h2>
+<h2>Tilføj eller fjern lærer til @Model.Education.Name</h2>
 
-@Html.Partial("_PartialModifyTeachers", @Model.Teachers)
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Education</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Education.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Education.Name, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Education.Name)
+                @Html.ValidationMessageFor(model => model.Education.Name)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Test", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBoxListFor(model => model.PostedTeachers.TeacherIds,
+                                  model => model.AvailableTeachers,
+                                  education => education.Id,
+                                  education => education.Name,
+                                  model => model.SelectedTeachers,
+                                  Position.Horizontal)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
 
 
 

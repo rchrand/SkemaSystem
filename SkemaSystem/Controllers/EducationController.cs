@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using SkemaSystem.Models;
 using System.Diagnostics;
+using SkemaSystem.Models.ViewModels;
 
 namespace SkemaSystem.Controllers
 {
@@ -118,6 +119,9 @@ namespace SkemaSystem.Controllers
             return View(education);
         }
 
+
+        // GET
+        [HttpGet]
         public ActionResult ModifyTeachers(string name)
         {
             if (name == null)
@@ -125,7 +129,13 @@ namespace SkemaSystem.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Education education = db.Educations.FirstOrDefault(e => e.Name.Equals(name));
+            EducationViewModel education = new EducationViewModel()
+            {
+                Education = db.Educations.FirstOrDefault(e => e.Name.Equals(name)),
+                AvailableTeachers = db.Teachers
+            };
+
+            education.SelectedTeachers = education.Education.Teachers;    
 
             if (education == null)
             {
@@ -134,6 +144,51 @@ namespace SkemaSystem.Controllers
 
             return View(education);
 
+        }
+
+        //POST: 
+        [HttpPost]
+        public ActionResult ModifyTeachers([Bind(Include = "Education,PostedTeachers")] EducationViewModel result)
+        {
+            Education education = result.Education;
+            List<Teacher> _teachers = GetTeachers(result.PostedTeachers);
+
+            if (ModelState.IsValid)
+            {
+                Education _education = db.Educations.FirstOrDefault(e => e.Id == education.Id);
+                _education.Name = education.Name;
+                if (_education.Teachers != null)
+                {
+                    _education.Teachers.Clear();
+                }
+                _education.Teachers = _teachers;
+                Debug.WriteLine("educations=" + _education.Teachers.Count);
+                db.Entry(_education).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("index");
+        }
+
+        private List<Teacher> GetTeachers(PostedTeachers postedTeachers)
+        {
+            var selectedTeachers = new List<Teacher>();
+            var postedTeacherIds = new string[0];
+
+            if (postedTeachers != null && postedTeachers.TeacherIds != null && postedTeachers.TeacherIds.Any())
+            {
+                postedTeacherIds = postedTeachers.TeacherIds;
+            }
+
+            if (postedTeacherIds.Any())
+            {
+                IEnumerable<Teacher> teachers = db.Teachers;
+                selectedTeachers= teachers
+                 .Where(x => postedTeacherIds.Any(s => x.Id.ToString().Equals(s)))
+                 .ToList();
+            }
+
+            return selectedTeachers;
         }
 
         // GET: /Education/Delete/5

@@ -35,24 +35,25 @@ namespace SkemaSystem.Migrations
                 new Teacher { Name = "Torben Kroejmand", UserName = "eaatk", Password = "torben5" }
             );
 
-            if (!Roles.RoleExists("Admin"))
-            {
-                Roles.CreateRole("Admin");
-            }
-            if (!Roles.RoleExists("Teacher"))
-            {
-                Roles.CreateRole("Teacher");
-            }
+            //if (!Roles.RoleExists("Admin"))
+            //{
+            //    Roles.CreateRole("Admin");
+            //}
+            //if (!Roles.RoleExists("Teacher"))
+            //{
+            //    Roles.CreateRole("Teacher");
+            //}
 
-            if (Roles.GetRolesForUser("eaatk").ToList().Count == 0)
-            {
-                Roles.AddUserToRole("eaatk", "Admin");
-            }
+            //if (Roles.GetRolesForUser("eaatk").ToList().Count == 0)
+            //{
+            //    Roles.AddUserToRole("eaatk", "Admin");
+            //}
 
-            if (Roles.GetRolesForUser("eaasommer").ToList().Count == 0)
-            {
-                Roles.AddUserToRole("eaasommer", "Teacher");
-            }
+            //if (Roles.GetRolesForUser("eaasommer").ToList().Count == 0)
+            //{
+            //    Roles.AddUserToRole("eaasommer", "Teacher");
+            //}
         }
+
     }
 }
