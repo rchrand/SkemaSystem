@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using System.Web;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Migrations;
 
 namespace SkemaSystem.Models
 {
@@ -18,12 +19,14 @@ namespace SkemaSystem.Models
         public SkeamSystemDb()
             : base("name=skeamsysdb")
         {
-
+            
         }
+
 
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Education> Educations { get; set; }
         public DbSet<ClassModel> Classes { get; set; }
+	public DbSet<Room> Rooms { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
@@ -36,5 +39,5 @@ namespace SkemaSystem.Models
             });
             base.OnModelCreating(modelBuilder);*/
         }
-    }
+}
 }
