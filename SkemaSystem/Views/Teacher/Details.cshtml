@@ -23,7 +23,8 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Educations)
+            @*@Html.DisplayFor(model => model.Educations)*@
+            @Html.Raw(string.Join(", ", @Model.Educations.Select(s => string.Format("{0}", s.Name))))
         </dd>
 
     </dl>
