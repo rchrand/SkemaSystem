@@ -1,18 +1,19 @@
 ﻿using SkemaSystem.Migrations;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 using System.Web;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
 
 namespace SkemaSystem.Models
 {
+<<<<<<< HEAD
     // Do not remove or rename this class without premission!
     public interface ISkemaSystemDb : IDisposable
     {
@@ -36,9 +37,15 @@ namespace SkemaSystem.Models
     }
 
     public class SkeamSystemDb : DbContext, ISkemaSystemDb
+=======
+
+    public class SkeamSystemDb : DbContext
+>>>>>>> develop
     {
-        public SkeamSystemDb() : base("name=skeamsysdb")
+        public SkeamSystemDb()
+            : base("name=skeamsysdb")
         {
+<<<<<<< HEAD
             Rooms = new TempDbSet<Room>();
         }
 
@@ -59,12 +66,20 @@ namespace SkemaSystem.Models
         public void StateModified(object entity) 
         {
             this.Entry(entity).State = System.Data.Entity.EntityState.Modified;
+=======
+
+>>>>>>> develop
         }
+
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Education> Educations { get; set; }
+        public DbSet<ClassModel> Classes { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
 
         }
+<<<<<<< HEAD
 
 
         //IDbSet<Teacher> ISkemaSystemDb.Teachers
@@ -265,5 +280,7 @@ namespace SkemaSystem.Models
         {
             return Activator.CreateInstance<TDerivedEntity>();
         }
+=======
+>>>>>>> develop
     }
 }

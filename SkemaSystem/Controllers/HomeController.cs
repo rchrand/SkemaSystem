@@ -11,16 +11,11 @@ namespace SkemaSystem.Controllers
 {
     public class HomeController : BaseController
     {
-        ISkemaSystemDb _db;
+        SkeamSystemDb _db;
         
         public HomeController()
         {
             _db = new SkeamSystemDb();
-        }
-
-        public HomeController(FakeSkemaSystemDb db)
-        {
-            _db = db;
         }
 
         public ActionResult Index(string education)

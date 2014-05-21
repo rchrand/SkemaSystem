@@ -12,7 +12,12 @@ namespace SkemaSystem.Controllers
 {
     public class EducationController : BaseController
     {
-        private SkeamSystemDb db = new SkeamSystemDb();
+        private SkeamSystemDb db;
+
+        public EducationController()
+        {
+            db = new SkeamSystemDb();
+        }
 
         // GET: /Education/Details/5
         public ActionResult Details(string name)
@@ -43,9 +48,10 @@ namespace SkemaSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize (Roles = "Admin")]
         public ActionResult Create([Bind(Include="Id,Name")] Education education)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && CheckIfNameIsAvailable(education.Name) && CheckIfIdIsAvailable(education.Id))
             {
                 db.Educations.Add(education);
                 db.SaveChanges();
@@ -53,6 +59,24 @@ namespace SkemaSystem.Controllers
             }
 
             return View(education);
+        }
+
+        private bool CheckIfIdIsAvailable(int id)
+        {
+            if (db.Educations.SingleOrDefault(x => x.Id == id) != null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool CheckIfNameIsAvailable(string name)
+        {
+            if (db.Educations.SingleOrDefault(x => x.Name.Equals(name)) != null)
+            {
+                return false;
+            }
+            return true;
         }
 
         // GET: /Education/Edit/5
