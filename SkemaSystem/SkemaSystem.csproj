@@ -165,6 +165,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Migrations\201405210649469_init.Designer.cs">
       <DependentUpon>201405210649469_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\SimpleCheckbox.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ClassModel.cs" />
     <Compile Include="Models\Education.cs" />
@@ -192,13 +194,11 @@
     <Compile Include="Models\Subject.cs" />
     <Compile Include="Models\SubjectDistBlock.cs" />
     <Compile Include="Models\Teacher.cs" />
-    <Compile Include="Models\ViewModels\PostedEducations.cs" />
     <Compile Include="Models\ViewModels\TeacherViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Components\Bootstrap.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -262,13 +262,28 @@
     <Content Include="Views\Room\Create.cshtml" />
     <Content Include="Views\Room\Delete.cshtml" />
     <Content Include="Views\Room\Edit.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Teacher\Create.cshtml" />
+=======
+    <Content Include="Views\Room\Index.cshtml" />    <Content Include="Views\Teacher\Create.cshtml" />
+>>>>>>> develop
     <Content Include="Views\Teacher\Delete.cshtml" />
     <Content Include="Views\Teacher\Details.cshtml" />
     <Content Include="Views\Teacher\Edit.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Teacher\Index.cshtml" />
     <Content Include="Views\Teacher\Login.cshtml" />
+=======
+    <Content Include="Views\Class\Create.cshtml" />
+    <Content Include="Views\Class\Index.cshtml" />
+    <Content Include="Views\Classes\Create.cshtml" />
+    <Content Include="Views\Classes\Delete.cshtml" />
+    <Content Include="Views\Classes\Details.cshtml" />
+    <Content Include="Views\Classes\Edit.cshtml" />
+    <Content Include="Views\Classes\Index.cshtml" />
+    <Content Include="Views\Room\Details.cshtml" />
+>>>>>>> develop
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

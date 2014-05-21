@@ -10,6 +10,7 @@ using System.Diagnostics;
 
 namespace SkemaSystem.Controllers
 {
+    [RouteArea("Default", AreaPrefix="")]
     public class EducationController : BaseController
     {
         private SkeamSystemDb db;

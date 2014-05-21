@@ -105,34 +105,6 @@ namespace SkemaSystem.Migrations
             //    new Room { RoomName = "A1.15" }
             //);
 
-            
-
-
-            //if (!Roles.RoleExists("Admin"))
-            //{
-            //    Roles.CreateRole("Admin");
-            //}
-            //if (!Roles.RoleExists("Teacher"))
-            //{
-            //    Roles.CreateRole("Teacher");
-            //}
-
-            //if (Roles.GetRolesForUser("eaatk").ToList().Count == 0)
-            //{
-            //    Roles.AddUserToRole("eaatk", "Admin");
-            //}
-
-            //if (Roles.GetRolesForUser("eaasommer").ToList().Count == 0)
-            //{
-            //    Roles.AddUserToRole("eaasommer", "Teacher");
-            //}
-
-            /*
-                new Teacher { Name = "Hanne Sommer", UserName = "eaasommer", Password = "fisk123" },
-                new Teacher { Name = "Torben Kroejmand", UserName = "eaatk", Password = "torben5" }
-            );*/
-
-            
         }
     }
 }

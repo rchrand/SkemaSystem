@@ -12,4 +12,9 @@ namespace SkemaSystem.Models.ViewModels
         public IEnumerable<Education> SelectedEducations { get; set; }
         public PostedEducations PostedEducations { get; set; }
     }
+
+    public class PostedEducations
+    {
+        public string[] EducationIds { get; set; }
+    }
 }
