@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using SkemaSystem.Models.Enum;
 
 namespace SkemaSystem.Models
 {
@@ -20,6 +21,9 @@ namespace SkemaSystem.Models
 
         [Required]
         public string Name { get; set; }
+
+        [Required]
+        public UserRoles Role { get; set; }
 
         public virtual ICollection<Education> Educations { get; set; }
 

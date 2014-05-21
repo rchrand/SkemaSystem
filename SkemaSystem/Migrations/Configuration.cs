@@ -42,8 +42,8 @@ namespace SkemaSystem.Migrations
 
             context.Teachers.AddOrUpdate(
                 t => t.Name,
-                new Teacher { Name = "Hanne Sommer", UserName = "eaasommer", Password = "fisk123" },
-                new Teacher { Name = "Torben Kroejmand", UserName = "eaatk", Password = "torben5" }
+                new Teacher { Name = "Hanne Sommer", UserName = "eaasommer", Password = "fisk123", Role = Models.Enum.UserRoles.Teacher },
+                new Teacher { Name = "Torben Kroejmand", UserName = "eaatk", Password = "torben5", Role = Models.Enum.UserRoles.Admin }
             );
         }
     }
