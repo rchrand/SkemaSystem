@@ -262,19 +262,14 @@
     <Content Include="Views\Room\Create.cshtml" />
     <Content Include="Views\Room\Delete.cshtml" />
     <Content Include="Views\Room\Edit.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Teacher\Create.cshtml" />
-=======
-    <Content Include="Views\Room\Index.cshtml" />    <Content Include="Views\Teacher\Create.cshtml" />
->>>>>>> develop
+    <Content Include="Views\Room\Index.cshtml" />
+	<Content Include="Views\Teacher\Create.cshtml" />
     <Content Include="Views\Teacher\Delete.cshtml" />
     <Content Include="Views\Teacher\Details.cshtml" />
     <Content Include="Views\Teacher\Edit.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Teacher\Index.cshtml" />
-    <Content Include="Views\Teacher\Login.cshtml" />
-=======
     <Content Include="Views\Class\Create.cshtml" />
     <Content Include="Views\Class\Index.cshtml" />
     <Content Include="Views\Classes\Create.cshtml" />
@@ -283,7 +278,6 @@
     <Content Include="Views\Classes\Edit.cshtml" />
     <Content Include="Views\Classes\Index.cshtml" />
     <Content Include="Views\Room\Details.cshtml" />
->>>>>>> develop
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
