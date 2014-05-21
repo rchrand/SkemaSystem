@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-using System.ComponentModel.DataAnnotations;
 
 namespace SkemaSystem.Models
 {
-    public class Room
+    public class Semester
     {
         [Required]
         public int Id { get; set; }
-        
+
         [Required]
-        public string RoomName { get; set; }
+        public int Number { get; set; }
+
+        public virtual List<SemesterSubjectBlock> Blocks { get; set; }
     }
 }

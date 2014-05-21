@@ -13,5 +13,5 @@
 }
 else
 {
-    <li>@Html.ActionLink("Log ind", "Login", "admin", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    <li>@Html.ActionLink("Log ind", "Login", "Account", routeValues: new { Area = "Admin" }, htmlAttributes: new { id = "loginLink" })</li>
 }

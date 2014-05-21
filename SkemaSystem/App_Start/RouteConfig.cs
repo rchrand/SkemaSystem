@@ -22,33 +22,6 @@ namespace SkemaSystem
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
-
-            ///*routes.MapRoute(
-            //    name: "Account",
-            //    url: "Account/{action}/{id}",
-            //    defaults: new { controller = "Account", action = "Index", id = UrlParameter.Optional }
-            //);*/
-
-            //routes.MapRoute(
-            //    name: "Education",
-            //    url: "{education}/{controller}/{action}/{id}",
-            //    defaults: new { controller = "Education", action = "Details", id = UrlParameter.Optional },
-            //    constraints: new { education = @"\w+" }
-            //);
-            
-            ///*
-            //routes.MapRoute(
-            //    name: "Education",
-            //    url: "{education}/{action}",
-            //    defaults: new { controller = "Education", action = "Details", id = UrlParameter.Optional },
-            //    constraints: new { education = @"\w+" }
-            //);
-            //*/
-            //routes.MapRoute(
-            //    name: "Default",
-            //    url: "{controller}/{action}/{id}",
-            //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            //);
         }
     }
 }

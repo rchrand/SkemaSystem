@@ -1,5 +1,4 @@
-﻿@using MvcCheckBoxList.Model
-@model SkemaSystem.Models.ViewModels.EducationViewModel
+﻿@model SkemaSystem.Models.ViewModels.EducationViewModel
 
 @{
     ViewBag.Title = "ModifyTeachers";
@@ -27,14 +26,17 @@
         </div>
 
         <div class="form-group">
-            @Html.Label("Test", new { @class = "control-label col-md-2" })
+            @Html.Label("Teachers", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.CheckBoxListFor(model => model.PostedTeachers.TeacherIds,
-                                  model => model.AvailableTeachers,
-                                  education => education.Id,
-                                  education => education.Name,
-                                  model => model.SelectedTeachers,
-                                  Position.Horizontal)
+                @foreach (var item in Model.AvailableTeachers)
+                {
+                    <div class="checkbox">
+                        <label>
+                            @Html.SimpleCheckbox("PostedTeachers.TeacherIds", Model.SelectedTeachers.Contains(item), item.Id.ToString())
+                            @item.Name
+                        </label>
+                    </div>
+                }
             </div>
         </div>
 

@@ -11,6 +11,10 @@ using SkemaSystem.Models.ViewModels;
 
 namespace SkemaSystem.Controllers
 {
+    //add rooms
+    //add semesters (wait)
+
+    [RouteArea("Default", AreaPrefix="")]
     public class EducationController : BaseController
     {
         private SkeamSystemDb db;
@@ -183,12 +187,87 @@ namespace SkemaSystem.Controllers
             if (postedTeacherIds.Any())
             {
                 IEnumerable<Teacher> teachers = db.Teachers;
-                selectedTeachers= teachers
+                selectedTeachers = teachers
                  .Where(x => postedTeacherIds.Any(s => x.Id.ToString().Equals(s)))
                  .ToList();
             }
 
             return selectedTeachers;
+        }
+
+        // GET
+        [HttpGet]
+        public ActionResult ModifyRooms(string name)
+        {
+            if (name == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            EducationViewModel education = new EducationViewModel()
+            {
+                Education = db.Educations.FirstOrDefault(e => e.Name.Equals(name)),
+                AvailableRooms = db.Rooms
+            };
+
+            
+
+            if (education == null)
+            {
+                return HttpNotFound();
+            }
+
+            education.SelectedRooms = education.Education.Rooms;
+
+            return View(education);
+
+        }
+
+        
+
+        //POST
+        [HttpPost]
+        public ActionResult ModifyRooms([Bind(Include = "Education,PostedRooms")] EducationViewModel result)
+        {
+            Education education = result.Education;
+            List<Room> _rooms = GetRooms(result.PostedRooms);
+
+            if (ModelState.IsValid)
+            {
+                Education _education = db.Educations.FirstOrDefault(e => e.Id == education.Id);
+                _education.Name = education.Name;
+                if (_education.Rooms != null)
+                {
+                    _education.Rooms.Clear();
+                }
+                _education.Rooms = _rooms;
+                
+                db.Entry(_education).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("index");
+        }
+
+        private List<Room> GetRooms(PostedRooms postedRooms)
+        {
+            var selectedRooms = new List<Room>();
+            var postedRoomIds = new string[0];
+
+            if (postedRooms != null && postedRooms.RoomIds != null && postedRooms.RoomIds.Any())
+            {
+                postedRoomIds = postedRooms.RoomIds;
+            }
+
+            if (postedRoomIds.Any())
+            {
+                IEnumerable<Room> rooms = db.Rooms;
+                selectedRooms = rooms
+                 .Where(x => postedRoomIds.Any(s => x.Id.ToString().Equals(s)))
+                 .ToList();
+            }
+
+            return selectedRooms;
         }
 
         // GET: /Education/Delete/5

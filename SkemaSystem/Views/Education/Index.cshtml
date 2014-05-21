@@ -26,7 +26,8 @@
             @Html.ActionLink("Opdatér", "Edit", new { name = item.Name }) |
             @Html.ActionLink("Details", "Details", new { name = item.Name }) |
             @Html.ActionLink("Delete", "Delete", new { name = item.Name }) |
-            @Html.ActionLink("Opdatér lærere", "ModifyTeachers", new { name = item.Name })
+            @Html.ActionLink("Tilføj/fjern lærere", "ModifyTeachers", new { name = item.Name }) |
+            @Html.ActionLink("Tilføj/fjern lokaler", "ModifyRooms", new { name = item.Name })
         </td>
     </tr>
 }

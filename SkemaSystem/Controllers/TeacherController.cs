@@ -15,7 +15,7 @@ using System.Web.Security;
 namespace SkemaSystem.Controllers
 {
     //[Authorize(Roles="teacher")]
-    [RouteArea("admin")]
+    [RouteArea("Admin", AreaPrefix="admin")]
     [RoutePrefix("teachers")]
     [Route("{action=index}")]
     public class TeacherController : BaseController
@@ -98,7 +98,7 @@ namespace SkemaSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("edit/{id}")]
+        [Route("edit")]
         public ActionResult Edit([Bind(Include = "Teacher,PostedEducations")] TeacherViewModel result)
         {
             // 
@@ -179,42 +179,6 @@ namespace SkemaSystem.Controllers
             }
 
             return selectedEducations;
-        }
-
-        [HttpGet]
-        [Route("~/admin/login")]
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [Route("~/admin/login")]
-        public ActionResult Login(Teacher model)
-        {
-            if (model.IsValid(model.UserName, model.Password)){
-                FormsAuthentication.SetAuthCookie(model.UserName, true);
-                return Redirect("/");
-            }
-            else {
-                ModelState.AddModelError("", "Login is invalid");
-            }
-
-            return View(model);
-        }
-
-        [Route("~/admin/logout")]
-        public ActionResult Logout()
-        {
-            FormsAuthentication.SignOut();
-            return Redirect("/");
-        }
-
-        [Authorize(Roles = "Admin")]
-        [Route("~/admin/adminonly")]
-        public ContentResult TestingAdminRole()
-        {
-            return Content("Admin,");
         }
     }
 }

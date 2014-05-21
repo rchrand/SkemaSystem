@@ -27,7 +27,7 @@
                 @{var e = ViewContext.RouteData.Values["education"];}
                 @foreach (var education in @EducationModel)
                 {
-                    <li>@Html.ActionLink(education.Name, "Details", "Education", new { education = education }, new { @class = (e != null && e.ToString() == education.Name) ? "selected" : "" })</li>
+                    <li>@Html.ActionLink(education.Name, "Details", "Education", new { education = education, Area = "Default" }, new { @class = (e != null && e.ToString() == education.Name) ? "selected" : "" })</li>
                 }
             </ul>
         </nav>
@@ -50,6 +50,7 @@
     </main>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/schemesys")
     @RenderSection("scripts", required: false)
 </body>
 </html>

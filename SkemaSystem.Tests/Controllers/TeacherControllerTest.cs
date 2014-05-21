@@ -10,6 +10,7 @@ using SkemaSystem.Models;
 
 namespace SkemaSystem.Tests.Controllers
 {
+<<<<<<< HEAD
     //[TestClass]
     //public class TeacherControllerTest
     //{
@@ -18,6 +19,16 @@ namespace SkemaSystem.Tests.Controllers
     //    {
     //        var db = new FakeSkemaSystemDb();
     //        db.AddSet(TestData.Teachers);
+=======
+    [TestClass]
+    public class TeacherControllerTest
+    {   /*
+        [TestMethod]
+        public void Index()
+        {
+            var db = new FakeSkemaSystemDb();
+            db.AddSet(TestData.Teachers);
+>>>>>>> develop
 
     //        TeacherController controller = new TeacherController(db);
 
@@ -109,7 +120,13 @@ namespace SkemaSystem.Tests.Controllers
 
     //        Teacher _teacher = teachers.Last();
 
+<<<<<<< HEAD
     //        Assert.Equals(teachers.Count(), teachers1.Count());
     //    }
     //}
+=======
+            Assert.Equals(teachers.Count(), teachers1.Count());
+        }*/
+    }
+>>>>>>> develop
 }
