@@ -1,14 +1,26 @@
-﻿
+﻿@model SkemaSystem.Models.Scheme
 @{
-    ViewBag.Title = "Index";
-    }
+    ViewBag.Title = "Skemalægning";
+}
 
-<div class="row">
-    <div class="col-sm-12">
-        <div class="box">
-            <div class="item">
-                @Html.DropDownList("education", new SelectList(ViewBag._educations, "Value", "Text"));
-            </div>
+@section Subheader {
+    <div class="form-group">
+        <!--<div class="col-sm-4">
+            <label class="control-label">Uddannelse</label>
+            @Html.DropDownList("education", new SelectList(ViewBag.educations, "Value", "Text"), new { @class = "form-control" })
+        </div>-->
+        <div class="col-sm-4">
+            <label class="control-label">Skema</label>
+            @Html.DropDownList("scheme", new SelectList(ViewBag.schemes, "Value", "Text"), new { @class = "form-control" })
+        </div>
+        <div class="col-sm-4">
+            <label class="control-label">Fag</label>
+            @Html.Partial("_SubjectDropDown", @Model)
+            @*@Html.DropDownList("rooms", new SelectList(ViewBag.rooms, "Value", "Text"), new { @class = "form-control" })*@
+        </div>
+        <div class="col-sm-4">
+            <label class="control-label">Lokale</label>
+            @Html.DropDownList("rooms", new SelectList(ViewBag.rooms, "Value", "Text"), new { @class = "form-control" })
         </div>
     </div>
-</div>
+}

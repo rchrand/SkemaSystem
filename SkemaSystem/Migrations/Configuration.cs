@@ -45,6 +45,9 @@ namespace SkemaSystem.Migrations
             Semester s1 = new Semester { Number = 1, Blocks = ssdbList1 };
             Semester s2 = new Semester { Number = 2, Blocks = ssdbList2 };
 
+            Room r1 = new Room { RoomName = "SH-A1.13" };
+            Room r2 = new Room { RoomName = "SH-A1.8" };
+            Room r3 = new Room { RoomName = "SH-A1.4" };
 
             Education e1 = new Education { Name = "DMU" };
             Education e2 = new Education { Name = "MDU" };
@@ -67,6 +70,7 @@ namespace SkemaSystem.Migrations
             c1.Education = e1;
             c2.Education = e1;
 
+            
             context.Educations.AddOrUpdate(
                 e => e.Name,
                 e1, e2
@@ -89,6 +93,11 @@ namespace SkemaSystem.Migrations
             context.Semesters.AddOrUpdate(
                 s => s.Id,
                 s1, s2);
+
+            context.Rooms.AddOrUpdate(
+                r => r.RoomName,
+                r1, r2, r3);
+
         }
     }
 }

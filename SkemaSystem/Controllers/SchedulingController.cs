@@ -1,6 +1,8 @@
 ﻿using SkemaSystem.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.SqlServer;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -14,13 +16,19 @@ namespace SkemaSystem.Controllers
     {
         public ActionResult Index()
         {
-            var db = new SkeamSystemDb();
+            IEnumerable<SelectListItem> schemes = from s in db.Schemes
+                                                  select new SelectListItem { Text = s.ClassModel.ClassName + " " + SqlFunctions.StringConvert((double)s.Semester.Number).Trim() + ". semester", Value = SqlFunctions.StringConvert((double)s.Id).Trim() };
+            ViewBag.schemes = schemes;
 
-            IEnumerable<SelectListItem> educations = from s in db.Educations
-                                                    select new SelectListItem { Text = s.Name, Value = s.Id };
+            IEnumerable<SelectListItem> educations = from e in db.Educations
+                                                     select new SelectListItem { Text = e.Name, Value = SqlFunctions.StringConvert((double)e.Id).Trim() };
+            ViewBag.educations = educations;
 
-            ViewBag._educations = educations;
-            return View();
+            IEnumerable<SelectListItem> rooms = from r in db.Rooms
+                                                     select new SelectListItem { Text = r.RoomName, Value = SqlFunctions.StringConvert((double)r.Id).Trim() };
+            ViewBag.rooms = rooms;
+
+            return View(db.Schemes.FirstOrDefault());
         }
 	}
 }

@@ -1,0 +1,4 @@
+﻿@model SkemaSystem.Models.Scheme
+
+@Html.DropDownList("test", new SelectList(@Model.SubjectDistBlocks, "Subject.Name", "Subject.Name"), new { @class = "form-control" })
+

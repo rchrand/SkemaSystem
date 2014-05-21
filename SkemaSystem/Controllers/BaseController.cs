@@ -10,15 +10,15 @@ namespace SkemaSystem.Controllers
 {
     public class BaseController : Controller
     {
-        SkeamSystemDb _db;
+        public SkeamSystemDb db { get; set; }
         public IEnumerable<Education> _educationModel;
 
         public BaseController()
         {
-            _db = new SkeamSystemDb();
+            db = new SkeamSystemDb();
             if (ConfigurationManager.ConnectionStrings["skeamsysdb"] != null)
             {
-                _educationModel = _db.Educations.ToList();
+                _educationModel = db.Educations.ToList();
                 ViewBag.EducationModel = _educationModel;
             }
         }

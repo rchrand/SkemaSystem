@@ -309,6 +309,7 @@
     <Content Include="Views\Classes\Index.cshtml" />
     <Content Include="Views\Room\Details.cshtml" />
     <Content Include="Views\Scheduling\Index.cshtml" />
+    <Content Include="Views\Scheduling\_SubjectDropDown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
