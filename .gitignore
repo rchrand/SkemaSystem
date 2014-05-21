@@ -152,5 +152,3 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
-/SkemaSystem/App_Data/*.mdf
-/SkemaSystem/App_Data/*.ldf
