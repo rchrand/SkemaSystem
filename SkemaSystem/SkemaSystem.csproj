@@ -169,9 +169,9 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\EducationController.cs" />
-    <Compile Include="Migrations\201405202029286_init.cs" />
-    <Compile Include="Migrations\201405202029286_init.Designer.cs">
-      <DependentUpon>201405202029286_init.cs</DependentUpon>
+    <Compile Include="Migrations\201405210649469_init.cs" />
+    <Compile Include="Migrations\201405210649469_init.Designer.cs">
+      <DependentUpon>201405210649469_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ClassModel.cs" />
@@ -260,8 +260,8 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201405202029286_init.resx">
-      <DependentUpon>201405202029286_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201405210649469_init.resx">
+      <DependentUpon>201405210649469_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
