@@ -28,11 +28,11 @@ namespace SkemaSystem.Tests.Controllers
             get
             {
                 var rooms = new List<Room>();
-                rooms.Add(new Room { RoomName = "A1.1" });
-                rooms.Add(new Room { RoomName = "A1.12" });
-                rooms.Add(new Room { RoomName = "A1.13" });
-                rooms.Add(new Room { RoomName = "A1.14" });
-                rooms.Add(new Room { RoomName = "A1.15" });
+                rooms.Add(new Room { RoomName = "A1.1" , Id = 1});
+                rooms.Add(new Room { RoomName = "A1.12" , Id = 2});
+                rooms.Add(new Room { RoomName = "A1.13" , Id = 3});
+                rooms.Add(new Room { RoomName = "A1.14" , Id = 4});
+                rooms.Add(new Room { RoomName = "A1.15" , Id = 5});
                 return rooms.AsQueryable();
             }
         }
