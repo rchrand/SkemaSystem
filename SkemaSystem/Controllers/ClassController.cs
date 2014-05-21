@@ -10,8 +10,8 @@ using SkemaSystem.Models;
 
 namespace SkemaSystem.Controllers
 {
-    [RouteArea("admin")]
-    [RoutePrefix("class")]
+    [RouteArea("Admin", AreaPrefix="admin")]
+    [RoutePrefix("classes")]
     [Route("{action=index}")]
     public class ClassController : BaseController
     {
@@ -68,14 +68,14 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-        // GET: /Classes/Edit/5
+        [Route("edit/{id?}")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClassModel classmodel = db.Classes.SingleOrDefault(x => x.Id.Equals(id));
+            ClassModel classmodel = db.Classes.Find(id);
             if (classmodel == null)
             {
                 return HttpNotFound();

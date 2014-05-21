@@ -168,7 +168,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClassController.cs" />
-    <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\EducationController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
@@ -281,7 +280,6 @@
     <Content Include="Views\Classes\Edit.cshtml" />
     <Content Include="Views\Classes\Index.cshtml" />
     <None Include="Views\Class\Create.cshtml" />
-    <Content Include="Views\Class\Index.cshtml" />
     <Content Include="Views\Class\SubjectDistribution.cshtml" />
     <Content Include="Views\Class\_SchemeSubjectDistribution.cshtml" />
     <Content Include="Views\Class\Delete.cshtml" />
@@ -299,13 +297,13 @@
     <Content Include="Views\Teacher\Edit.cshtml" />
     <Content Include="Views\Teacher\Index.cshtml" />
     <Content Include="Views\Class\Create.cshtml" />
-    <Content Include="Views\Class\Index.cshtml" />
     <Content Include="Views\Classes\Create.cshtml" />
     <Content Include="Views\Classes\Delete.cshtml" />
     <Content Include="Views\Classes\Details.cshtml" />
     <Content Include="Views\Classes\Edit.cshtml" />
     <Content Include="Views\Classes\Index.cshtml" />
     <Content Include="Views\Room\Details.cshtml" />
+    <Content Include="Views\Class\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

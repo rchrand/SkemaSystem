@@ -10,6 +10,9 @@ using SkemaSystem.Models;
 
 namespace SkemaSystem.Controllers
 {
+    [RouteArea("Admin", AreaPrefix="admin")]
+    [RoutePrefix("rooms")]
+    [Route("{action=index}")]
     public class RoomController : Controller
     {
         private SkeamSystemDb db = new SkeamSystemDb();
