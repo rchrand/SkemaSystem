@@ -12,16 +12,11 @@ namespace SkemaSystem.Controllers
 {
     public class ClassController : Controller
     {
-        private ISkemaSystemDb db;
+        private SkeamSystemDb db;
 
         public ClassController()
         {
            this.db = new SkeamSystemDb();
-        }
-
-        public ClassController(ISkemaSystemDb db)
-        {
-            this.db = db;
         }
 
         // GET: /Class/

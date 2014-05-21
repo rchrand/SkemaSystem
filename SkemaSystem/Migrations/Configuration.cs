@@ -2,6 +2,7 @@ namespace SkemaSystem.Migrations
 {
     using SkemaSystem.Models;
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -11,21 +12,23 @@ namespace SkemaSystem.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(SkemaSystem.Models.SkeamSystemDb context)
         {
-            context.Educations.AddOrUpdate(
+            /*context.Educations.AddOrUpdate(
                 e => e.Name,
-                new Education { Name = "DMU" }
+                new Education { Name = "DMU" },
+                new Education { Name = "FIBCA" },
+                new Education { Name = "MDU" }
             );
 
             context.Teachers.AddOrUpdate(
                 t => t.Name,
                 new Teacher { Name = "Hanne Sommer" },
                 new Teacher { Name = "Torben Kroejmand" }
-            );
-
+            );*/
         }
     }
 }

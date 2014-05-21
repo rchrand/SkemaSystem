@@ -16,7 +16,7 @@ namespace SkemaSystem.Tests.Controllers
                 var teachers = new List<Teacher>();
                 for (int i = 0; i < 100; i++)
                 {
-                    var teacher = new Teacher() { Name = "Hanne" + i};
+                    var teacher = new Teacher() { Id = i + 1, Name = "Hanne" + i};
                     teachers.Add(teacher); 
                 }
                 return teachers.AsQueryable();
