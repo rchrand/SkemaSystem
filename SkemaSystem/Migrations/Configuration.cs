@@ -17,7 +17,7 @@ namespace SkemaSystem.Migrations
         {
             context.Educations.AddOrUpdate(
                 e => e.Name,
-                new Education { Name = "DMU" }
+                new Education { Id = 1, Name = "DMU" }
             );
 
             context.Teachers.AddOrUpdate(
@@ -25,7 +25,6 @@ namespace SkemaSystem.Migrations
                 new Teacher { Name = "Hanne Sommer" },
                 new Teacher { Name = "Torben Kroejmand" }
             );
-
         }
     }
 }
