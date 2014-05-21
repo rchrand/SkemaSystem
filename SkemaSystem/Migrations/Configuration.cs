@@ -18,11 +18,11 @@ namespace SkemaSystem.Migrations
 
         protected override void Seed(SkemaSystem.Models.SkeamSystemDb context)
         {
-            Teacher t1 = new Teacher { Name = "Hanne Sommer" };
-            Teacher t2 = new Teacher { Name = "Torben Krøjmand" };
-            Teacher t3 = new Teacher { Name = "Erik Jacobsen" };
-            Teacher t4 = new Teacher { Name = "Jörn Hujak" };
-            Teacher t5 = new Teacher { Name = "Karsten ITO" };
+            Teacher t1 = new Teacher { Name = "Hanne Sommer", UserName = "eaasommer", Password = "fisk123" };
+            Teacher t2 = new Teacher { Name = "Torben Krøjmand", UserName = "eaatk", Password = "fisk123" };
+            Teacher t3 = new Teacher { Name = "Erik Jacobsen", UserName = "eaaej", Password = "fisk123" };
+            Teacher t4 = new Teacher { Name = "Jörn Hujak", UserName = "eaajh", Password = "fisk123" };
+            Teacher t5 = new Teacher { Name = "Karsten ITO", UserName = "eaakarsten", Password = "fisk123" };
 
             ClassModel c1 = new ClassModel { ClassName = "12t" };
             ClassModel c2 = new ClassModel { ClassName = "12s" };
@@ -68,25 +68,9 @@ namespace SkemaSystem.Migrations
             c2.Education = e1;
 
             context.Educations.AddOrUpdate(
-            context.Educations.AddOrUpdate(
                 e => e.Name,
                 e1, e2
             );
-
-            //context.Teachers.AddOrUpdate(
-            //    t => t.Name,
-            //    new Teacher { Name = "Hanne Sommer" },
-            //    new Teacher { Name = "Torben Kroejmand" }
-            //);
-
-            //context.Rooms.AddOrUpdate(
-            //    r => r.RoomName,
-            //    new Room { RoomName = "A1.1" },
-            //    new Room { RoomName = "A1.12" },
-            //    new Room { RoomName = "A1.13" },
-            //    new Room { RoomName = "A1.14" },
-            //    new Room { RoomName = "A1.15" }
-            //);
 
             context.Teachers.AddOrUpdate(
                 t => t.Name,
@@ -105,28 +89,50 @@ namespace SkemaSystem.Migrations
             context.Semesters.AddOrUpdate(
                 s => s.Id,
                 s1, s2);
+
+            //context.Teachers.AddOrUpdate(
+            //    t => t.Name,
+            //    new Teacher { Name = "Hanne Sommer" },
+            //    new Teacher { Name = "Torben Kroejmand" }
+            //);
+
+            //context.Rooms.AddOrUpdate(
+            //    r => r.RoomName,
+            //    new Room { RoomName = "A1.1" },
+            //    new Room { RoomName = "A1.12" },
+            //    new Room { RoomName = "A1.13" },
+            //    new Room { RoomName = "A1.14" },
+            //    new Room { RoomName = "A1.15" }
+            //);
+
+            
+
+
+            //if (!Roles.RoleExists("Admin"))
+            //{
+            //    Roles.CreateRole("Admin");
+            //}
+            //if (!Roles.RoleExists("Teacher"))
+            //{
+            //    Roles.CreateRole("Teacher");
+            //}
+
+            //if (Roles.GetRolesForUser("eaatk").ToList().Count == 0)
+            //{
+            //    Roles.AddUserToRole("eaatk", "Admin");
+            //}
+
+            //if (Roles.GetRolesForUser("eaasommer").ToList().Count == 0)
+            //{
+            //    Roles.AddUserToRole("eaasommer", "Teacher");
+            //}
+
+            /*
                 new Teacher { Name = "Hanne Sommer", UserName = "eaasommer", Password = "fisk123" },
                 new Teacher { Name = "Torben Kroejmand", UserName = "eaatk", Password = "torben5" }
-            );
+            );*/
 
-            if (!Roles.RoleExists("Admin"))
-            {
-                Roles.CreateRole("Admin");
-            }
-            if (!Roles.RoleExists("Teacher"))
-            {
-                Roles.CreateRole("Teacher");
-            }
-
-            if (Roles.GetRolesForUser("eaatk").ToList().Count == 0)
-            {
-                Roles.AddUserToRole("eaatk", "Admin");
-            }
-
-            if (Roles.GetRolesForUser("eaasommer").ToList().Count == 0)
-            {
-                Roles.AddUserToRole("eaasommer", "Teacher");
-            }
+            
         }
     }
 }

@@ -11,18 +11,8 @@ using System.Web.Mvc;
 namespace SkemaSystem.Controllers
 {
     public class RoomController : BaseController
-    {
-        private ISkemaSystemDb db;
-
-        public RoomController()
-        {
-            db = new SkeamSystemDb();
-        }
-
-        public RoomController(FakeSkemaSystemDb db)
-        {
-            this.db = db;
-        }
+    { /*
+        private SkemaSystemDb db;
 
         // GET: /Room/
         public ActionResult Index()
@@ -121,6 +111,6 @@ namespace SkemaSystem.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
+        }*/
     }
 }
