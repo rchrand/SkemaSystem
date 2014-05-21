@@ -24,9 +24,10 @@
         </div>
         <nav>
             <ul>
+                @{var e = ViewContext.RouteData.Values["education"];}
                 @foreach (var education in @EducationModel)
                 {
-                    <li>@Html.ActionLink(education.Name, "Details", "Education", new { education = education }, null)</li>
+                    <li>@Html.ActionLink(education.Name, "Details", "Education", new { education = education }, new { @class = (e != null && e.ToString() == education.Name) ? "selected" : "" })</li>
                 }
             </ul>
         </nav>
