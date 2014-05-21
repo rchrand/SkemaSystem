@@ -45,28 +45,6 @@ namespace SkemaSystem.Migrations
                 new Teacher { Name = "Hanne Sommer", UserName = "eaasommer", Password = "fisk123" },
                 new Teacher { Name = "Torben Kroejmand", UserName = "eaatk", Password = "torben5" }
             );
-
-            var Role = Roles.Provider;
-            var membership = Membership.Provider;
-
-            if (!Role.RoleExists("Admin"))
-            {
-                Role.CreateRole("Admin");
-            }
-            if (!Role.RoleExists("Teacher"))
-            {
-                Role.CreateRole("Teacher");
-            }
-
-            if (Role.GetRolesForUser("eaatk").ToList().Count == 0)
-            {
-                Roles.AddUserToRole("eaatk", "Admin");
-            }
-
-            if (Role.GetRolesForUser("eaasommer").ToList().Count == 0)
-            {
-                Roles.AddUserToRole("eaasommer", "Teacher");
-            }*/
         }
     }
 }
