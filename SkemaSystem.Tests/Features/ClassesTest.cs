@@ -13,32 +13,9 @@ namespace SkemaSystem.Tests.Features
         public List<Subject> Subjects { get; set; }
         public Semester Semester { get; set; }
 
-        //public FakeSkemaSystemDb db { get; set; }
 
         [TestInitialize]
         public void Init() {
-            /*db = new FakeSkemaSystemDb();
-            db.Teachers.Add(new Teacher { Name = "Hanne" });
-            db.Teachers.Add(new Teacher { Name = "Karsten" });
-            db.Teachers.Add(new Teacher { Name = "Jorn" });
-            db.Teachers.Add(new Teacher { Name = "Kaj" });
-
-            db.Subjects.Add(new Subject { Name = "ITO" });
-            db.Subjects.Add(new Subject { Name = "SK" });
-            db.Subjects.Add(new Subject { Name = "SD" });
-            db.Subjects.Add(new Subject { Name = "CNDS" });
-
-            
-            Semester semester = new Semester { Number = 1 };
-
-            Dictionary<Subject, int> blocks = new Dictionary<Subject, int>();
-            blocks.Add(Subjects[0], 20);
-            blocks.Add(Subjects[1], 40);
-            blocks.Add(Subjects[2], 35);
-            semester.Blocks = blocks;
-
-            db.Semesters.Add(semester);
-            */
             Teachers = new List<Teacher>();
             Subjects = new List<Subject>();
 

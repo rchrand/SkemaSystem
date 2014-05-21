@@ -37,11 +37,23 @@ namespace SkemaSystem.Models
 
         public bool AddLessonBlock(Teacher t, Subject s, int blocksCount)
         {
-            SubjectDistBlock ldb = new SubjectDistBlock { Teacher = t, Subject = s, BlocksCount = blocksCount };
-
             // Check whether or not this subject is full already.
             if (!IsSubjectFull(s,blocksCount)) {
-                SubjectDistBlocks.Add(ldb);
+                // Check if there are a SubjectDistBlock with this subject AND this teacher already! If there are - add to the blockscount! :-)
+                SubjectDistBlock sdb = (from sb in SubjectDistBlocks
+                                       where sb.Subject.Equals(s) && sb.Teacher.Equals(t)
+                                       select sb).FirstOrDefault();
+
+                if (sdb != null)
+                {
+                    // Already exists!
+                    sdb.BlocksCount += blocksCount;
+                }
+                else
+                {
+                    // Create new!
+                    SubjectDistBlocks.Add(new SubjectDistBlock { Teacher = t, Subject = s, BlocksCount = blocksCount });
+                }
                 return true;
             }
             return false;

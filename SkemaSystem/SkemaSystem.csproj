@@ -243,7 +243,7 @@
     <Content Include="Views\Education\Details.cshtml" />
     <Content Include="Views\Education\Edit.cshtml" />
     <Content Include="Views\Education\Index.cshtml" />
-    <Content Include="Views\Class\Create.cshtml" />
+    <None Include="Views\Class\Create.cshtml" />
     <Content Include="Views\Class\Index.cshtml" />
     <Content Include="Views\Class\SubjectDistribution.cshtml" />
     <Content Include="Views\Class\_SchemeSubjectDistribution.cshtml" />

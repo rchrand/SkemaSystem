@@ -12,7 +12,7 @@ namespace SkemaSystem.Tests.Controllers
 {
     [TestClass]
     public class TeacherControllerTest
-    {
+    {   /*
         [TestMethod]
         public void Index()
         {
@@ -110,6 +110,6 @@ namespace SkemaSystem.Tests.Controllers
             Teacher _teacher = teachers.Last();
 
             Assert.Equals(teachers.Count(), teachers1.Count());
-        }
+        }*/
     }
 }
