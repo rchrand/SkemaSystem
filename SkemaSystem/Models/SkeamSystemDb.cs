@@ -12,7 +12,6 @@ using System.Data.Entity.Infrastructure;
 
 namespace SkemaSystem.Models
 {
-
     public class SkeamSystemDb : DbContext
     {
         public SkeamSystemDb()
