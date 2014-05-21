@@ -20,21 +20,22 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Education/Details/5
-        public ActionResult Details(string name)
+        [Route("{education}")]
+        public ActionResult Details(string education)
         {
-            Debug.WriteLine(name);
+            Debug.WriteLine(education);
 
-            if (name == null)
+            if (education == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Education education = db.Educations.Find(name);
-            Education education = db.Educations.First(e => e.Name == name);
-            if (education == null)
+            Education _education = db.Educations.FirstOrDefault(e => e.Name.Equals(education));
+            if (_education == null)
             {
                 return HttpNotFound();
             }
-            return View(education);
+            return View(_education);
         }
 
         // GET: /Education/Create
@@ -80,19 +81,20 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Education/Edit/5
-        public ActionResult Edit(string name)
+        [Route("{education}/edit")]
+        public ActionResult Edit(string education)
         {
-            if (name == null)
+            if (education == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Education education = db.Educations.Find(id);
-            Education education = db.Educations.First(e => e.Name == name);
-            if (education == null)
+            Education _education = db.Educations.First(e => e.Name == education);
+            if (_education == null)
             {
                 return HttpNotFound();
             }
-            return View(education);
+            return View(_education);
         }
 
         // POST: /Education/Edit/5
@@ -112,29 +114,29 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Education/Delete/5
-        public ActionResult Delete(string name)
+        public ActionResult Delete(string education)
         {
-            if (name == null)
+            if (education == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Education education = db.Educations.Find(id);
-            Education education = db.Educations.First(e => e.Name == name);
-            if (education == null)
+            Education _education = db.Educations.First(e => e.Name == education);
+            if (_education == null)
             {
                 return HttpNotFound();
             }
-            return View(education);
+            return View(_education);
         }
 
         // POST: /Education/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string name)
+        public ActionResult DeleteConfirmed(string education)
         {
             //Education education = db.Educations.Find(id);
-            Education education = db.Educations.First(e => e.Name == name);
-            db.Educations.Remove(education);
+            Education _education = db.Educations.First(e => e.Name == education);
+            db.Educations.Remove(_education);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

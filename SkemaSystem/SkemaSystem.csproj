@@ -43,6 +43,9 @@
       <HintPath>..\packages\dotless.1.4.0.0\lib\dotless.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MvcCheckBoxList">
+      <HintPath>..\packages\MvcCheckBoxList.1.4.4.5\lib\net45\MvcCheckBoxList.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
@@ -170,6 +173,7 @@
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\EducationController.cs" />
+    <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Models\ClassModel.cs" />
     <Compile Include="Models\Education.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -182,6 +186,8 @@
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\SkeamSystemDb.cs" />
     <Compile Include="Models\Teacher.cs" />
+    <Compile Include="Models\ViewModels\PostedEducations.cs" />
+    <Compile Include="Models\ViewModels\TeacherViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -191,6 +197,46 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.less" />
+    <Content Include="Content\Bootstrap\alerts.less" />
+    <Content Include="Content\Bootstrap\badges.less" />
+    <Content Include="Content\Bootstrap\bootstrap.less" />
+    <Content Include="Content\Bootstrap\breadcrumbs.less" />
+    <Content Include="Content\Bootstrap\button-groups.less" />
+    <Content Include="Content\Bootstrap\buttons.less" />
+    <Content Include="Content\Bootstrap\carousel.less" />
+    <Content Include="Content\Bootstrap\close.less" />
+    <Content Include="Content\Bootstrap\code.less" />
+    <Content Include="Content\Bootstrap\component-animations.less" />
+    <Content Include="Content\Bootstrap\dropdowns.less" />
+    <Content Include="Content\Bootstrap\forms.less" />
+    <Content Include="Content\Bootstrap\glyphicons.less" />
+    <Content Include="Content\Bootstrap\grid.less" />
+    <Content Include="Content\Bootstrap\input-groups.less" />
+    <Content Include="Content\Bootstrap\jumbotron.less" />
+    <Content Include="Content\Bootstrap\labels.less" />
+    <Content Include="Content\Bootstrap\list-group.less" />
+    <Content Include="Content\Bootstrap\media.less" />
+    <Content Include="Content\Bootstrap\mixins.less" />
+    <Content Include="Content\Bootstrap\modals.less" />
+    <Content Include="Content\Bootstrap\navbar.less" />
+    <Content Include="Content\Bootstrap\navs.less" />
+    <Content Include="Content\Bootstrap\normalize.less" />
+    <Content Include="Content\Bootstrap\pager.less" />
+    <Content Include="Content\Bootstrap\pagination.less" />
+    <Content Include="Content\Bootstrap\panels.less" />
+    <Content Include="Content\Bootstrap\popovers.less" />
+    <Content Include="Content\Bootstrap\print.less" />
+    <Content Include="Content\Bootstrap\progress-bars.less" />
+    <Content Include="Content\Bootstrap\responsive-utilities.less" />
+    <Content Include="Content\Bootstrap\scaffolding.less" />
+    <Content Include="Content\Bootstrap\tables.less" />
+    <Content Include="Content\Bootstrap\theme.less" />
+    <Content Include="Content\Bootstrap\thumbnails.less" />
+    <Content Include="Content\Bootstrap\tooltip.less" />
+    <Content Include="Content\Bootstrap\type.less" />
+    <Content Include="Content\Bootstrap\utilities.less" />
+    <Content Include="Content\Bootstrap\variables.less" />
+    <Content Include="Content\Bootstrap\wells.less" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -232,6 +278,12 @@
     <Content Include="Views\Education\Details.cshtml" />
     <Content Include="Views\Education\Edit.cshtml" />
     <Content Include="Views\Education\Index.cshtml" />
+    <Content Include="Views\Teacher\Create.cshtml" />
+    <Content Include="Views\Teacher\Delete.cshtml" />
+    <Content Include="Views\Teacher\Details.cshtml" />
+    <Content Include="Views\Teacher\Edit2.cshtml" />
+    <Content Include="Views\Teacher\Index.cshtml" />
+    <Content Include="Views\Teacher\Edit.cshtml" />
     <Content Include="Views\Class\Create.cshtml" />
     <Content Include="Views\Class\Index.cshtml" />
     <Content Include="Views\Classes\Create.cshtml" />
