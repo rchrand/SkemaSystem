@@ -22,6 +22,7 @@ namespace SkemaSystem.Models
         IDbSet<Semester> Semesters { get; set; }
         IDbSet<Scheme> Schemes { get; set; }
         IDbSet<SemesterSubjectBlock> SemesterSubjectBlocks { get; set; }
+        IDbSet<Room> Rooms { get; set; }
 
         int SaveChanges();
         //DbEntityEntry Entry(object entity);
@@ -43,6 +44,7 @@ namespace SkemaSystem.Models
         public IDbSet<Semester> Semesters { get; set; }
         public IDbSet<Scheme> Schemes { get; set; }
         public IDbSet<SemesterSubjectBlock> SemesterSubjectBlocks { get; set; }
+        public IDbSet<Room> Rooms { get; set; }
 
         public void StateModified(object entity) 
         {
