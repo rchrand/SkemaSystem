@@ -6,7 +6,46 @@
 @borderLight: #EEEEEE;
 @borderDark: #DDDDDD;
 
-@import "Components/Bootstrap.css";
+//@import "Components/Bootstrap.css";
+
+// Core variables and mixins
+@import "Bootstrap/variables.less";
+@import "Bootstrap/mixins.less";
+
+@grid-columns:              12;
+@grid-gutter-width:         20px;
+@input-border-radius:       0px;
+@padding-base-vertical:     5px;
+@padding-base-horizontal:   5px;
+@input-height-base:         (@line-height-computed + (@padding-base-vertical * 2) + 2);
+
+@border-radius-base:        0px;
+@border-radius-small:       0px;
+@border-radius-large:       0px;
+
+@btn-primary-color:         #FFFFFF;
+@btn-primary-bg:            @blue;
+@btn-primary-border:        transparent;
+
+// Reset
+@import "Bootstrap/normalize.less";
+
+// Core CSS
+@import "Bootstrap/scaffolding.less";
+@import "Bootstrap/type.less";
+@import "Bootstrap/code.less";
+@import "Bootstrap/grid.less";
+@import "Bootstrap/tables.less";
+@import "Bootstrap/forms.less";
+@import "Bootstrap/buttons.less";
+
+// Utility classes
+@import "Bootstrap/utilities.less";
+@import "Bootstrap/responsive-utilities.less";
+
+.btn {
+    padding:@padding-base-vertical 20px;
+}
 
 html, body {
     margin:0;
@@ -68,6 +107,20 @@ header {
             &:last-child {
                 margin-right:0;
             }
+            
+            a {
+                padding:5px;
+
+                &:hover {
+                    color:#FFFFFF;
+                    text-decoration:none;
+                }
+
+                &.selected {
+                    background-color:#007EA8;
+                    .border-radius();
+                }
+            }
         }
     }
 
@@ -117,11 +170,39 @@ main {
     padding:@padding;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+table {
+    width:100%;
+    border-top:2px solid @blue;
+    border-bottom:2px solid @blue;
+    border-collapse:collapse;
+
+    thead {
+        background:#F7F7F7;
+
+        th {
+            font-weight:bold;
+
+            .pull-right {
+                font-weight:normal;
+            }
+        }
+    }
+
+    th, td {
+        padding:10px;
+    }
+
+    td, th {
+        border:1px solid @borderDark;
+
+        &:first-child {
+            border-left:none;
+        }
+
+        &:last-child {
+            border-right:none;
+        }
+    }
 }
 
 /* styles for validation helpers */
@@ -147,4 +228,14 @@ input[type="checkbox"].input-validation-error {
 
 .validation-summary-valid {
     display: none;
+}
+
+.border-radius (@radius: 5px) {
+	-webkit-border-radius: @radius;
+	-moz-border-radius:    @radius;
+	border-radius:         @radius;
+
+	-moz-background-clip:    padding;
+	-webkit-background-clip: padding-box;
+	background-clip:         padding-box;
 }
