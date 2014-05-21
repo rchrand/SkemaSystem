@@ -17,9 +17,17 @@ namespace SkemaSystem.Models
 
         public virtual ICollection<Teacher> Teachers { get; set; }
 
+        public virtual List<Semester> Semesters { get; set; }
+
         public override string ToString()
         {
             return Name;
         }
+
+        //Semester --> mange
+
+        //lokaler --> mange
+
+        //skema --> én
     }
 }
