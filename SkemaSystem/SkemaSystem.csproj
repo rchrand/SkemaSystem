@@ -279,19 +279,16 @@
     <Content Include="Views\Education\Details.cshtml" />
     <Content Include="Views\Education\Edit.cshtml" />
     <Content Include="Views\Education\Index.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Room\Create.cshtml" />
     <Content Include="Views\Room\Delete.cshtml" />
     <Content Include="Views\Room\Edit.cshtml" />
     <Content Include="Views\Room\Index.cshtml" />
-=======
     <Content Include="Views\Teacher\Create.cshtml" />
     <Content Include="Views\Teacher\Delete.cshtml" />
     <Content Include="Views\Teacher\Details.cshtml" />
     <Content Include="Views\Teacher\Edit2.cshtml" />
     <Content Include="Views\Teacher\Index.cshtml" />
     <Content Include="Views\Teacher\Edit.cshtml" />
->>>>>>> develop
     <Content Include="Views\Class\Create.cshtml" />
     <Content Include="Views\Class\Index.cshtml" />
     <Content Include="Views\Classes\Create.cshtml" />

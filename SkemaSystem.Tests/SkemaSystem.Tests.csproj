@@ -90,11 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <Compile Include="Controllers\RoomControllerTest.cs" />
-=======
     <Compile Include="Controllers\TeacherControllerTest.cs" />
->>>>>>> develop
     <Compile Include="Controllers\TestData.cs" />
     <Compile Include="Features\CRUD class\ClassTest.cs" />
     <Compile Include="Features\CRUD educations\US4CreateEducation.cs" />
