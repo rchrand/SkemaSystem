@@ -1,10 +1,10 @@
 ﻿@model SkemaSystem.Models.Education
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Opdatér";
 }
 
-<h2>Edit</h2>
+<h2>Opdatér</h2>
 
 
 @using (Html.BeginForm())
@@ -22,6 +22,14 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Name)
                 @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="NumberOfSemesters">Antal semestre</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NumberOfSemesters)
+                @Html.ValidationMessageFor(model => model.NumberOfSemesters)
             </div>
         </div>
 

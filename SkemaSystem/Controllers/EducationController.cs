@@ -58,8 +58,8 @@ namespace SkemaSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize (Roles = "Admin")]
-        public ActionResult Create([Bind(Include="Id,Name")] Education education)
+        [Authorize(Roles = "Admin")]
+        public ActionResult Create([Bind(Include="Id,Name,NumberOfSemesters")] Education education)
         {
             if (ModelState.IsValid && CheckIfNameIsAvailable(education.Name) && CheckIfIdIsAvailable(education.Id))
             {
@@ -111,10 +111,10 @@ namespace SkemaSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name")] Education education)
+        public ActionResult Edit([Bind(Include="Id,Name,NumberOfSemesters")] Education education)
         {
             //needs to check if the new name is already used
-            if (ModelState.IsValid && CheckIfNameIsAvailable(education.Name))
+            if (ModelState.IsValid)
             {
                 db.Entry(education).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -289,10 +289,10 @@ namespace SkemaSystem.Controllers
         // POST: /Education/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string education)
+        public ActionResult DeleteConfirmed(string name)
         {
             //Education education = db.Educations.Find(id);
-            Education _education = db.Educations.First(e => e.Name == education);
+            Education _education = db.Educations.First(e => e.Name.Equals(name));
             db.Educations.Remove(_education);
             db.SaveChanges();
             return RedirectToAction("Index");
