@@ -1,5 +1,4 @@
-﻿using SkemaSystem.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -7,30 +6,33 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using SkemaSystem.Models;
 
 namespace SkemaSystem.Controllers
 {
-    public class RoomController : BaseController
+    public class RoomController : Controller
     {
-        private ISkemaSystemDb db;
-
-        public RoomController()
-        {
-            db = new SkeamSystemDb();
-        }
-
-        public RoomController(FakeSkemaSystemDb db)
-        {
-            this.db = db;
-        }
+        private SkeamSystemDb db = new SkeamSystemDb();
 
         // GET: /Room/
         public ActionResult Index()
         {
-            var model = from r in db.Rooms
-                        orderby r.RoomName ascending
-                        select r;
-            return View(model);
+            return View(db.Rooms.ToList());
+        }
+
+        // GET: /Room/Details/5
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Room room = db.Rooms.Find(id);
+            if (room == null)
+            {
+                return HttpNotFound();
+            }
+            return View(room);
         }
 
         // GET: /Room/Create
@@ -63,8 +65,7 @@ namespace SkemaSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Room room = db.Rooms.Find(id);
-            Room room = db.Rooms.SingleOrDefault(x => x.Id.Equals(id));
+            Room room = db.Rooms.Find(id);
             if (room == null)
             {
                 return HttpNotFound();
@@ -81,7 +82,7 @@ namespace SkemaSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.StateModified(room);
+                db.Entry(room).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -95,7 +96,7 @@ namespace SkemaSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Room room = db.Rooms.Local.Single(x => x.Id.Equals(id));
+            Room room = db.Rooms.Find(id);
             if (room == null)
             {
                 return HttpNotFound();

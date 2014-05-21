@@ -46,21 +46,24 @@ namespace SkemaSystem.Migrations
                 new Teacher { Name = "Torben Kroejmand", UserName = "eaatk", Password = "torben5" }
             );
 
-            if (!Roles.RoleExists("Admin"))
+            var Role = Roles.Provider;
+            var membership = Membership.Provider;
+
+            if (!Role.RoleExists("Admin"))
             {
-                Roles.CreateRole("Admin");
+                Role.CreateRole("Admin");
             }
-            if (!Roles.RoleExists("Teacher"))
+            if (!Role.RoleExists("Teacher"))
             {
-                Roles.CreateRole("Teacher");
+                Role.CreateRole("Teacher");
             }
 
-            if (Roles.GetRolesForUser("eaatk").ToList().Count == 0)
+            if (Role.GetRolesForUser("eaatk").ToList().Count == 0)
             {
                 Roles.AddUserToRole("eaatk", "Admin");
             }
 
-            if (Roles.GetRolesForUser("eaasommer").ToList().Count == 0)
+            if (Role.GetRolesForUser("eaasommer").ToList().Count == 0)
             {
                 Roles.AddUserToRole("eaasommer", "Teacher");
             }
