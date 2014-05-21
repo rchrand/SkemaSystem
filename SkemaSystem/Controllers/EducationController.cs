@@ -18,19 +18,23 @@ namespace SkemaSystem.Controllers
         {
             db = new SkeamSystemDb();
         }
+        
+        //[Route("~/")]
+        public ActionResult Index()
+        {
+            return View(db.Educations);
+        }
 
         // GET: /Education/Details/5
-        [Route("{education}")]
-        public ActionResult Details(string education)
+        //[Route("{education}")]
+        public ActionResult Details(string name)
         {
-            Debug.WriteLine(education);
-
-            if (education == null)
+            if (name == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Education education = db.Educations.Find(name);
-            Education _education = db.Educations.FirstOrDefault(e => e.Name.Equals(education));
+            
+            Education _education = db.Educations.FirstOrDefault(e => e.Name.Equals(name));
             if (_education == null)
             {
                 return HttpNotFound();
@@ -81,15 +85,15 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Education/Edit/5
-        [Route("{education}/edit")]
-        public ActionResult Edit(string education)
+        //[Route("{education}/edit")]
+        public ActionResult Edit(string name)
         {
-            if (education == null)
+            if (name == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Education education = db.Educations.Find(id);
-            Education _education = db.Educations.First(e => e.Name == education);
+            Education _education = db.Educations.First(e => e.Name.Equals(name));
             if (_education == null)
             {
                 return HttpNotFound();
@@ -104,7 +108,8 @@ namespace SkemaSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include="Id,Name")] Education education)
         {
-            if (ModelState.IsValid)
+            //needs to check if the new name is already used
+            if (ModelState.IsValid && CheckIfNameIsAvailable(education.Name))
             {
                 db.Entry(education).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -113,15 +118,33 @@ namespace SkemaSystem.Controllers
             return View(education);
         }
 
-        // GET: /Education/Delete/5
-        public ActionResult Delete(string education)
+        public ActionResult ModifyTeachers(string name)
         {
+            if (name == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Education education = db.Educations.FirstOrDefault(e => e.Name.Equals(name));
+
             if (education == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(education);
+
+        }
+
+        // GET: /Education/Delete/5
+        public ActionResult Delete(string name)
+        {
+            if (name == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Education education = db.Educations.Find(id);
-            Education _education = db.Educations.First(e => e.Name == education);
+            Education _education = db.Educations.First(e => e.Name.Equals(name));
             if (_education == null)
             {
                 return HttpNotFound();
