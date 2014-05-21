@@ -21,5 +21,11 @@ namespace SkemaSystem.Models
         {
             return Name;
         }
+
+        //Semester --> mange
+
+        //lokaler --> mange
+
+        //skema --> én
     }
 }
