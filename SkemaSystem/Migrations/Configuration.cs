@@ -18,11 +18,11 @@ namespace SkemaSystem.Migrations
 
         protected override void Seed(SkemaSystem.Models.SkeamSystemDb context)
         {
-            Teacher t1 = new Teacher { Name = "Hanne Sommer", UserName = "eaasommer", Password = "fisk123", Role = Models.Enum.UserRoles.Teacher };
-            Teacher t2 = new Teacher { Name = "Torben Krøjmand", UserName = "eaatk", Password = "fisk123" , Role = Models.Enum.UserRoles.Teacher};
-            Teacher t3 = new Teacher { Name = "Erik Jacobsen", UserName = "eaaej", Password = "fisk123", Role = Models.Enum.UserRoles.Admin };
-            Teacher t4 = new Teacher { Name = "Jörn Hujak", UserName = "eaajh", Password = "fisk123" , Role = Models.Enum.UserRoles.Teacher};
-            Teacher t5 = new Teacher { Name = "Karsten ITO", UserName = "eaakarsten", Password = "fisk123" , Role = Models.Enum.UserRoles.Teacher};
+            Teacher t1 = new Teacher { Name = "Hanne Sommer", Username = "eaasommer", Password = "fisk123", Role = Models.Enum.UserRoles.Teacher };
+            Teacher t2 = new Teacher { Name = "Torben Krøjmand", Username = "eaatk", Password = "fisk123", Role = Models.Enum.UserRoles.Teacher };
+            Teacher t3 = new Teacher { Name = "Erik Jacobsen", Username = "eaaej", Password = "fisk123", Role = Models.Enum.UserRoles.Admin };
+            Teacher t4 = new Teacher { Name = "Jörn Hujak", Username = "eaajh", Password = "fisk123", Role = Models.Enum.UserRoles.Teacher };
+            Teacher t5 = new Teacher { Name = "Karsten ITO", Username = "eaakarsten", Password = "fisk123", Role = Models.Enum.UserRoles.Teacher };
 
             ClassModel c1 = new ClassModel { ClassName = "12t" };
             ClassModel c2 = new ClassModel { ClassName = "12s" };

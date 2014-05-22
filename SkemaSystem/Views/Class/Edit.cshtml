@@ -1,11 +1,14 @@
-﻿@model SkemaSystem.Models.ClassModel
+﻿@model SkemaSystem.Models.ViewModels.ClassViewModel
 
 @{
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+@section Subheader {
+    @Html.Partial("_AdminTabsPartial")
+}
 
+<h2>Edit</h2>
 
 @using (Html.BeginForm())
 {
@@ -15,19 +18,26 @@
         <h4>ClassModel</h4>
         <hr />
         @Html.ValidationSummary(true)
-        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.ClassModel.Id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ClassName, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ClassModel.ClassName, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ClassName)
-                @Html.ValidationMessageFor(model => model.ClassName)
+                @Html.TextBoxFor(model => model.ClassModel.ClassName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ClassModel.ClassName)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Education, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Education, new SelectList(@ViewBag.Educations, "Value", "Text", @Model.SelectedEducation), "- Vælg uddannelse -", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Education)
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </div>
     </div>

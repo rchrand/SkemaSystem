@@ -1,14 +1,15 @@
 ﻿@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("Logout", "Admin", FormMethod.Get, new { id = "logoutForm"}))
+    using (Html.BeginForm("Logout", "Account", new { Area = "Admin" }, FormMethod.Get, new { id = "logoutForm" }))
     {
     @Html.AntiForgeryToken()
-
+    <ul>
         <li>
-            <span> Hej @User.Identity.GetUserName() !</span>
+            @Html.ActionLink("Administration", "Demo", "Account", new { Area = "Admin" }, null)
         </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log ud</a></li>
+    </ul>
     }
 }
 else

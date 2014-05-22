@@ -7,21 +7,15 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SkemaSystem.Models;
+using SkemaSystem.Models.ViewModels;
 
 namespace SkemaSystem.Controllers
 {
-    [RouteArea("admin")]
-    [RoutePrefix("class")]
-    [Route("{action=index}")]
+    [RouteArea("Admin", AreaPrefix="admin")]
+    [RoutePrefix("classes")]
+    [Route("{action=index}/{id?}")]
     public class ClassController : BaseController
     {
-        private SkeamSystemDb db;
-
-        public ClassController()
-        {
-           this.db = new SkeamSystemDb();
-        }
-
         // GET: /Class/
         public ActionResult Index()
         {
@@ -46,9 +40,15 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Classes/Create
+        [Route("create")]
         public ActionResult Create()
         {
-            return View();
+            IEnumerable<SelectListItem> items = from s in db.Educations.ToList()
+                                                select new SelectListItem { Text = s.Name, Value = s.Id.ToString() };
+            
+            ViewBag.Educations = items;
+
+            return View(new ClassViewModel());
         }
 
         // POST: /Classes/Create
@@ -56,47 +56,75 @@ namespace SkemaSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,ClassName")] ClassModel classmodel)
+        public ActionResult Create(ClassViewModel result)
         {
             if (ModelState.IsValid)
             {
-                db.Classes.Add(classmodel);
+                result.ClassModel.Education = db.Educations.ToList().Where(e => e.Id.Equals(result.Education)).SingleOrDefault();
+
+                db.Classes.Add(result.ClassModel);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(classmodel);
+            IEnumerable<SelectListItem> items = from s in db.Educations.ToList()
+                                                select new SelectListItem { Text = s.Name, Value = s.Id.ToString() };
+
+            ViewBag.Educations = items;
+
+            return View(result);
         }
 
-        // GET: /Classes/Edit/5
+        [Route("edit/{id?}")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClassModel classmodel = db.Classes.SingleOrDefault(x => x.Id.Equals(id));
+            ClassModel classmodel = db.Classes.Find(id);
             if (classmodel == null)
             {
                 return HttpNotFound();
             }
-            return View(classmodel);
+
+            IEnumerable<SelectListItem> items = from s in db.Educations.ToList()
+                                                select new SelectListItem { Text = s.Name, Value = s.Id.ToString() };
+
+            ViewBag.Educations = items;
+
+            var model = new ClassViewModel();
+            model.ClassModel = classmodel;
+            model.SelectedEducation = classmodel.Education.Id;
+
+            return View(model);
         }
 
         // POST: /Classes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Route("edit/{id?}")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,ClassName")] ClassModel classmodel)
+        public ActionResult Edit(ClassViewModel result)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(classmodel).State = System.Data.Entity.EntityState.Modified;
+                var classModel = db.Classes.Find(result.ClassModel.Id);
+                classModel.ClassName = result.ClassModel.ClassName;
+                classModel.Education = db.Educations.ToList().Where(e => e.Id.Equals(result.Education)).SingleOrDefault();
+
+                db.Entry(classModel).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(classmodel);
+
+            IEnumerable<SelectListItem> items = from s in db.Educations.ToList()
+                                                select new SelectListItem { Text = s.Name, Value = s.Id.ToString() };
+
+            ViewBag.Educations = items;
+
+            return View(result);
         }
 
         // GET: /Classes/Delete/5

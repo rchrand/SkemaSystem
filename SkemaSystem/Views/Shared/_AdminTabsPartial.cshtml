@@ -1,0 +1,7 @@
+﻿@{string Action = (string) ViewContext.RouteData.Values["Action"];}
+@{string Controller = (string) ViewContext.RouteData.Values["Controller"];}
+<ul class="tabs">
+    <li>@Html.ActionLink("Velkommen", "Demo", "Account", new { Area = "Admin" }, new { @class = ("Account".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
+    <li>@Html.ActionLink("Lærere", "Index", "Teacher", new { Area = "Admin" }, new { @class = ("Teacher".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
+    <li>@Html.ActionLink("Klasser", "index", "Class", new { Area = "Admin" }, new { @class = ("Class".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
+</ul>

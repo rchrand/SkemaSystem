@@ -16,8 +16,8 @@ namespace SkemaSystem.Tests.Features.CRUD_Teacher
         [TestMethod]
         public void TestIsVaild()
         {
-            var t1 = new Teacher() { Name = "Erik Jacobsen", UserName = "eaaej", Password = "russia" };
-            var t2 = new Teacher() { Name = "Karsten", UserName = "eaakk", Password = "skak" };
+            var t1 = new Teacher() { Name = "Erik Jacobsen", Username = "eaaej", Password = "russia" };
+            var t2 = new Teacher() { Name = "Karsten", Username = "eaakk", Password = "skak" };
 
             // Does not work, since IsValid looks in the db
             //Assert.IsTrue(t1.IsValid("eaaej", "russia"));
