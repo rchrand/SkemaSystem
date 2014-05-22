@@ -4,4 +4,6 @@
     <li>@Html.ActionLink("Velkommen", "Demo", "Account", new { Area = "Admin" }, new { @class = ("Account".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
     <li>@Html.ActionLink("Lærere", "Index", "Teacher", new { Area = "Admin" }, new { @class = ("Teacher".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
     <li>@Html.ActionLink("Klasser", "index", "Class", new { Area = "Admin" }, new { @class = ("Class".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
+    <li>@Html.ActionLink("Lokaler", "index", "Room", new { Area = "Admin" }, new { @class = ("Room".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
+    <li>@Html.ActionLink("Uddannelser", "index", "Education", new { Area = "Admin" }, new { @class = ("Education".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
 </ul>

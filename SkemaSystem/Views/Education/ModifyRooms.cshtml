@@ -1,7 +1,14 @@
 ﻿@model SkemaSystem.Models.ViewModels.EducationViewModel
 
-<h2>Tilføj eller fjern lærer til @Model.Education.Name</h2>
+@{
+    ViewBag.Title = "ModifyRooms";
+}
 
+@section Subheader {
+    @Html.Partial("_AdminTabsPartial")
+}
+
+<h2>Tilføj eller fjern lærer til @Model.Education.Name</h2>
 
 @using (Html.BeginForm())
 {
@@ -12,14 +19,7 @@
         <hr />
         @Html.ValidationSummary(true)
         @Html.HiddenFor(model => model.Education.Id)
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Education.Name, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Education.Name)
-                @Html.ValidationMessageFor(model => model.Education.Name)
-            </div>
-        </div>
+        @Html.HiddenFor(model => model.Education.Name)
 
         <div class="form-group">
             @Html.Label("Rooms", new { @class = "control-label col-md-2" })
@@ -38,7 +38,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </div>
     </div>

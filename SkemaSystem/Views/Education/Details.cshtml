@@ -4,6 +4,10 @@
     ViewBag.Title = "Detaljer";
 }
 
+@section Subheader {
+    @Html.Partial("_AdminTabsPartial")
+}
+
 <h2>Detaljer</h2>
 
 <div>
@@ -76,6 +80,6 @@
 <br />
 <br />
 <p>
-    @Html.ActionLink("Opdatér uddannelsen", "Edit", new { name = Model.Name }) |
+    @Html.ActionLink("Opdatér uddannelsen", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

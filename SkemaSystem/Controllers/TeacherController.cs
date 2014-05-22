@@ -151,7 +151,7 @@ namespace SkemaSystem.Controllers
         // POST: /admin/teachers/delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Route("delete/{id?}")]
+        [Route("delete/{id}")]
         public ActionResult DeleteConfirmed(int id)
         {
             Teacher teacher = db.Teachers.Find(id);

@@ -4,9 +4,10 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-<br />
-<br />
+@section Subheader {
+    @Html.Partial("_AdminTabsPartial")
+}
+
 <p>
     @Html.ActionLink("Opret ny uddannelse", "Create")
 </p>
@@ -24,11 +25,11 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.ActionLink("Opdatér", "Edit", new { name = item.Name }) &nbsp;&nbsp;|&nbsp;&nbsp;
-            @Html.ActionLink("Detaljer", "Details", new { name = item.Name }) &nbsp;&nbsp;|&nbsp;&nbsp;
-            @Html.ActionLink("Slet", "Delete", new { name = item.Name }) &nbsp;&nbsp;|&nbsp;&nbsp;
-            @Html.ActionLink("Tilføj/fjern lærere", "ModifyTeachers", new { name = item.Name }) &nbsp;&nbsp;|&nbsp;&nbsp;
-            @Html.ActionLink("Tilføj/fjern lokaler", "ModifyRooms", new { name = item.Name })
+            @Html.ActionLink("Opdatér", "Edit", new { id = item.Id }) &nbsp;&nbsp;|&nbsp;&nbsp;
+            @Html.ActionLink("Detaljer", "Details", new { id = item.Id }) &nbsp;&nbsp;|&nbsp;&nbsp;
+            @Html.ActionLink("Slet", "Delete", new { id = item.Id }) &nbsp;&nbsp;|&nbsp;&nbsp;
+            @Html.ActionLink("Tilføj/fjern lærere", "ModifyTeachers", new { id = item.Id }) &nbsp;&nbsp;|&nbsp;&nbsp;
+            @Html.ActionLink("Tilføj/fjern lokaler", "ModifyRooms", new { id = item.Id })
         </td>
     </tr>
 }

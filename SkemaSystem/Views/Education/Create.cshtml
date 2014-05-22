@@ -4,8 +4,11 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
+@section Subheader {
+    @Html.Partial("_AdminTabsPartial")
+}
 
+<h2>Create</h2>
 
 @using (Html.BeginForm()) 
 {
@@ -19,7 +22,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Name)
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Name)
             </div>
         </div>
@@ -27,14 +30,14 @@
         <div class="form-group">
             <label class="control-label col-md-2" for="NumberOfSemesters">Antal semestre</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.NumberOfSemesters)
+                @Html.TextBoxFor(model => model.NumberOfSemesters, new { @class = "form-control", type = "number" })
                 @Html.ValidationMessageFor(model => model.NumberOfSemesters)
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </div>
     </div>

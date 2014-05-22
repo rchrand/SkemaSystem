@@ -277,11 +277,6 @@
     <Content Include="Views\Education\Details.cshtml" />
     <Content Include="Views\Education\Edit.cshtml" />
     <Content Include="Views\Education\Index.cshtml" />
-    <Content Include="Views\Classes\Create.cshtml" />
-    <Content Include="Views\Classes\Delete.cshtml" />
-    <Content Include="Views\Classes\Details.cshtml" />
-    <Content Include="Views\Classes\Edit.cshtml" />
-    <Content Include="Views\Classes\Index.cshtml" />
     <Content Include="Views\Class\SubjectDistribution.cshtml" />
     <Content Include="Views\Class\_SchemeSubjectDistribution.cshtml" />
     <Content Include="Views\Class\Delete.cshtml" />
@@ -290,17 +285,10 @@
     <Content Include="Views\Room\Create.cshtml" />
     <Content Include="Views\Room\Delete.cshtml" />
     <Content Include="Views\Room\Edit.cshtml" />
-    <Content Include="Views\Room\Index.cshtml" />
-    <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Teacher\Delete.cshtml" />
     <Content Include="Views\Teacher\Details.cshtml" />
     <Content Include="Views\Teacher\Edit.cshtml" />
     <Content Include="Views\Teacher\Index.cshtml" />
-    <Content Include="Views\Classes\Create.cshtml" />
-    <Content Include="Views\Classes\Delete.cshtml" />
-    <Content Include="Views\Classes\Details.cshtml" />
-    <Content Include="Views\Classes\Edit.cshtml" />
-    <Content Include="Views\Classes\Index.cshtml" />
     <Content Include="Views\Education\ModifyTeachers.cshtml" />
     <Content Include="Views\Room\Details.cshtml" />
     <Content Include="Views\Education\ModifyRooms.cshtml" />
@@ -309,6 +297,7 @@
     <Content Include="Views\Class\Create.cshtml" />
     <Content Include="Views\Account\Demo.cshtml" />
     <Content Include="Views\Shared\_AdminTabsPartial.cshtml" />
+    <Content Include="Views\Room\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

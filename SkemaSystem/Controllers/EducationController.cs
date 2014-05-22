@@ -14,32 +14,24 @@ namespace SkemaSystem.Controllers
     //add rooms
     //add semesters (wait)
 
-    [RouteArea("Default", AreaPrefix="")]
+    [RouteArea("Admin", AreaPrefix="admin")]
+    [RoutePrefix("educations")]
+    [Route("{action=index}/{id?}")]
     public class EducationController : BaseController
     {
-        private SkeamSystemDb db;
-
-        public EducationController()
-        {
-            db = new SkeamSystemDb();
-        }
-        
-        //[Route("~/")]
-        public ActionResult Index()
-        {
-            return View(db.Educations);
-        }
-
         // GET: /Education/Details/5
         //[Route("{education}")]
-        public ActionResult Details(string name)
+        [Route("details/{id?}")]
+        //public ActionResult Details(string name)
+        public ActionResult Details(int? id)
         {
-            if (name == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             
-            Education _education = db.Educations.FirstOrDefault(e => e.Name.Equals(name));
+            //Education _education = db.Educations.FirstOrDefault(e => e.Name.Equals(name));
+            Education _education = db.Educations.Find(id);
             if (_education == null)
             {
                 return HttpNotFound();
@@ -48,6 +40,7 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Education/Create
+        [Route("create")]
         public ActionResult Create()
         {
             return View();
@@ -56,9 +49,8 @@ namespace SkemaSystem.Controllers
         // POST: /Education/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Route("create"), HttpPost]
         public ActionResult Create([Bind(Include="Id,Name,NumberOfSemesters")] Education education)
         {
             if (ModelState.IsValid && CheckIfNameIsAvailable(education.Name) && CheckIfIdIsAvailable(education.Id))
@@ -90,15 +82,14 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Education/Edit/5
-        //[Route("{education}/edit")]
-        public ActionResult Edit(string name)
+        [Route("edit/{id?}")]
+        public ActionResult Edit(int? id)
         {
-            if (name == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Education education = db.Educations.Find(id);
-            Education _education = db.Educations.First(e => e.Name.Equals(name));
+            Education _education = db.Educations.Find(id);
             if (_education == null)
             {
                 return HttpNotFound();
@@ -111,6 +102,7 @@ namespace SkemaSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("edit/{id}")]
         public ActionResult Edit([Bind(Include="Id,Name,NumberOfSemesters")] Education education)
         {
             //needs to check if the new name is already used
@@ -126,16 +118,17 @@ namespace SkemaSystem.Controllers
 
         // GET
         [HttpGet]
-        public ActionResult ModifyTeachers(string name)
+        [Route("teachers/{id?}")]
+        public ActionResult ModifyTeachers(int? id)
         {
-            if (name == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             EducationViewModel education = new EducationViewModel()
             {
-                Education = db.Educations.FirstOrDefault(e => e.Name.Equals(name)),
+                Education = db.Educations.Find(id),
                 AvailableTeachers = db.Teachers
             };
 
@@ -152,6 +145,7 @@ namespace SkemaSystem.Controllers
 
         //POST: 
         [HttpPost]
+        [Route("teachers/{id}")]
         public ActionResult ModifyTeachers([Bind(Include = "Education,PostedTeachers")] EducationViewModel result)
         {
             Education education = result.Education;
@@ -197,20 +191,19 @@ namespace SkemaSystem.Controllers
 
         // GET
         [HttpGet]
-        public ActionResult ModifyRooms(string name)
+        [Route("rooms/{id?}")]
+        public ActionResult ModifyRooms(int? id)
         {
-            if (name == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             EducationViewModel education = new EducationViewModel()
             {
-                Education = db.Educations.FirstOrDefault(e => e.Name.Equals(name)),
+                Education = db.Educations.Find(id),
                 AvailableRooms = db.Rooms
-            };
-
-            
+            };            
 
             if (education == null)
             {
@@ -223,10 +216,9 @@ namespace SkemaSystem.Controllers
 
         }
 
-        
-
         //POST
         [HttpPost]
+        [Route("rooms/{id}")]
         public ActionResult ModifyRooms([Bind(Include = "Education,PostedRooms")] EducationViewModel result)
         {
             Education education = result.Education;
@@ -271,14 +263,15 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Education/Delete/5
-        public ActionResult Delete(string name)
+        [Route("delete/{id?}")]
+        public ActionResult Delete(int? id)
         {
-            if (name == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Education education = db.Educations.Find(id);
-            Education _education = db.Educations.First(e => e.Name.Equals(name));
+            Education _education = db.Educations.Find(id);
             if (_education == null)
             {
                 return HttpNotFound();
@@ -289,10 +282,10 @@ namespace SkemaSystem.Controllers
         // POST: /Education/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string name)
+        [Route("delete/{id}")]
+        public ActionResult DeleteConfirmed(int id)
         {
-            //Education education = db.Educations.Find(id);
-            Education _education = db.Educations.First(e => e.Name.Equals(name));
+            Education _education = db.Educations.Find(id);
             db.Educations.Remove(_education);
             db.SaveChanges();
             return RedirectToAction("Index");
