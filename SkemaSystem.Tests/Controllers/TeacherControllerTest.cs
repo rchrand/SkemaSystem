@@ -10,6 +10,16 @@ using SkemaSystem.Models;
 
 namespace SkemaSystem.Tests.Controllers
 {
+<<<<<<< HEAD
+    //[TestClass]
+    //public class TeacherControllerTest
+    //{
+    //    [TestMethod]
+    //    public void Index()
+    //    {
+    //        var db = new FakeSkemaSystemDb();
+    //        db.AddSet(TestData.Teachers);
+=======
     [TestClass]
     public class TeacherControllerTest
     {   /*
@@ -18,98 +28,105 @@ namespace SkemaSystem.Tests.Controllers
         {
             var db = new FakeSkemaSystemDb();
             db.AddSet(TestData.Teachers);
+>>>>>>> develop
 
-            TeacherController controller = new TeacherController(db);
+    //        TeacherController controller = new TeacherController(db);
 
-            var teachers =
-                from t in db.Query<Teacher>()
-                select t;
+    //        var teachers =
+    //            from t in db.Query<Teacher>()
+    //            select t;
 
-            var result = controller.Index();
+    //        var result = controller.Index();
 
-            Assert.IsInstanceOfType(result, typeof(controller.ViewResult));
+    //        Assert.IsInstanceOfType(result, typeof(controller.ViewResult));
 
-            Assert.Equals(teachers.Count(), ((IOrderedQueryable<Teacher>)((ViewResult)result).Model).Count());
-        }
+    //        Assert.Equals(teachers.Count(), ((IOrderedQueryable<Teacher>)((ViewResult)result).Model).Count());
+    //    }
 
-        [TestMethod]
-        public void Edit()
-        {
-            var db = new FakeSkemaSystemDb();
-            db.AddSet(TestData.Teachers);
+    //    [TestMethod]
+    //    public void Edit()
+    //    {
+    //        var db = new FakeSkemaSystemDb();
+    //        db.AddSet(TestData.Teachers);
 
-            TeacherController controller = new TeacherController(db);
+    //        TeacherController controller = new TeacherController(db);
 
-            var teacher =
-                from t in db.Query<Teacher>()
-                where t.Id == 1
-                select t;
+    //        var teacher =
+    //            from t in db.Query<Teacher>()
+    //            where t.Id == 1
+    //            select t;
 
-            Teacher _teacher = teacher.First();
-            _teacher.Name = "Martin";
+    //        Teacher _teacher = teacher.First();
+    //        _teacher.Name = "Martin";
 
-            var result = controller.Edit(_teacher);
+    //        var result = controller.Edit(_teacher);
 
-            Assert.IsInstanceOfType(result, typeof(controller.View));
+    //        Assert.IsInstanceOfType(result, typeof(controller.View));
 
-            var teacher1 =
-                from t in db.Query<Teacher>()
-                where t.Id == 1
-                select t;
+    //        var teacher1 =
+    //            from t in db.Query<Teacher>()
+    //            where t.Id == 1
+    //            select t;
 
-            Teacher _teacher1 = teacher1.First();
+    //        Teacher _teacher1 = teacher1.First();
 
-            Assert.Equals(_teacher.Name, _teacher1.Name);
-        }
+    //        Assert.Equals(_teacher.Name, _teacher1.Name);
+    //    }
 
-        [TestMethod]
-        public void Create()
-        {
-            var db = new FakeSkemaSystemDb();
-            db.AddSet(TestData.Teachers);
+    //    [TestMethod]
+    //    public void Create()
+    //    {
+    //        var db = new FakeSkemaSystemDb();
+    //        db.AddSet(TestData.Teachers);
 
-            TeacherController controller = new TeacherController(db);
+    //        TeacherController controller = new TeacherController(db);
 
-            Teacher teacher = new Teacher() { Name = "Martin" };
+    //        Teacher teacher = new Teacher() { Name = "Martin" };
 
-            var result = controller.Create(teacher);
+    //        var result = controller.Create(teacher);
 
-            Assert.IsInstanceOfType(result, typeof(controller.View));
+    //        Assert.IsInstanceOfType(result, typeof(controller.View));
 
-            var teachers =
-                from t in db.Query<Teacher>()
-                select t;
+    //        var teachers =
+    //            from t in db.Query<Teacher>()
+    //            select t;
 
-            Teacher _teacher = teachers.Last();
+    //        Teacher _teacher = teachers.Last();
 
-            Assert.Equals(_teacher.Name, "Martin");
-        }
+    //        Assert.Equals(_teacher.Name, "Martin");
+    //    }
 
-        [TestMethod]
-        public void Delete()
-        {
-            var db = new FakeSkemaSystemDb();
-            db.AddSet(TestData.Teachers);
+    //    [TestMethod]
+    //    public void Delete()
+    //    {
+    //        var db = new FakeSkemaSystemDb();
+    //        db.AddSet(TestData.Teachers);
 
-            TeacherController controller = new TeacherController(db);
+    //        TeacherController controller = new TeacherController(db);
 
-            var teachers =
-                from t in db.Query<Teacher>()
-                select t;
+    //        var teachers =
+    //            from t in db.Query<Teacher>()
+    //            select t;
 
-            Teacher teacher = teachers.First();
+    //        Teacher teacher = teachers.First();
 
-            var result = controller.Delete(teacher);
+    //        var result = controller.Delete(teacher);
 
-            Assert.IsInstanceOfType(result, typeof(controller.RedirectToAction));
+    //        Assert.IsInstanceOfType(result, typeof(controller.RedirectToAction));
 
-            var teachers1 =
-                from t in db.Query<Teacher>()
-                select t;
+    //        var teachers1 =
+    //            from t in db.Query<Teacher>()
+    //            select t;
 
-            Teacher _teacher = teachers.Last();
+    //        Teacher _teacher = teachers.Last();
 
+<<<<<<< HEAD
+    //        Assert.Equals(teachers.Count(), teachers1.Count());
+    //    }
+    //}
+=======
             Assert.Equals(teachers.Count(), teachers1.Count());
         }*/
     }
+>>>>>>> develop
 }

@@ -17,6 +17,7 @@ namespace SkemaSystem.Controllers
     public class ClassController : BaseController
     {
         // GET: /Class/
+        [Route("")]
         public ActionResult Index()
         {
             return View(db.Classes.ToList());
@@ -25,13 +26,14 @@ namespace SkemaSystem.Controllers
 
 
         // GET: /Class/Details/5
+        [Route("details/{id?}")]
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClassModel classmodel = db.Classes.SingleOrDefault(x => x.Id.Equals(id));
+            ClassModel classmodel = db.Classes.Find(id);
             if (classmodel == null)
             {
                 return HttpNotFound();
@@ -56,6 +58,7 @@ namespace SkemaSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("create")]
         public ActionResult Create(ClassViewModel result)
         {
             if (ModelState.IsValid)
@@ -128,13 +131,14 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Classes/Delete/5
+        [Route("delete/{id?}")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClassModel classmodel = db.Classes.SingleOrDefault(x => x.Id.Equals(id));
+            ClassModel classmodel = db.Classes.Find(id);
             if (classmodel == null)
             {
                 return HttpNotFound();
@@ -145,9 +149,10 @@ namespace SkemaSystem.Controllers
         // POST: /Classes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        [Route("delete/{id?}")]
+        public ActionResult DeleteConfirmed(int? id)
         {
-            ClassModel classmodel = db.Classes.Single(x => x.Id.Equals(id));
+            ClassModel classmodel = db.Classes.Find(id);
             db.Classes.Remove(classmodel);
             db.SaveChanges();
             return RedirectToAction("Index");

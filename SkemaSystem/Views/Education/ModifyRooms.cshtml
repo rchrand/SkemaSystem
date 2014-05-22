@@ -1,0 +1,53 @@
+﻿@model SkemaSystem.Models.ViewModels.EducationViewModel
+
+@{
+    ViewBag.Title = "ModifyRooms";
+}
+
+@section Subheader {
+    @Html.Partial("_AdminTabsPartial")
+}
+
+<h2>Tilføj eller fjern lærer til @Model.Education.Name</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Education</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Education.Id)
+        @Html.HiddenFor(model => model.Education.Name)
+
+        <div class="form-group">
+            @Html.Label("Rooms", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @foreach (var item in Model.AvailableRooms)
+                {
+                    <div class="checkbox">
+                        <label>
+                            @Html.SimpleCheckbox("PostedRooms.RoomIds", Model.SelectedRooms.Contains(item), item.Id.ToString())
+                            @item.RoomName
+                        </label>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

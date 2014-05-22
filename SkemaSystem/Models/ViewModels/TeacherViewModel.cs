@@ -17,4 +17,14 @@ namespace SkemaSystem.Models.ViewModels
     {
         public string[] EducationIds { get; set; }
     }
+
+    public class PostedRooms
+    {
+        public string[] RoomIds { get; set; }
+    }
+
+    public class PostedTeachers
+    {
+        public string[] TeacherIds { get; set; }
+    }
 }
