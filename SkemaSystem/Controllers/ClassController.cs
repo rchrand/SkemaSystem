@@ -16,13 +16,6 @@ namespace SkemaSystem.Controllers
     [Route("{action=index}/{id?}")]
     public class ClassController : BaseController
     {
-        private SkeamSystemDb db;
-
-        public ClassController()
-        {
-           this.db = new SkeamSystemDb();
-        }
-
         // GET: /Class/
         public ActionResult Index()
         {

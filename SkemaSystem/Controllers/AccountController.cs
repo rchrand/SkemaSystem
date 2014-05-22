@@ -63,19 +63,5 @@ namespace SkemaSystem.Controllers
 
             return Content("Teacher,");
         }
-
-        private bool IsRole(UserRoles role)
-        {
-            var db = new SkeamSystemDb();
-            var user = User.Identity.Name;
-            var userName = db.Teachers.SingleOrDefault(t => t.Username == user && t.Role == role);
-
-            if (userName != null)
-            {
-                return true;
-            }
-            
-            return false;
-        }
     }
 }

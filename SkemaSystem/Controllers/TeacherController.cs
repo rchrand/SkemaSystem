@@ -20,8 +20,6 @@ namespace SkemaSystem.Controllers
     [Route("{action=index}/{id?}")]
     public class TeacherController : BaseController
     {
-        private SkeamSystemDb db = new SkeamSystemDb();
-
         // GET: /admin/teachers/
         [Route("")]
         public ActionResult Index()
