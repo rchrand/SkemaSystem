@@ -3,8 +3,8 @@
     ViewBag.Title = "Demo";
 }
 
-<h2>Page with tabs:</h2>
+@section Subheader {
+    @Html.Partial("_AdminTabsPartial")
+}
 
-@Html.ActionLink("Lærere", "Index", "Teacher", new { Area = "Admin" }, null)
-<br />
-@Html.ActionLink("Klasser", "Index", "Class", new { Area = "Admin" }, null)
+<h2>Hej Torben</h2>

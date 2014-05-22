@@ -4,8 +4,11 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+@section Subheader {
+    @Html.Partial("_AdminTabsPartial")
+}
 
+<h2>Edit</h2>
 
 @using (Html.BeginForm())
 {

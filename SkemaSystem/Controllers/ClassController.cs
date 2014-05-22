@@ -40,6 +40,7 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Classes/Create
+        [Route("create")]
         public ActionResult Create()
         {
             IEnumerable<SelectListItem> items = from s in db.Educations.ToList()
