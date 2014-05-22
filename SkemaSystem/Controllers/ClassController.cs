@@ -209,7 +209,7 @@ namespace SkemaSystem.Controllers
         public PartialViewResult AddSubjectDistBlock(int scheme, int add_subject, int add_teacher, int add_blockscount)
         {
             Scheme theScheme = db.Schemes.Single(x => x.Id == scheme);
-            if (theScheme.AddLessonBlock(db.Teachers.SingleOrDefault(x => x.Id == add_teacher), db.Subjects.SingleOrDefault(x => x.Id == add_subject), add_blockscount))
+            if (add_blockscount > 0 && add_blockscount < 100 && theScheme.AddLessonBlock(db.Teachers.SingleOrDefault(x => x.Id == add_teacher), db.Subjects.SingleOrDefault(x => x.Id == add_subject), add_blockscount))
             {
                 db.SaveChanges();
             }
@@ -219,9 +219,15 @@ namespace SkemaSystem.Controllers
                 ViewBag.add_subject = add_subject;
                 ViewBag.add_teacher = add_teacher;
                 ViewBag.add_blockscount = add_blockscount;
-                ViewBag.Error = "- Der er ikke nok ledige blokke på semestret til, at udføre denne handling.";
+                if (add_blockscount < 0 || add_blockscount > 100)
+                {
+                    ViewBag.Error = "- Antal blokke skal være mellem 0 og 100.";
+                }
+                else
+                {
+                    ViewBag.Error = "- Der er ikke nok ledige blokke på semestret til, at udføre denne handling.";
+                }
             }
-            
             return PartialView("_SchemeSubjectDistribution", theScheme);
         }
 
