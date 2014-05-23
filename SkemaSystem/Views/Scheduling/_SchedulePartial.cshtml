@@ -3,7 +3,7 @@
 <br />
 <br />
 
-<table class="table">
+<table class="table scheme">
     <thead>
         <tr>
             <th>
@@ -15,7 +15,7 @@
             @foreach (var item in @weekdays)
             {
                 <th>
-                    @item<span class="pull-right">@Model.StartDate.Date.ToString("dd/MM")</span>
+                    @item<span class="pull-right">@Model.StartDate.Date.ToString("dd'/'MM")</span>
                 </th>
                 @Model.AddDay();
             }
@@ -28,11 +28,13 @@
         @for (int i = 0; i < @blocks.Length; i++)
         {
             <tr>
-                <td>@blocks[i][0]<br />@blocks[i][1]</td>
+                <th>@blocks[i][0]<br />@blocks[i][1]</th>
                 @foreach (var item in @Model.TableCells[i])
                 {
                     <td>
-                        <span class="scheme-subjectname">@item.SubjectName</span><span class="scheme-roomname">@item.Room.RoomName</span><span class="scheme-teacher">@item.Teacher.Name</span>
+                        @if (item != null) {
+                            <span class="scheme-subjectname">@item.SubjectName</span><span class="scheme-roomname">@item.Room.RoomName</span><span class="scheme-teacher">@item.Teacher.Name</span>
+                        }
                     </td>
                 }
             </tr>

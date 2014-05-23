@@ -43,7 +43,6 @@ namespace SkemaSystem.Models.ViewModels
 
     public class TableCellViewModel
     {
-        public int Id { get; set; }
         public string SubjectName { get; set; }
         public Teacher Teacher { get; set; }
         public Room Room { get; set; }
