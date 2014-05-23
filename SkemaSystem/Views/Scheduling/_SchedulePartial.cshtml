@@ -1,0 +1,43 @@
+﻿@model SkemaSystem.Models.ViewModels.TableViewModel
+<br />
+<br />
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Uge @Model.Week
+            </th>
+            @{
+                var weekdays = new string[] { "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag" };
+            }
+            @foreach (var item in @weekdays)
+            {
+                <th>
+                    @item<span class="pull-right">@Model.StartDate.Date.ToString("dd/MM")</span>
+                </th>
+                @Model.AddDay();
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var blocks = new object[][] { new object[] { "08:30", "10:00" }, new object[] { "10:30", "12:00" }, new object[] { "12:30", "14:00" }, new object[] { "14:30", "16:00" } };
+        }
+        @for (int i = 0; i < @blocks.Length; i++)
+        {
+            <tr>
+                <td>@blocks[i][0]<br />@blocks[i][1]</td>
+                @foreach (var item in @Model.TableCells[i])
+                {
+                    <td>
+                        <span class="scheme-subjectname">@item.SubjectName</span><span class="scheme-roomname">@item.Room.RoomName</span><span class="scheme-teacher">@item.Teacher.Name</span>
+                    </td>
+                }
+            </tr>
+        }
+
+    </tbody>
+
+</table>

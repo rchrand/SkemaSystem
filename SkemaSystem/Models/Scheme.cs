@@ -1,6 +1,8 @@
-﻿using System;
+﻿using SkemaSystem.Models.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -74,5 +76,9 @@ namespace SkemaSystem.Models
             Console.WriteLine(subjectDistBlocks.Count());
             return (totalBlocksCount + tryingToAdd) > highestBlocksCount;
         }
+
+
+        [NotMapped]
+        public TableViewModel TableViewModel { get; set; }
     }
 }
