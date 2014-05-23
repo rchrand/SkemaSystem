@@ -34,13 +34,10 @@ namespace SkemaSystem.Models.ViewModels
 
         public string AddDay()
         {
-            StartDate.AddDays(1);
+            StartDate = StartDate.AddDays(1);
             return "";
         }
     }
-
-
-
     public class TableCellViewModel
     {
         public string SubjectName { get; set; }

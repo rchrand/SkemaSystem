@@ -95,6 +95,7 @@
     <Compile Include="Features\CRUD Teacher\TeacherTest.cs" />
     <Compile Include="Features\Example.cs" />
     <Compile Include="Features\ClassesTest.cs" />
+    <Compile Include="Features\scheduling\UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
