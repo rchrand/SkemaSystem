@@ -7,64 +7,27 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SkemaSystem.Models;
+using SkemaSystem.Models.ViewModels;
 
 namespace SkemaSystem.Controllers
 {
-    public class ClassController : Controller
+    [RouteArea("Admin", AreaPrefix="admin")]
+    [RoutePrefix("classes")]
+    [Route("{action=index}/{id?}")]
+    public class ClassController : BaseController
     {
-        private SkeamSystemDb db;
-
-        public ClassController()
-        {
-           this.db = new SkeamSystemDb();
-        }
-
         // GET: /Class/
+        [Route("")]
         public ActionResult Index()
         {
-            return View(db.Teachers);
+            return View(db.Classes.ToList());
         }
+
+
 
         // GET: /Class/Details/5
+        [Route("details/{id?}")]
         public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ClassModel classmodel = db.Classes.Single(x => x.Id == id);
-            if (classmodel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(classmodel);
-        }
-
-        // GET: /Class/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: /Class/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,ClassName")] ClassModel classmodel)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Classes.Add(classmodel);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(classmodel);
-        }
-
-         //GET: /Class/Edit/5
-        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -78,23 +41,97 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-        // POST: /Class/Edit/5
+        // GET: /Classes/Create
+        [Route("create")]
+        public ActionResult Create()
+        {
+            IEnumerable<SelectListItem> items = from s in db.Educations.ToList()
+                                                select new SelectListItem { Text = s.Name, Value = s.Id.ToString() };
+            
+            ViewBag.Educations = items;
+
+            return View(new ClassViewModel());
+        }
+
+        // POST: /Classes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,ClassName")] ClassModel classmodel)
+        [Route("create")]
+        public ActionResult Create(ClassViewModel result)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(classmodel).State = System.Data.Entity.EntityState.Modified;
+                result.ClassModel.Education = db.Educations.ToList().Where(e => e.Id.Equals(result.Education)).SingleOrDefault();
+
+                db.Classes.Add(result.ClassModel);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(classmodel);
+
+            IEnumerable<SelectListItem> items = from s in db.Educations.ToList()
+                                                select new SelectListItem { Text = s.Name, Value = s.Id.ToString() };
+
+            ViewBag.Educations = items;
+
+            return View(result);
         }
 
-        //// GET: /Class/Delete/5
+        [Route("edit/{id?}")]
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ClassModel classmodel = db.Classes.Find(id);
+            if (classmodel == null)
+            {
+                return HttpNotFound();
+            }
+
+            IEnumerable<SelectListItem> items = from s in db.Educations.ToList()
+                                                select new SelectListItem { Text = s.Name, Value = s.Id.ToString() };
+
+            ViewBag.Educations = items;
+
+            var model = new ClassViewModel();
+            model.ClassModel = classmodel;
+            model.SelectedEducation = classmodel.Education.Id;
+
+            return View(model);
+        }
+
+        // POST: /Classes/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [Route("edit/{id?}")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ClassViewModel result)
+        {
+            if (ModelState.IsValid)
+            {
+                var classModel = db.Classes.Find(result.ClassModel.Id);
+                classModel.ClassName = result.ClassModel.ClassName;
+                classModel.Education = db.Educations.ToList().Where(e => e.Id.Equals(result.Education)).SingleOrDefault();
+
+                db.Entry(classModel).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            IEnumerable<SelectListItem> items = from s in db.Educations.ToList()
+                                                select new SelectListItem { Text = s.Name, Value = s.Id.ToString() };
+
+            ViewBag.Educations = items;
+
+            return View(result);
+        }
+
+        // GET: /Classes/Delete/5
+        [Route("delete/{id?}")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -109,10 +146,11 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-        //// POST: /Class/Delete/5
+        // POST: /Classes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        [Route("delete/{id?}")]
+        public ActionResult DeleteConfirmed(int? id)
         {
             ClassModel classmodel = db.Classes.Find(id);
             db.Classes.Remove(classmodel);
@@ -128,5 +166,70 @@ namespace SkemaSystem.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public ActionResult SubjectDistribution(int id)
+        {
+            ClassModel classmodel = db.Classes.Single(x => x.Id == id);
+            if (classmodel == null)
+            {
+                return HttpNotFound();
+            }
+            if (classmodel.ActiveSchemes.Count > 0)
+            {
+                var latestScheme = classmodel.ActiveSchemes[classmodel.ActiveSchemes.Count() - 1];
+
+                IEnumerable<SelectListItem> items = from s in classmodel.ActiveSchemes
+                                                    select new SelectListItem { Text = s.Semester.Number + ". Semester", Value = "" + s.Id };
+                ViewBag.Schemes = items;
+            }
+            return View(classmodel);
+        }
+
+        [HttpPost]
+        public ActionResult StartNewSemester(int id)
+        {
+            ClassModel classmodel = db.Classes.Single(x => x.Id == id);
+            if (classmodel == null)
+            {
+                return HttpNotFound();
+            }
+            classmodel.CreateNewSemester();
+            db.SaveChanges();
+            return RedirectToActionPermanent("SubjectDistribution", new { id = id});
+        }
+
+        [HttpGet]
+        public PartialViewResult ChangeScheme(string scheme)
+        {
+            int schemeId = Int32.Parse(scheme);
+            return PartialView("_SchemeSubjectDistribution", db.Schemes.Single(x => x.Id == schemeId));
+        }
+
+        [HttpPost]
+        public PartialViewResult AddSubjectDistBlock(int scheme, int add_subject, int add_teacher, int add_blockscount)
+        {
+            Scheme theScheme = db.Schemes.Single(x => x.Id == scheme);
+            if (add_blockscount > 0 && add_blockscount < 100 && theScheme.AddLessonBlock(db.Teachers.SingleOrDefault(x => x.Id == add_teacher), db.Subjects.SingleOrDefault(x => x.Id == add_subject), add_blockscount))
+            {
+                db.SaveChanges();
+            }
+            else
+            {
+                // Didn't succeed!
+                ViewBag.add_subject = add_subject;
+                ViewBag.add_teacher = add_teacher;
+                ViewBag.add_blockscount = add_blockscount;
+                if (add_blockscount < 0 || add_blockscount > 100)
+                {
+                    ViewBag.Error = "- Antal blokke skal være mellem 0 og 100.";
+                }
+                else
+                {
+                    ViewBag.Error = "- Der er ikke nok ledige blokke på semestret til, at udføre denne handling.";
+                }
+            }
+            return PartialView("_SchemeSubjectDistribution", theScheme);
+        }
+
     }
 }

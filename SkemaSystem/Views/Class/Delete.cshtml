@@ -1,0 +1,24 @@
+﻿@model SkemaSystem.Models.ClassModel
+
+@{
+    ViewBag.Title = "Slet klasse";
+}
+
+@section Subheader {
+    @Html.Partial("_AdminTabsPartial")
+}
+
+<h2>Delete</h2>
+
+<h3>Er du sikker på, at du vil slette klassen @(Model.ClassName)?</h3>
+<div>
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            
+            <input type="submit" value="Delete" class="btn btn-primary" /> |
+            @Html.ActionLink("Tilbage til klasseoversigten", "Index")
+        </div>
+    }
+</div>

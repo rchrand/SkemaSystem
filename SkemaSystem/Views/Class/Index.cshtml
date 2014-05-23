@@ -4,30 +4,31 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
+@section Subheader {
+    @Html.Partial("_AdminTabsPartial")
+}
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Opret ny klasse", "Create")
 </p>
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ClassName)
-        </th>
-        <th></th>
+        <th>Klassenavn</th>
+        <th>Handlinger</th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ClassName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClassName)
+            </td>
+            <td>
+                @Html.ActionLink("Fagfordeling", "SubjectDistribution", new { id = item.Id }) |
+                @Html.ActionLink("Ændre", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Detaljer", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Slet", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
 
 </table>

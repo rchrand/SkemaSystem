@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SkemaSystem.Models;
-using SkemaSystem.Tests.Controllers;
 using SkemaSystem.Controllers;
 using System.Web.Mvc;
 using System.Linq;

@@ -1,0 +1,63 @@
+﻿@model SkemaSystem.Models.ClassModel
+
+@{
+    ViewBag.Title = "SubjectDistribution";
+}
+
+@section Subheader {
+    @Html.Partial("_AdminTabsPartial")
+}
+
+<h1>Fagfordeling for @Model.ClassName</h1>
+<div class="row">
+    <div class="col-sm-7">
+        @if (@Model.ActiveSchemes.Count() > 0)
+        {
+            <div>
+                <form class="form-horizontal" method="get" action="@Url.Action("ChangeScheme")" data-schemesys-ajax="true" data-schemesys-target="#subject_dist">
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <label class="control-label">Vælg semester: </label>
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.DropDownList("scheme", new SelectList(ViewBag.Schemes, "Value", "Text", @Model.ActiveSchemes[@Model.ActiveSchemes.Count() - 1].Id), new { onchange = "$(this.form).submit();", @class = "form-control" })
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="subject_dist">
+                @Html.Partial("_SchemeSubjectDistribution", @Model.ActiveSchemes[@Model.ActiveSchemes.Count() - 1])
+            </div>
+        }
+        else
+        {
+            <div>
+                Der er endnu ikke blevet oprettet et semester for denne klasse. <br />
+                Hvis du er klar til, at lige den første fagfordeling, kan du gøre det i højre side!
+            </div>
+        }
+    </div>
+
+    <div class="col-sm-5">
+        <div class="box">
+            <h2>Start nyt semester</h2>
+            <div>
+                Ved at starte et nyt semester, bliver fagfordelingen oprettet for næste semester for den valgte klasse.<br />
+                Når semesteret er startet og fagfordelingen lagt, kan skemalæggere gå ind på klassen og ligge skemaet for den pågældende klasse.
+            </div>
+            @if (@Model.NextSemester() != null) 
+            {
+                using (@Html.BeginForm("StartNewSemester", "Class", FormMethod.Post))
+                {
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <input type="submit" value="Start @(Model.NextSemester().Number). semester" class="btn btn-primary" />
+                }
+            }
+            else
+            {
+                <div><b>Det sidste semester for denne uddannelse er allerede startet.</b></div>
+            }
+        </div>
+    </div>
+</div>
+

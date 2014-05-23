@@ -6,7 +6,61 @@
 @borderLight: #EEEEEE;
 @borderDark: #DDDDDD;
 
-@import "Components/Bootstrap.css";
+//@import "Components/Bootstrap.css";
+
+// Core variables and mixins
+@import "Bootstrap/variables.less";
+@import "Bootstrap/mixins.less";
+
+@font-family-sans-serif:    "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family-serif:         Georgia, "Times New Roman", Times, serif;
+@font-family-monospace:     Menlo, Monaco, Consolas, "Courier New", monospace;
+@font-family-base:          @font-family-sans-serif;
+
+@font-size-base:            12px;
+@line-height-base:          1.666666667; // 20/14
+
+@font-size-h1:              floor((@font-size-base * 2));
+@font-size-h2:              floor((@font-size-base * 1.75));
+@font-size-h3:              ceil((@font-size-base * 1.5));
+@font-size-h4:              ceil((@font-size-base * 1.25));
+@font-size-h5:              @font-size-base;
+@font-size-h6:              ceil((@font-size-base * 0.75));
+
+@grid-columns:              12;
+@grid-gutter-width:         20px;
+@input-border-radius:       0px;
+@padding-base-vertical:     5px;
+@padding-base-horizontal:   5px;
+@input-height-base:         (@line-height-computed + (@padding-base-vertical * 2) + 2);
+
+@border-radius-base:        0px;
+@border-radius-small:       0px;
+@border-radius-large:       0px;
+
+@btn-primary-color:         #FFFFFF;
+@btn-primary-bg:            @blue;
+@btn-primary-border:        transparent;
+
+// Reset
+@import "Bootstrap/normalize.less";
+
+// Core CSS
+@import "Bootstrap/scaffolding.less";
+@import "Bootstrap/type.less";
+@import "Bootstrap/code.less";
+@import "Bootstrap/grid.less";
+@import "Bootstrap/tables.less";
+@import "Bootstrap/forms.less";
+@import "Bootstrap/buttons.less";
+
+// Utility classes
+@import "Bootstrap/utilities.less";
+@import "Bootstrap/responsive-utilities.less";
+
+.btn {
+    padding:@padding-base-vertical 20px;
+}
 
 html, body {
     margin:0;
@@ -16,23 +70,23 @@ html, body {
 }
 
 body {
-    font-family:"Open Sans", "Helvetica Neue", Arial, Helvetica, Sans-Serif; // Arial, Helvetica, sans-serif
-    font-size:12px;
+    //font-family:"Open Sans", "Helvetica Neue", Arial, Helvetica, Sans-Serif; // Arial, Helvetica, sans-serif
+    //font-size:12px;
     display:table;
 }
 
-* {
+/** {
     -webkit-box-sizing: border-box; 
 	-moz-box-sizing: border-box; 
 	box-sizing: border-box;
-}
+}*/
 
 a {
     color:@blue;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    margin:0;
+    margin:0 0 10px 0;
 }
 
 header {
@@ -68,6 +122,20 @@ header {
             &:last-child {
                 margin-right:0;
             }
+            
+            a {
+                padding:5px;
+
+                &:hover {
+                    color:#FFFFFF;
+                    text-decoration:none;
+                }
+
+                &.selected {
+                    background-color:#007EA8;
+                    .border-radius();
+                }
+            }
         }
     }
 
@@ -99,6 +167,10 @@ main {
     background:#EEEEEE;
     border-bottom:1px solid @borderDark;
     padding:20px;
+
+    .tabs {
+        margin-bottom:-21px;
+    }
 }
 
 .body-content {
@@ -115,13 +187,74 @@ main {
     border:1px solid @borderDark;
     background-color:#F5F5F5;
     padding:@padding;
+    margin-bottom:20px;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+.row [class*="col-"]:last-child .box {
+    margin-bottom:0;
+}
+
+table {
+    width:100%;
+    border-top:2px solid @blue;
+    border-bottom:2px solid @blue;
+    border-collapse:collapse;
+
+    thead {
+        background:#F7F7F7;
+
+        th {
+            font-weight:bold;
+
+            .pull-right {
+                font-weight:normal;
+            }
+        }
+    }
+
+    th, td {
+        padding:10px;
+    }
+
+    td, th {
+        border:1px solid @borderDark;
+
+        &:first-child {
+            border-left:none;
+        }
+
+        &:last-child {
+            border-right:none;
+        }
+    }
+}
+
+ul.tabs {
+    margin:0;
+    padding:0;
+    list-style-type:none;
+
+    .clearfix();
+
+    li {
+        display:inline;
+        float:left;
+
+        a {
+            display:block;
+            padding:10px 20px;
+            color:@text-color;
+            font-size:ceil((@font-size-base * 1.15));
+            border:1px solid transparent;
+            border-bottom:none;
+
+            &.selected {
+                background:#FFFFFF;
+                border-color:@borderDark;
+                text-decoration:none;
+            }
+        }
+    }
 }
 
 /* styles for validation helpers */
@@ -147,4 +280,14 @@ input[type="checkbox"].input-validation-error {
 
 .validation-summary-valid {
     display: none;
+}
+
+.border-radius (@radius: 5px) {
+	-webkit-border-radius: @radius;
+	-moz-border-radius:    @radius;
+	border-radius:         @radius;
+
+	-moz-background-clip:    padding;
+	-webkit-background-clip: padding-box;
+	background-clip:         padding-box;
 }
