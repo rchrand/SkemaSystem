@@ -73,7 +73,7 @@ namespace SkemaSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClassModel classmodel = db.Classes.SingleOrDefault(x => x.Id.Equals(id));
+            ClassModel classmodel = db.Classes.Find(id);
             if (classmodel == null)
             {
                 return HttpNotFound();
