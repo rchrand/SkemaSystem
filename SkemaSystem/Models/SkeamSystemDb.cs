@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using System.Web;
 using System.Data.Entity.Infrastructure;
+using SkemaSystem.Migrations;
 
 namespace SkemaSystem.Models
 {
@@ -53,7 +54,7 @@ namespace SkemaSystem.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            Database.SetInitializer<SkeamSystemDb>(null);
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
             //Database.SetInitializer(new MigrateDatabaseToLatestVersion<SkeamSystemDb, Configuration>());
             /*modelBuilder.Entity<Teacher>().HasMany(t => t.Educations).WithMany(e => e.Teachers).Map(m =>
             {
