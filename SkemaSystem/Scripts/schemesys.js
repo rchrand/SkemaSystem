@@ -1,7 +1,8 @@
-﻿jQuery(function($) {
+﻿(function ($) {
+    
         var ajaxSemesterFormSubmit = function () {
-            var $form = $(this);
 
+            var $form = $(this);
             var options = {
                 url: $form.attr("action"),
                 type: $form.attr("method"),
@@ -10,7 +11,6 @@
 
             $.ajax(options).done(function (data) {
                 var $target = $($form.attr("data-schemesys-target"));
-                console.log($target);
                 $target.html(data);
             });
 

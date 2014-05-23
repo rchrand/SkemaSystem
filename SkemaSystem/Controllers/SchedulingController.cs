@@ -41,5 +41,11 @@ namespace SkemaSystem.Controllers
 
             return View(db.Schemes.FirstOrDefault());
         }
+
+
+        public ActionResult ChangeSubjectDropDown(int scheme)
+        {
+            return PartialView("_SubjectDropDown", db.Schemes.Single(x => x.Id == scheme));
+        }
 	}
 }
