@@ -19,6 +19,11 @@ namespace SkemaSystem.Controllers
     [Route("{action=index}/{id?}")]
     public class EducationController : BaseController
     {
+        [Route("")]
+        public ActionResult Index()
+        {
+            return View(db.Educations.ToList());
+        }
         // GET: /Education/Details/5
         //[Route("{education}")]
         [Route("details/{id?}")]
