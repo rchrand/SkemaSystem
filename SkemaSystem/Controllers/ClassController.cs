@@ -11,7 +11,7 @@ using SkemaSystem.Models.ViewModels;
 
 namespace SkemaSystem.Controllers
 {
-    [RouteArea("Admin", AreaPrefix="admin")]
+    [RouteArea("Admin", AreaPrefix = "admin")]
     [RoutePrefix("classes")]
     [Route("{action=index}/{id?}")]
     public class ClassController : BaseController
@@ -47,7 +47,7 @@ namespace SkemaSystem.Controllers
         {
             IEnumerable<SelectListItem> items = from s in db.Educations.ToList()
                                                 select new SelectListItem { Text = s.Name, Value = s.Id.ToString() };
-            
+
             ViewBag.Educations = items;
 
             return View(new ClassViewModel());
@@ -195,7 +195,7 @@ namespace SkemaSystem.Controllers
             }
             classmodel.CreateNewSemester();
             db.SaveChanges();
-            return RedirectToActionPermanent("SubjectDistribution", new { id = id});
+            return RedirectToActionPermanent("SubjectDistribution", new { id = id });
         }
 
         [HttpGet]
@@ -235,7 +235,7 @@ namespace SkemaSystem.Controllers
         public ActionResult CreateSemester()
         {
             var semester = db.Educations.Where(e => e.Name.Equals("DMU")).Select(s => s.Semesters).FirstOrDefault();
-            
+
             List<SemesterViewModel> list = new List<SemesterViewModel>();
 
             foreach (var item in semester)
@@ -246,71 +246,30 @@ namespace SkemaSystem.Controllers
             return View(list);
         }
 
-        //[HttpPost]
-        //public ActionResult CreateSemester(SemesterViewModelList svm)
-        //{
-            
-        //    return View();
-        //}
-
         [HttpPost]
         public ActionResult CreateSemester(string[] semesterId, string[] start, string[] finish)
+        //public ActionResult CreateSemester(string[] semesterId, string[] start, string[] finish, Education education)
         {
-            for (int i = 0; i < semesterId.Count(); i++)
-            {
-                InsertDataValues(semesterId[i], start[i], finish[i]);
-            }
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+            Service.Service service = new Service.Service();
 
-        private void InsertDataValues(string semId, string startval, string finishVal)
-        {
-            List<ClassModel> classes =  (from c in db.Classes
-                                        where c.ActiveSchemes == null || c.ActiveSchemes.Count < c.Education.NumberOfSemesters
-                                        select c).ToList();
-
-            //var classes = (from c in db.Classes
-            //              where c.ActiveSchemes.Count < c.Education.NumberOfSemesters || c.ActiveSchemes == null
-            //              select c);
-
-            int number = classes.Count();
+            var classes = (from c in db.Classes
+                           where c.ActiveSchemes.Count < c.Education.NumberOfSemesters
+                           //&& c.Education == education
+                           select c).ToList();
 
             foreach (var item in classes)
             {
-                if(CreateNewSemester(item))
-                {
-                    Scheme scheme = item.ActiveSchemes.Last();
-                    scheme.SemesterStart = Convert.ToDateTime(startval);
-                    scheme.SemesterFinish = Convert.ToDateTime(finishVal);
-                }
-            }
-        }
+                var activeSchemes = (from a in item.ActiveSchemes
+                                     select a).ToList();
+                List<Semester> semesters = (from s in item.Education.Semesters
+                                            select s).ToList();
+                int semesterNumber = activeSchemes.Count;
 
-        public bool CreateNewSemester(ClassModel classmodel)
-        {
-            Semester nextSemester = NextSemester(classmodel);
-            if (nextSemester != null)
-            {
-                classmodel.ActiveSchemes.Add(new Scheme { Semester = nextSemester, ClassModel = classmodel });
-                return true;
+                service.setNewSemesterForClass(item, semesters[semesterNumber], Convert.ToDateTime(start[semesterNumber]), Convert.ToDateTime(finish[semesterNumber]));
             }
-            return false;
-        }
 
-        public Semester NextSemester(ClassModel classmodel)
-        {
-            if (classmodel.ActiveSchemes.Count > 0)
-            {
-                return (from s in classmodel.Education.Semesters
-                        orderby s.Number ascending
-                        where s.Number > classmodel.ActiveSchemes[classmodel.ActiveSchemes.Count - 1].Semester.Number
-                        select s).FirstOrDefault();
-            }
-            else
-            {
-                return classmodel.Education.Semesters[0];
-            }
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }

@@ -20,6 +20,7 @@ namespace SkemaSystem.Models
 
         public ClassModel()
         {
+            ActiveSchemes = new List<Scheme>();
         }
 
         public bool CreateNewSemester() {
