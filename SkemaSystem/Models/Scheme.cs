@@ -8,9 +8,11 @@ namespace SkemaSystem.Models
 {
     public class Scheme
     {
+        [Key]
         [Required]
         public int Id { get; set; }
         
+
         [Required]
         public virtual ClassModel ClassModel { get; set; }
 
@@ -18,6 +20,10 @@ namespace SkemaSystem.Models
         public virtual Semester Semester { get; set; }
 
         public virtual List<SubjectDistBlock> SubjectDistBlocks { get; set; }
+
+        public DateTime SemesterStart { get; set; }
+
+        public DateTime SemesterFinish { get; set; }
 
         public Scheme()
         {

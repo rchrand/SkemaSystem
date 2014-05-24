@@ -231,5 +231,86 @@ namespace SkemaSystem.Controllers
             return PartialView("_SchemeSubjectDistribution", theScheme);
         }
 
+        [HttpGet]
+        public ActionResult CreateSemester()
+        {
+            var semester = db.Educations.Where(e => e.Name.Equals("DMU")).Select(s => s.Semesters).FirstOrDefault();
+            
+            List<SemesterViewModel> list = new List<SemesterViewModel>();
+
+            foreach (var item in semester)
+            {
+                list.Add(new SemesterViewModel { semester = item });
+            }
+
+            return View(list);
+        }
+
+        //[HttpPost]
+        //public ActionResult CreateSemester(SemesterViewModelList svm)
+        //{
+            
+        //    return View();
+        //}
+
+        [HttpPost]
+        public ActionResult CreateSemester(string[] semesterId, string[] start, string[] finish)
+        {
+            for (int i = 0; i < semesterId.Count(); i++)
+            {
+                InsertDataValues(semesterId[i], start[i], finish[i]);
+            }
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        private void InsertDataValues(string semId, string startval, string finishVal)
+        {
+            List<ClassModel> classes =  (from c in db.Classes
+                                        where c.ActiveSchemes == null || c.ActiveSchemes.Count < c.Education.NumberOfSemesters
+                                        select c).ToList();
+
+            //var classes = (from c in db.Classes
+            //              where c.ActiveSchemes.Count < c.Education.NumberOfSemesters || c.ActiveSchemes == null
+            //              select c);
+
+            int number = classes.Count();
+
+            foreach (var item in classes)
+            {
+                if(CreateNewSemester(item))
+                {
+                    Scheme scheme = item.ActiveSchemes.Last();
+                    scheme.SemesterStart = Convert.ToDateTime(startval);
+                    scheme.SemesterFinish = Convert.ToDateTime(finishVal);
+                }
+            }
+        }
+
+        public bool CreateNewSemester(ClassModel classmodel)
+        {
+            Semester nextSemester = NextSemester(classmodel);
+            if (nextSemester != null)
+            {
+                classmodel.ActiveSchemes.Add(new Scheme { Semester = nextSemester, ClassModel = classmodel });
+                return true;
+            }
+            return false;
+        }
+
+        public Semester NextSemester(ClassModel classmodel)
+        {
+            if (classmodel.ActiveSchemes.Count > 0)
+            {
+                return (from s in classmodel.Education.Semesters
+                        orderby s.Number ascending
+                        where s.Number > classmodel.ActiveSchemes[classmodel.ActiveSchemes.Count - 1].Semester.Number
+                        select s).FirstOrDefault();
+            }
+            else
+            {
+                return classmodel.Education.Semesters[0];
+            }
+        }
     }
 }
