@@ -1,0 +1,65 @@
+﻿@model IEnumerable<SkemaSystem.Models.ViewModels.SemesterViewModel>
+
+@{
+    ViewBag.Title = "Opret Semester";
+}
+
+<style>
+    fieldset {
+        border: 1px groove #ddd !important;
+        padding: 0 1.4em 1.4em 1.4em !important;
+        margin: 0 0 1.5em 0 !important;
+        -webkit-box-shadow: 0px;
+        box-shadow: 0px;
+    }
+
+        fieldset legend {
+            width: inherit;
+            padding: 0 10px;
+            border-bottom: none;
+            font-size: 1.2em !important;
+            font-weight: bold !important;
+            text-align: left !important;
+        }
+</style>
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("CreateSemester", "Class"))
+{
+    <div class="row">
+        @foreach (var item in @Model)
+        {
+            <input type="hidden" value="@item.semester.Id" name="semesterId" />
+            <div class="col-sm-6">
+                <fieldset>
+                    <legend>@(item.semester.Number). Semster</legend>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label class="control-label">Start</label>
+                            </div>
+                            <div class="col-sm-10">
+                                <input type="date" value="@item.start" name="start" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label class="control-label">Slut</label>
+                            </div>
+                            <div class="col-sm-10">
+                                <input type="date" value="@item.finish" name="finish" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <input type="submit" class="btn btn-primary" value="Start Semester" />
+        </div>
+    </div>
+}
