@@ -30,7 +30,7 @@
                 {
                     foreach (var item in @Model.TableCells[i])
                     {
-                        <td class="cell" data-cell-id="@(item != null ? item.SubjectName : "")">
+                        <td id="cell" data-cell-id="@(item != null ? item.SubjectName : "")">
                             @if (item != null) {
                                 <span class="scheme-subjectname">@item.SubjectName</span><span class="scheme-roomname">@item.Room.RoomName</span><span class="scheme-teacher">@item.Teacher.Name</span>
                             }

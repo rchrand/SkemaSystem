@@ -40,15 +40,4 @@
     });
 
 
-    $.contextMenu({
-        selector: ".cell",
-
-        items: {
-
-            test: { name: "Test", callback: function (key, opt) { alert("Test 1")}},
-            foo: { name: "Foo", callback: function (key, opt) { alert("Test 2")}},
-            bar: { name: "Bar", callback: function (key, opt) { alert("Test 3")}}
-                }
-    });
-
 })(jQuery);

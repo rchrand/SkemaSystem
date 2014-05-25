@@ -21,7 +21,7 @@ namespace SkemaSystem.Models
 
         public virtual List<SubjectDistBlock> SubjectDistBlocks { get; set; }
 
-        // public virtual List<LessonBlock> LessonBlocks { get; set; }
+        public virtual List<LessonBlock> LessonBlocks { get; set; }
 
         public Scheme()
         {
