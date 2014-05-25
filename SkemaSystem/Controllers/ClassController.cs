@@ -11,7 +11,7 @@ using SkemaSystem.Models.ViewModels;
 
 namespace SkemaSystem.Controllers
 {
-    [RouteArea("Admin", AreaPrefix="admin")]
+    [RouteArea("Admin", AreaPrefix = "admin")]
     [RoutePrefix("classes")]
     [Route("{action=index}/{id?}")]
     public class ClassController : BaseController
@@ -47,7 +47,7 @@ namespace SkemaSystem.Controllers
         {
             IEnumerable<SelectListItem> items = from s in db.Educations.ToList()
                                                 select new SelectListItem { Text = s.Name, Value = s.Id.ToString() };
-            
+
             ViewBag.Educations = items;
 
             return View(new ClassViewModel());
@@ -195,7 +195,7 @@ namespace SkemaSystem.Controllers
             }
             classmodel.CreateNewSemester();
             db.SaveChanges();
-            return RedirectToActionPermanent("SubjectDistribution", new { id = id});
+            return RedirectToActionPermanent("SubjectDistribution", new { id = id });
         }
 
         [HttpGet]
@@ -231,5 +231,45 @@ namespace SkemaSystem.Controllers
             return PartialView("_SchemeSubjectDistribution", theScheme);
         }
 
+        [HttpGet]
+        public ActionResult CreateSemester()
+        {
+            var semester = db.Educations.Where(e => e.Name.Equals("DMU")).Select(s => s.Semesters).FirstOrDefault();
+
+            List<SemesterViewModel> list = new List<SemesterViewModel>();
+
+            foreach (var item in semester)
+            {
+                list.Add(new SemesterViewModel { semester = item });
+            }
+
+            return View(list);
+        }
+
+        [HttpPost]
+        public ActionResult CreateSemester(string[] semesterId, string[] start, string[] finish)
+        //public ActionResult CreateSemester(string[] semesterId, string[] start, string[] finish, Education education)
+        {
+            Service.Service service = new Service.Service();
+
+            var classes = (from c in db.Classes
+                           where c.ActiveSchemes.Count < c.Education.NumberOfSemesters
+                           //&& c.Education == education
+                           select c).ToList();
+
+            foreach (var item in classes)
+            {
+                var activeSchemes = (from a in item.ActiveSchemes
+                                     select a).ToList();
+                List<Semester> semesters = (from s in item.Education.Semesters
+                                            select s).ToList();
+                int semesterNumber = activeSchemes.Count;
+
+                service.setNewSemesterForClass(item, semesters[semesterNumber], Convert.ToDateTime(start[semesterNumber]), Convert.ToDateTime(finish[semesterNumber]));
+            }
+
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }

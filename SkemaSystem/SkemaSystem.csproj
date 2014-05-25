@@ -192,8 +192,11 @@
     <Compile Include="Models\Teacher.cs" />
     <Compile Include="Models\ViewModels\EducationViewModel.cs" />
     <Compile Include="Models\ViewModels\ClassViewModel.cs" />
+    <Compile Include="Models\ViewModels\SemesterViewModel.cs" />
+    <Compile Include="Models\ViewModels\SemesterViewModelList.cs" />
     <Compile Include="Models\ViewModels\TeacherViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\Service.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -298,6 +301,7 @@
     <Content Include="Views\Account\Demo.cshtml" />
     <Content Include="Views\Shared\_AdminTabsPartial.cshtml" />
     <Content Include="Views\Room\Index.cshtml" />
+    <Content Include="Views\Class\CreateSemester.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
