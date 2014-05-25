@@ -252,18 +252,16 @@ namespace SkemaSystem.Controllers
         {
             Service.Service service = new Service.Service();
 
-            var classes = (from c in db.Classes
-                           where c.ActiveSchemes.Count < c.Education.NumberOfSemesters
-                           //&& c.Education == education
-                           select c).ToList();
+            var classes = from c in db.Classes
+                           where c.ActiveSchemes.Count < c.Education.Semesters.Count
+                           select c;
 
             foreach (var item in classes)
             {
-                var activeSchemes = (from a in item.ActiveSchemes
-                                     select a).ToList();
                 List<Semester> semesters = (from s in item.Education.Semesters
                                             select s).ToList();
-                int semesterNumber = activeSchemes.Count;
+
+                int semesterNumber = item.ActiveSchemes.Count;
 
                 service.setNewSemesterForClass(item, semesters[semesterNumber], Convert.ToDateTime(start[semesterNumber]), Convert.ToDateTime(finish[semesterNumber]));
             }
