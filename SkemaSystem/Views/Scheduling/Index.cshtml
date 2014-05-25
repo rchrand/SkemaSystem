@@ -4,18 +4,14 @@
 }
 
 @section Subheader {
-    <div class="form-group">
-        <!--<div class="col-sm-4">
-            <label class="control-label">Uddannelse</label>
-            @Html.DropDownList("education", new SelectList(ViewBag.educations, "Value", "Text"), new { @class = "form-control   " })
-        </div>-->
+    <div class="row">
         <div class="col-sm-3">
             <label class="control-label">Skema</label>
-            <form action="@Url.Action("ChangeSubjectDropDown")" method="get" data-schemesys-ajax="true" data-schemesys-target="#subjectDropdown">
-                @Html.DropDownList("scheme", new SelectList(ViewBag.schemes, "Value", "Text"), new { @class = "form-control", onchange = "$(this.form).submit();" })
+            <form action="@Url.Action("ChangeSubjectDropDown")" method="get" id="scheme-selector" data-action-subject="@Url.Action("ChangeSubjectDropDown")" data-action-scheme="@Url.Action("ChangeScheme")">
+                @Html.DropDownList("scheme", new SelectList(ViewBag.schemes, "Value", "Text"), "- Vælg skema -", new { @class = "form-control", onchange = "$(this.form).submit();" })
             </form>
         </div>
-        <div class="col-sm-3" id="subjectDropdown">
+        <div class="col-sm-3" id="subject-selector">
             @Html.Partial("_SubjectDropDown", Model)
         </div>
         <div class="col-sm-3">
@@ -35,4 +31,10 @@
     </div>
 }
 
-@Html.Partial("_SchedulePartial", (SkemaSystem.Models.ViewModels.TableViewModel)ViewBag.TableViewModel)
+@section scripts {
+    
+}
+
+<div id="schemes">
+    
+</div>

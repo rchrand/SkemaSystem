@@ -1,7 +1,4 @@
 ﻿@model SkemaSystem.Models.ViewModels.TableViewModel
-<br />
-<br />
-<br />
 
 <table class="table scheme" >
     <thead>
@@ -29,13 +26,24 @@
         {
             <tr>
                 <th>@blocks[i][0]<br />@blocks[i][1]</th>
-                @foreach (var item in @Model.TableCells[i])
+                @if (@Model.TableCells.ContainsKey(i))
                 {
-                    <td class="cell" data-cell-id="@(item != null ? item.SubjectName : "")">
-                        @if (item != null) {
-                            <span class="scheme-subjectname" >@item.SubjectName</span><span class="scheme-roomname">@item.Room.RoomName</span><span class="scheme-teacher">@item.Teacher.Name</span>
-                        }
-                    </td>
+                    foreach (var item in @Model.TableCells[i])
+                    {
+                        <td class="cell" data-cell-id="@(item != null ? item.SubjectName : "")">
+                            @if (item != null) {
+                                <span class="scheme-subjectname">@item.SubjectName</span><span class="scheme-roomname">@item.Room.RoomName</span><span class="scheme-teacher">@item.Teacher.Name</span>
+                            }
+                        </td>
+                    }
+                }
+                else
+                {
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 }
             </tr>
         }
