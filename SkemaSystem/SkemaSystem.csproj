@@ -169,6 +169,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\EducationController.cs" />
+    <Compile Include="Controllers\OptionalSubjectsController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Helpers\SimpleCheckbox.cs" />
@@ -301,6 +302,8 @@
     <Content Include="Views\Shared\_AdminTabsPartial.cshtml" />
     <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Class\CreateSemester.cshtml" />
+    <Content Include="Views\OptionalSubjects\Index.cshtml" />
+    <Content Include="Views\OptionalSubjects\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

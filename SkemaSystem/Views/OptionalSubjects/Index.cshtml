@@ -1,0 +1,27 @@
+﻿@model IEnumerable<SkemaSystem.Models.Scheme>
+
+@{
+    ViewBag.Title = "Valgfag";
+}
+
+<h2>Administrer valgfag</h2>
+
+<table class="table">
+    <tr>
+        <th>Valgfags navn</th>
+        <th>Semester/årgang</th>
+    </tr>
+
+    @foreach (var scheme in Model)
+    {
+        <tr>
+            <td>
+                @scheme.Name
+            </td>
+            <td>
+                @(scheme.Semester.Number). semester / @scheme.YearString
+            </td>
+        </tr>
+    }
+
+</table>

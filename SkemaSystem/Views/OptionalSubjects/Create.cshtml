@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "Opret valgfag";
+}
+
+<h2>Opret valgfag</h2>
+
+<div class="row">
+    <div class="col-sm-8">
+        <form class="form-horizontal">
+
+            <div class="form-group">
+                <div class="col-sm-2">
+                    <label class="control-label" for="name">Navn:</label>
+                </div>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" name="name" id="name" placeholder="Valgfags navn" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2">
+                    <label class="control-label">Semester:</label>
+                </div>
+                <div class="col-sm-6">
+                    <select class="form-control" name="semester" id="semester">
+                        <option>- Vælg semester -</option>
+                        @{
+                            SkemaSystem.Models.Education edu = ViewBag.Education;
+                            List<SkemaSystem.Models.Semester> semesters = edu.Semesters;
+                        }
+
+                        @foreach (SkemaSystem.Models.Semester semester in semesters)
+                        {
+                            <option value="@semester.Id">@(semester.Number). semester</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2">
+                    <label class="control-label">Årgang:</label>
+                </div>
+                <div class="col-sm-6">
+                    <select class="form-control" name="year" id="year">
+                        <option>- Vælg årgang -</option>
+                        @foreach (string val in ViewBag.Years)
+                        {
+                            <option value="@val">@val</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="box">
+            <h2>Opret nyt fag</h2>
+        </div>
+    </div>
+</div>
+
