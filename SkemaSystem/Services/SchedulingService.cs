@@ -24,14 +24,8 @@ namespace SkemaSystem.Services
 
             Dictionary<int, List<TableCellViewModel>> dic = new Dictionary<int, List<TableCellViewModel>>();
 
-            if (startDate.DayOfWeek > DayOfWeek.Friday)
-            {
-                startDate = StartOfWeek(startDate.AddDays(2), DayOfWeek.Monday);
-            }
-            else if (startDate.DayOfWeek != DayOfWeek.Monday)
-            {
-                startDate = StartOfWeek(startDate, DayOfWeek.Monday);
-            }
+            startDate = CalculateStartDate(startDate);
+
             DateTime endDate = startDate.AddDays(4);
 
             IEnumerable<LessonBlock> blocks = scheme.LessonBlocks.Where(l => l.Date >= startDate && l.Date <= endDate);
@@ -73,6 +67,19 @@ namespace SkemaSystem.Services
                 }
             }
             return dic;
+        }
+
+        public static DateTime CalculateStartDate(DateTime date)
+        {
+            if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
+            {
+                date = StartOfWeek(date.AddDays(2), DayOfWeek.Monday);
+            }
+            else if (date.DayOfWeek != DayOfWeek.Monday)
+            {
+                date = StartOfWeek(date, DayOfWeek.Monday);
+            }
+            return date;
         }
 
         private static DateTime StartOfWeek(DateTime dt, DayOfWeek startOfWeek)

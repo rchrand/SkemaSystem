@@ -17,4 +17,26 @@
         return false;
     }
     $(document).on('submit', "form[data-schemesys-ajax='true']", ajaxSemesterFormSubmit);
+
+    $(document).on('submit', 'form#scheme-selector', function () {
+        var form = $(this);
+
+        $.ajax({
+            url: form.attr("data-action-subject"),
+            type: form.attr("method"),
+            data: form.serialize()
+        }).done(function (response) {
+            $('#subject-selector').html(response);
+        });
+
+        $.ajax({
+            url: form.attr("data-action-scheme"),
+            type: form.attr("method"),
+            data: form.serialize()
+        }).done(function (response) {
+            $('#schemes').html(response);
+        });
+
+        return false;
+    });
 })(jQuery);

@@ -1,0 +1,7 @@
+﻿@model SkemaSystem.Models.ViewModels.SchemeViewModel
+
+<h1>@Model.Classname</h1>
+
+@foreach (var scheme in Model.Schemes) {
+    @Html.Partial("_SchedulePartial", scheme);
+}

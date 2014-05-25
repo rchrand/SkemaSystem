@@ -45,6 +45,33 @@ namespace SkemaSystem.Controllers
             return View(db.Schemes.FirstOrDefault());
         }
 
+
+        public ActionResult ChangeSubjectDropDown(int scheme)
+        {
+            return PartialView("_SubjectDropDown", db.Schemes.Single(x => x.Id == scheme));
+        }
+
+
+        public ActionResult ChangeScheme(int scheme)
+        {
+            Scheme _scheme = db.Schemes.Single(x => x.Id == scheme);
+            
+            DateTime startDate = new DateTime(2014, 5, 25);
+
+            Scheme data = scheme == 1 ? Testdata() : Testdata2();
+
+            TableViewModel tvm = new TableViewModel() { ClassName = "12TFake", StartDate = SchedulingService.CalculateStartDate(startDate), Id = 1, TableCells = SchedulingService.buildScheme(startDate, data) };
+
+            SchemeViewModel model = new SchemeViewModel();
+            model.Classname = "12TFake";
+            model.Schemes.Add(tvm);
+            if (scheme == 2)
+            {
+                model.Schemes.Add(tvm);
+            }
+            return PartialView("_SchemePartial", model);
+        }
+
         private static Scheme Testdata()
         {
             return new Scheme()
@@ -121,10 +148,73 @@ namespace SkemaSystem.Controllers
             };
         }
 
-
-        public ActionResult ChangeSubjectDropDown(int scheme)
+        private static Scheme Testdata2()
         {
-            return PartialView("_SubjectDropDown", db.Schemes.Single(x => x.Id == scheme));
+            return new Scheme()
+            {
+                Id = -1,
+                ClassModel = null,
+                LessonBlocks = new List<LessonBlock>() { 
+                    new LessonBlock(){ 
+                        BlockNumber = 0,
+                        Date = new DateTime(2014, 5, 26),
+                        Room = new Room(){ RoomName = "A.1.12"},
+                        Subject = new Subject(){ Name = "SD"},
+                        Teacher = new Teacher(){ Name = "Hanne"}
+                    },
+                    new LessonBlock(){ 
+                        BlockNumber = 0,
+                        Date = new DateTime(2014, 5, 27),
+                        Room = new Room(){ RoomName = "A.1.12"},
+                        Subject = new Subject(){ Name = "SD"},
+                        Teacher = new Teacher(){ Name = "Hanne"}
+                    },
+                    new LessonBlock(){ 
+                        BlockNumber = 0,
+                        Date = new DateTime(2014, 5, 28),
+                        Room = new Room(){ RoomName = "A.1.12"},
+                        Subject = new Subject(){ Name = "SD"},
+                        Teacher = new Teacher(){ Name = "Hanne"}
+                    },
+                    new LessonBlock(){ 
+                        BlockNumber = 1,
+                        Date = new DateTime(2014, 5, 28),
+                        Room = new Room(){ RoomName = "A.1.12"},
+                        Subject = new Subject(){ Name = "SD"},
+                        Teacher = new Teacher(){ Name = "Hanne"}
+                    },
+                    new LessonBlock(){ 
+                        BlockNumber = 0,
+                        Date = new DateTime(2014, 5, 29),
+                        Room = new Room(){ RoomName = "A.1.12"},
+                        Subject = new Subject(){ Name = "SD"},
+                        Teacher = new Teacher(){ Name = "Hanne"}
+                    },
+                    new LessonBlock(){ 
+                        BlockNumber = 1,
+                        Date = new DateTime(2014, 5, 29),
+                        Room = new Room(){ RoomName = "A.1.12"},
+                        Subject = new Subject(){ Name = "SD"},
+                        Teacher = new Teacher(){ Name = "Hanne"}
+                    },
+                    new LessonBlock(){ 
+                        BlockNumber = 0,
+                        Date = new DateTime(2014, 5, 30),
+                        Room = new Room(){ RoomName = "A.1.12"},
+                        Subject = new Subject(){ Name = "SD"},
+                        Teacher = new Teacher(){ Name = "Hanne"}
+                    },
+                    new LessonBlock(){ 
+                        BlockNumber = 1,
+                        Date = new DateTime(2014, 5, 30),
+                        Room = new Room(){ RoomName = "A.1.12"},
+                        Subject = new Subject(){ Name = "SD"},
+                        Teacher = new Teacher(){ Name = "Hanne"}
+                    },
+                },
+                Semester = null,
+                SubjectDistBlocks = null,
+            };
         }
 	}
 }

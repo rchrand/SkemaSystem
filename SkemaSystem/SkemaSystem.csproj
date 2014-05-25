@@ -193,6 +193,7 @@
     <Compile Include="Models\Subject.cs" />
     <Compile Include="Models\SubjectDistBlock.cs" />
     <Compile Include="Models\Teacher.cs" />
+    <Compile Include="Models\ViewModels\SchemeViewModel.cs" />
     <Compile Include="Models\ViewModels\TableViewModel.cs" />
     <Compile Include="Models\ViewModels\TeacherViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -314,6 +315,7 @@
     <Content Include="Views\Scheduling\Index.cshtml" />
     <Content Include="Views\Scheduling\_SubjectDropDown.cshtml" />
     <Content Include="Views\Scheduling\_SchedulePartial.cshtml" />
+    <Content Include="Views\Scheduling\_SchemePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
