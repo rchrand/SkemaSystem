@@ -3,7 +3,7 @@
 <br />
 <br />
 
-<table class="table scheme">
+<table class="table scheme" >
     <thead>
         <tr>
             <th>
@@ -21,7 +21,7 @@
             }
         </tr>
     </thead>
-    <tbody>
+    <tbody >
         @{
             var blocks = new object[][] { new object[] { "08:30", "10:00" }, new object[] { "10:30", "12:00" }, new object[] { "12:30", "14:00" }, new object[] { "14:30", "16:00" } };
         }
@@ -31,9 +31,9 @@
                 <th>@blocks[i][0]<br />@blocks[i][1]</th>
                 @foreach (var item in @Model.TableCells[i])
                 {
-                    <td>
+                    <td class="cell" data-cell-id="@(item != null ? item.SubjectName : "")">
                         @if (item != null) {
-                            <span class="scheme-subjectname">@item.SubjectName</span><span class="scheme-roomname">@item.Room.RoomName</span><span class="scheme-teacher">@item.Teacher.Name</span>
+                            <span class="scheme-subjectname" >@item.SubjectName</span><span class="scheme-roomname">@item.Room.RoomName</span><span class="scheme-teacher">@item.Teacher.Name</span>
                         }
                     </td>
                 }

@@ -17,4 +17,11 @@
             return false;
         }
         $(document).on('submit', "form[data-schemesys-ajax='true']", ajaxSemesterFormSubmit);
+
+        $('.cell').on('contextmenu', function (e) {
+            e.preventDefault();
+            alert($(this).attr('data-cell-id'));
+            return false;
+        });
+
 })(jQuery);
