@@ -32,8 +32,6 @@ namespace SkemaSystem.Controllers
                 years.Add(scheme.YearString);
             }
 
-            OptionalSubjectViewModel os = new OptionalSubjectViewModel();
-
             ViewBag.Years = years;
 
             ViewBag.Education = (from e in db.Educations
@@ -48,57 +46,80 @@ namespace SkemaSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(string semesterId, string[] subject, string[] blockcount, string[] classModel)
+        public ActionResult Create(FormCollection form)//string semesterId, string name, string[] subjectId, string[] subjectBlockCount, string[] subjectUse)
         {
-            Debug.WriteLine(semesterId + "GAGAGAG");
-            int smid = Int32.Parse(semesterId);
-
-            int[] blockArray = ConvertStringArraytoInt(blockcount);
-
-            int[] classArray = ConvertStringArraytoInt(classModel);
-
-            var optionalSubjects = (from su in db.Subjects
-                                where su.OptionalSubject
-                                select su);
-
-            var semester = (from e in db.Semesters
-                           where e.Id == smid
-                           select e).SingleOrDefault();
-
-            var classes = (from e in db.Classes
-                           select e);
-
-            List<Subject> conflictSubjects = new List<Subject>();
-            List<ClassModel> conflictClasses = new List<ClassModel>();
-
-            // Skal nok omskrives :)
-            foreach (var item in optionalSubjects)
+            if (string.IsNullOrEmpty(form["semester"]) || string.IsNullOrEmpty(form["name"]) || string.IsNullOrEmpty(form["year"]))
             {
-                for (int i = 0; i < subject.Length; i++)
-                {
-                    if (item.Name.Equals(subject[i]))
-                    {
-                        conflictSubjects.Add(item);
-                        semester.Blocks.Add(new SemesterSubjectBlock { Subject = item, BlocksCount = blockArray[i] });
-                        item.conflictSubjects.Add(optionalSubjects.First(x => x.Name.Equals(subject[i])));
-                    }
+                // If any of the required fields are empty!
 
+            }
+
+            string[] subjectBlocksCountArray = form["subjectBlockCount"].Split(',');
+            string[] subjectIdArray = form["subjectId"].Split(',');
+            string[] subjectUses = form["subjectUse"].Split(',');
+
+            for (int i = 0; i < subjectBlocksCountArray.Count(); i++)
+            {
+                if (subjectBlocksCountArray[i].Equals("") && subjectUses.Any(x => x.Equals(subjectIdArray[i])))
+                {
+                    // A chosen subject has no block count value!
                 }
             }
 
-            foreach (var item in classes)
+            // If no errors occurs - convert the arrays to int arrays, now we know that every index has correct values!
+            int[] subjectIds = ConvertStringArraytoInt(subjectIdArray);
+            int[] subjectBlockCounts = ConvertStringArraytoInt(subjectBlocksCountArray);
+
+            int semesterId = Int32.Parse(form["semester"]);
+            string name = form["name"];
+            string year = form["year"];
+
+            Semester semester = db.Semesters.Where(x=> x.Id == semesterId).SingleOrDefault();
+
+
+            // Get all the subjects chosen along with it's values!
+            List<SemesterSubjectBlock> optionalSubjectBlocks = new List<SemesterSubjectBlock>();
+            for (int i = 0; i < subjectIds.Count(); i++)
             {
-                for (int i = 0; i < subject.Length; i++)
+                int subjectId = subjectIds[i];
+                if (subjectUses.Contains("" + subjectId))
                 {
-                    if (item.Id.Equals(classArray[i]))
-                    {
-                        item.ActiveSchemes.Last().ConflictClasses.Add(item);
-                    }
+                    Subject su = db.Subjects.Where(x=>x.Id == subjectId).SingleOrDefault();
+                    int blocksCount = subjectBlockCounts[i];
+                    // The subject has been chosen from the list, and has to be created!
+                    optionalSubjectBlocks.Add(new SemesterSubjectBlock { BlocksCount = blocksCount, Subject = su });
                 }
             }
 
+            // Get all schemes from the conflict list, and make sure this new scheme has those schemes in it and that the other schemes has this one in their conflicts-list as well!
+            int[] conflictSchemeIds = ConvertStringArraytoInt(form["conflictScheme"].Split(','));
+            List<Scheme> conflictSchemes = new List<Scheme>();
+            foreach (int schemeId in conflictSchemeIds) {
+                Scheme s = db.Schemes.Where(x => x.Id == schemeId).SingleOrDefault();
+                conflictSchemes.Add(s);
+            }
 
-                return null;
+            // random scheme to get the startdate and enddate of this particular semester!
+            // If the randomScheme is empty, then we aren't able to start an optionalSubject! Error message has to be shown!
+            Scheme randomScheme = db.Schemes.Where(x => x.YearString.Equals(year)).Where(x => x.Semester.Id == semester.Id).SingleOrDefault();
+            if (randomScheme != null)
+            {
+                Scheme newScheme = new Scheme { Name = name, OptionalSubjectBlockList = optionalSubjectBlocks, Semester = semester, ConflictSchemes = conflictSchemes, SemesterStart = randomScheme.SemesterStart, SemesterFinish = randomScheme.SemesterFinish};
+
+                foreach (Scheme otherScheme in conflictSchemes)
+                {
+                    otherScheme.ConflictSchemes.Add(newScheme);
+                }
+                
+                db.Schemes.Add(newScheme);
+                db.SaveChanges();
+            }
+            else
+            {
+                // ERROR: No start and end date!
+            }
+
+            return RedirectToAction("Index");
         }
 
         private int[] ConvertStringArraytoInt(string[] item)
@@ -106,7 +127,7 @@ namespace SkemaSystem.Controllers
             int[] result = new int[item.Length];
             for (int i = 0; i < item.Length; i++)
             {
-                result[i] = Int32.Parse(item[i]);
+                result[i] = (item[i].Equals("")) ? 0 : Int32.Parse(item[i]);
             }
             return result;
         }

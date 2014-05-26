@@ -193,6 +193,7 @@
     <Compile Include="Models\Teacher.cs" />
     <Compile Include="Models\ViewModels\EducationViewModel.cs" />
     <Compile Include="Models\ViewModels\ClassViewModel.cs" />
+    <Compile Include="Models\ViewModels\OptionalSubjectViewModel.cs" />
     <Compile Include="Models\ViewModels\SemesterViewModel.cs" />
     <Compile Include="Models\ViewModels\TeacherViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
