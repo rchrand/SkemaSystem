@@ -1,5 +1,17 @@
 ﻿(function ($) {
 
+    jQuery.fn.extend({
+        toggleVisibility: function () {
+            return this.each(function () {
+                if ($(this).css('visibility') == 'hidden') {
+                    $(this).css('visibility', 'visible');
+                } else {
+                    $(this).css('visibility', 'hidden');
+                }
+            });
+        }
+    });
+
     var ajaxSemesterFormSubmit = function () {
 
         var $form = $(this);
@@ -73,6 +85,7 @@
     $(document).on('submit', '#bulk-selector form', function (e) {
         var action = $(this).find('select option:selected').val();
         var cells = $('.scheme tbody td.selected');
+        var schemeId = $('#scheme-selector select option:selected').val();
         var ids = [];
 
         $.each(cells, function (index, element) {
@@ -80,7 +93,16 @@
         });
 
         if (action == 'delete') {
-
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:49415/admin/scheduling/lesson/delete',
+                data: 'schemeId=' + schemeId + '&lessonIds=' + ids.join(','),
+                success: function (response) {
+                    $.each(cells, function (index, element) {
+                        $(element).html('');
+                    });
+                }
+            });
         } else if (action == 'move') {
 
         }

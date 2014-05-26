@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Data.Entity.SqlServer;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -59,11 +60,11 @@ namespace SkemaSystem.Controllers
 
             Room room = db.Rooms.Single(r => r.Id.Equals(roomId));
 
-            SubjectDistBlock sdb = scheme.SubjectDistBlocks.Single(s => s.Id.Equals(subjectId)); //db.Subjects.Single(s => s.Id.Equals(subjectId));
+            SubjectDistBlock sdb = scheme.SubjectDistBlocks.Single(s => s.Id.Equals(subjectId));
 
             Subject subject = sdb.Subject;
 
-            Teacher teacher = sdb.Teacher; // db.Teachers.Single(t => t.Id.Equals(teacherId)); // TODO fetch from subject
+            Teacher teacher = sdb.Teacher;
 
             LessonBlock lesson = new LessonBlock()
             {
@@ -74,13 +75,34 @@ namespace SkemaSystem.Controllers
                 Teacher = teacher
             };
 
-            scheme.LessonBlocks.Add(lesson);
+            if (SchedulingService.IsConflicting(scheme, lesson, db.Rooms, db.Schemes))
+            {
+                throw new Exception("Lesson is conflicting!");
+            }
+            else
+            {
+                scheme.LessonBlocks.Add(lesson);
 
-            db.SaveChanges();
-
+                Debug.WriteLine(db.SaveChanges());
+            }
             return PartialView("_LessonBlockPartial", lesson);
         }
 
+        [Route("lesson/delete"), HttpPost]
+        public ActionResult DeleteLesson(int schemeId, string lessonIds)
+        {
+            // TODO check permissions
+
+            Scheme scheme = db.Schemes.Single(s => s.Id.Equals(schemeId));
+
+            string[] ids = lessonIds.Split(',');
+
+            scheme.LessonBlocks.RemoveAll(l => ids.Contains(l.Id.ToString()));
+
+            db.SaveChanges();
+
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
 
         public ActionResult ChangeScheme(int scheme)
         {

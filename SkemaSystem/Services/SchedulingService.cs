@@ -94,5 +94,32 @@ namespace SkemaSystem.Services
 
             return dt.AddDays(-1 * diff).Date;
         }
+
+        public static Boolean IsConflicting(Scheme scheme, LessonBlock lessonBlock, IEnumerable<Room> rooms, IEnumerable<Scheme> schemes)
+        {
+            if (scheme.LessonBlocks.FirstOrDefault(l => l.Date.Equals(lessonBlock.Date) && l.BlockNumber == lessonBlock.BlockNumber) != null)
+            {
+                // block already existing on current scheme
+                return true;
+            }
+
+            // find blocks in all schemes, where date, blocknumber and teacher match with lessonBlock
+            IEnumerable<LessonBlock> blocks = schemes.SelectMany(s => s.LessonBlocks).Where(l => l.Date.Equals(lessonBlock.Date) && l.BlockNumber.Equals(lessonBlock.BlockNumber) && l.Teacher.Id.Equals(lessonBlock.Teacher.Id));
+            
+            // if we found any block, conflict
+            if (blocks.Count() > 0)
+            {
+                return true;
+            }
+
+            blocks = schemes.SelectMany(s => s.LessonBlocks).Where(l => l.Date.Equals(lessonBlock.Date) && l.BlockNumber.Equals(lessonBlock.BlockNumber) && l.Room.Id.Equals(lessonBlock.Room.Id));
+
+            // if we found any block, conflict
+            if (blocks.Count() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
