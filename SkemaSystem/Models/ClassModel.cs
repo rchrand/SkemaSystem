@@ -23,7 +23,8 @@ namespace SkemaSystem.Models
             ActiveSchemes = new List<Scheme>();
         }
 
-        public bool CreateNewSemester() {
+        public bool CreateNewSemester()
+        {
             Semester nextSemester = NextSemester();
             if (nextSemester != null)
             {
@@ -38,9 +39,9 @@ namespace SkemaSystem.Models
             if (this.ActiveSchemes.Count > 0)
             {
                 return (from s in this.Education.Semesters
-                                    orderby s.Number ascending
-                                    where s.Number > this.ActiveSchemes[this.ActiveSchemes.Count - 1].Semester.Number
-                                    select s).FirstOrDefault();
+                        orderby s.Number ascending
+                        where s.Number > this.ActiveSchemes[this.ActiveSchemes.Count - 1].Semester.Number
+                        select s).FirstOrDefault();
             }
             else
             {
