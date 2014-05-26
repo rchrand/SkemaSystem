@@ -13,6 +13,25 @@ namespace SkemaSystem.Tests.Features.ServiceTest
     public class MyTestClass
     {
         [TestMethod]
+        public void setNewSemesterForClassTest()
+        {
+            Semester semester1 = new Semester { Id = 1, Number = 1 };
+            Semester semester2 = new Semester { Id = 2, Number = 2 };
+            Education education = new Education { Name = "DMU", Semesters = new List<Semester> { semester1, semester2 }, NumberOfSemesters = 2 };
+            ClassModel model = new ClassModel { Education = education, ClassName = "12T" };
+
+            DateTime start = DateTime.Today;
+            DateTime finish = DateTime.Today.AddDays(30);
+
+            Service.Service service = new Service.Service();
+
+            service.setNewSemesterForClass(model, semester1, start, finish);
+
+            Assert.AreEqual(start, model.ActiveSchemes[0].SemesterStart);
+            Assert.AreEqual(finish, model.ActiveSchemes[0].SemesterFinish);
+        }
+
+        [TestMethod]
         public void TestFindAHole()
         {
             ClassModel model1 = new ClassModel();
@@ -162,6 +181,5 @@ namespace SkemaSystem.Tests.Features.ServiceTest
 
             Assert.AreEqual(new DateTime(2014, 6, 2), availableBlocks[0]);
         }
-        
     }
 }
