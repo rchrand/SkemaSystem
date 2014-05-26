@@ -13,7 +13,7 @@ namespace SkemaSystem.Tests.Features.CRUD_Teacher
 
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void TestIsVaild()
         {
             var t1 = new Teacher() { Name = "Erik Jacobsen", UserName = "eaaej", Password = "russia" };
