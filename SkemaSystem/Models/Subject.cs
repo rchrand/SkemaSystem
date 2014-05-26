@@ -18,5 +18,7 @@ namespace SkemaSystem.Models
         public Education Education { get; set; }
 
         public bool OptionalSubject { get; set; }
+
+        public virtual List<Subject> conflictSubjects { get; set; }
     }
 }

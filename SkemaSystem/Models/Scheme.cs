@@ -27,6 +27,10 @@ namespace SkemaSystem.Models
 
         public virtual DateTime SemesterFinish { get; set; }
 
+        public virtual List<Subject> OptionalSubjects { get; set; }
+
+        public virtual List<ClassModel> ConflictClasses { get; set; }
+
         [NotMapped]
         private string YString;
 

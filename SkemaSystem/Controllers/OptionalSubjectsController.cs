@@ -1,4 +1,5 @@
 ﻿using SkemaSystem.Models;
+using SkemaSystem.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Objects;
@@ -30,6 +31,9 @@ namespace SkemaSystem.Controllers
             {
                 years.Add(scheme.YearString);
             }
+
+            OptionalSubjectViewModel os = new OptionalSubjectViewModel();
+
             ViewBag.Years = years;
 
             ViewBag.Education = (from e in db.Educations
@@ -44,9 +48,67 @@ namespace SkemaSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(string stuff)
+        public ActionResult Create(string semesterId, string[] subject, string[] blockcount, string[] classModel)
         {
-            return null;
+            Debug.WriteLine(semesterId + "GAGAGAG");
+            int smid = Int32.Parse(semesterId);
+
+            int[] blockArray = ConvertStringArraytoInt(blockcount);
+
+            int[] classArray = ConvertStringArraytoInt(classModel);
+
+            var optionalSubjects = (from su in db.Subjects
+                                where su.OptionalSubject
+                                select su);
+
+            var semester = (from e in db.Semesters
+                           where e.Id == smid
+                           select e).SingleOrDefault();
+
+            var classes = (from e in db.Classes
+                           select e);
+
+            List<Subject> conflictSubjects = new List<Subject>();
+            List<ClassModel> conflictClasses = new List<ClassModel>();
+
+            // Skal nok omskrives :)
+            foreach (var item in optionalSubjects)
+            {
+                for (int i = 0; i < subject.Length; i++)
+                {
+                    if (item.Name.Equals(subject[i]))
+                    {
+                        conflictSubjects.Add(item);
+                        semester.Blocks.Add(new SemesterSubjectBlock { Subject = item, BlocksCount = blockArray[i] });
+                        item.conflictSubjects.Add(optionalSubjects.First(x => x.Name.Equals(subject[i])));
+                    }
+
+                }
+            }
+
+            foreach (var item in classes)
+            {
+                for (int i = 0; i < subject.Length; i++)
+                {
+                    if (item.Id.Equals(classArray[i]))
+                    {
+                        item.ActiveSchemes.Last().ConflictClasses.Add(item);
+                    }
+                }
+            }
+
+
+                return null;
+        }
+
+        private int[] ConvertStringArraytoInt(string[] item)
+        {
+            int[] result = new int[item.Length];
+            for (int i = 0; i < item.Length; i++)
+            {
+                result[i] = Int32.Parse(item[i]);
+            }
+            return result;
         }
 
         public ActionResult UpdateConflictsWith(string year, string semester)
