@@ -30,8 +30,8 @@ namespace Tests.Features
             db.Classes.ToList().Clear();
             db.Teachers.ToList().Clear();
 
-            db.Teachers.Add(new Teacher { Id = 1, Name = "Kaj", UserName = "eaakaj" });
-            db.Teachers.Add(new Teacher { Id = 2, Name = "Hanne", UserName = "eaasommer" });
+            db.Teachers.Add(new Teacher { Id = 1, Name = "Kaj", Username = "eaakaj" });
+            db.Teachers.Add(new Teacher { Id = 2, Name = "Hanne", Username = "eaasommer" });
 
             db.Classes.Add(new ClassModel { Id = 1, ClassName = "12.t"});
             db.Classes.Add(new ClassModel { Id = 2, ClassName = "12.i"});
