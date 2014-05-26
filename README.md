@@ -1,7 +1,7 @@
 SkemaSystem
 ===========
 
-A new SkeamSystem for EAAA, For a SUM Project!
+A new SkeamSystem for EAAA, For the one and only SUM Project!
 
 # Design Guidelines
 ## Grid
