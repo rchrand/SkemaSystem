@@ -316,6 +316,7 @@
     <Content Include="Views\Scheduling\_SubjectDropDown.cshtml" />
     <Content Include="Views\Scheduling\_SchedulePartial.cshtml" />
     <Content Include="Views\Scheduling\_SchemePartial.cshtml" />
+    <Content Include="Views\Scheduling\_LessonBlockPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

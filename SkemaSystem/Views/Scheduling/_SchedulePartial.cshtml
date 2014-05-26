@@ -1,6 +1,6 @@
 ﻿@model SkemaSystem.Models.ViewModels.TableViewModel
 
-<table class="table scheme">
+<table class="table scheme editable">
     <thead>
         <tr>
             <th>
@@ -11,7 +11,7 @@
             }
             @foreach (var item in @weekdays)
             {
-                <th>
+                <th data-datetime="@Model.StartDate.Date.Date">
                     @item<span class="pull-right">@Model.StartDate.Date.ToString("dd'/'MM")</span>
                 </th>
                 @Model.AddDay();
@@ -30,11 +30,13 @@
                 {
                     foreach (var item in @Model.TableCells[i])
                     {
-                        <td>
-                            @if (item != null) {
-                                <span class="scheme-subjectname">@item.SubjectName</span><span class="scheme-roomname">@item.Room.RoomName</span><span class="scheme-teacher">@item.Teacher.Name</span>
-                            }
-                        </td>
+                        if (item != null) {
+                            @Html.Partial("_LessonBlockPartial", item)
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
                     }
                 }
                 else

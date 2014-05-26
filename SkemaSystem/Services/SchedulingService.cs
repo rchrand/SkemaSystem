@@ -18,11 +18,11 @@ namespace SkemaSystem.Services
             dic.Add(3, new List<TableCellViewModel>() { null, new TableCellViewModel() { Teacher = db.Teachers.FirstOrDefault(), SubjectName = "SD", Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } } });
          */
 
-        public static Dictionary<int, List<TableCellViewModel>> buildScheme(DateTime startDate, Scheme scheme)
+        public static Dictionary<int, List<LessonBlock>> buildScheme(DateTime startDate, Scheme scheme)
         {
             SkeamSystemDb db = new SkeamSystemDb();
 
-            Dictionary<int, List<TableCellViewModel>> dic = new Dictionary<int, List<TableCellViewModel>>();
+            Dictionary<int, List<LessonBlock>> dic = new Dictionary<int, List<LessonBlock>>();
 
             startDate = CalculateStartDate(startDate);
 
@@ -36,33 +36,35 @@ namespace SkemaSystem.Services
 
                 if (dic.ContainsKey(key))
                 {
-                    List<TableCellViewModel> cells = dic[key];
+                    List<LessonBlock> cells = dic[key];
 
-                    cells[((int)block.Date.Date.DayOfWeek) - 1] = new TableCellViewModel()
+                    cells[((int)block.Date.Date.DayOfWeek) - 1] = block;/*new LessonBlock()
                     {
                         BlockNumber = block.BlockNumber,
                         Room = block.Room,
-                        SubjectName = block.Subject.Name,
+                        Subject = block.Subject,
                         Teacher = block.Teacher
-                    };
+                    };*/
                     dic[key] = cells;
                 }
                 else
                 {
-                    List<TableCellViewModel> cells = new List<TableCellViewModel>() { 
+                    List<LessonBlock> cells = new List<LessonBlock>() { 
                         null,
                         null,
                         null,
                         null,
                         null
                     };
-                    cells[((int)block.Date.Date.DayOfWeek) - 1] = new TableCellViewModel()
+                    cells[((int)block.Date.Date.DayOfWeek) - 1] = block;/*new LessonBlock()
                     {
+                        Id = block.Id,
                         BlockNumber = block.BlockNumber,
                         Room = block.Room,
-                        SubjectName = block.Subject.Name,
-                        Teacher = block.Teacher
-                    };
+                        Subject = block.Subject,
+                        Teacher = block.Teacher,
+                        Date = block.Date
+                    };*/
                     dic.Add(key, cells);
                 }
             }

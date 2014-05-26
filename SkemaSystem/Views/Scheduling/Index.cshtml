@@ -14,14 +14,14 @@
         <div class="col-sm-3" id="subject-selector">
             @Html.Partial("_SubjectDropDown", Model)
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-3" id="room-selector">
             <label class="control-label">Lokale</label>
             @Html.DropDownList("rooms", new SelectList(ViewBag.rooms, "Value", "Text"), new { @class = "form-control" })
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-3" id="bulk-selector">
             <label class="control-label">Massehandlinger</label>
             <form>
-                <select class="form-control">
+                <select class="form-control" onchange="$(this.form).submit();">
                     <option value="">- Vælg handling -</option>
                     <option value="delete">Slet markerede</option>
                     <option value="move">Flyt markerede</option>

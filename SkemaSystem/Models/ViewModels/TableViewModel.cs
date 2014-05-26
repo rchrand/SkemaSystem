@@ -11,7 +11,7 @@ namespace SkemaSystem.Models.ViewModels
         public int Id { get; set; }
         public string ClassName { get; set; }
         public DateTime StartDate { get; set; }
-        public Dictionary<int, List<TableCellViewModel>> TableCells { get; set; }
+        public Dictionary<int, List<LessonBlock>> TableCells { get; set; }
         public int Week
         {
             get { return GetWeekOfYear(); }
@@ -39,11 +39,12 @@ namespace SkemaSystem.Models.ViewModels
             return "";
         }
     }
-    public class TableCellViewModel
+
+    /*public class TableCellViewModel
     {
         public string SubjectName { get; set; }
         public Teacher Teacher { get; set; }
         public Room Room { get; set; }
         public int BlockNumber { get; set; }
-    }
+    }*/
 }

@@ -3,6 +3,7 @@ using SkemaSystem.Models.ViewModels;
 using SkemaSystem.Services;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.SqlServer;
 using System.Diagnostics;
 using System.Linq;
@@ -51,6 +52,35 @@ namespace SkemaSystem.Controllers
             return PartialView("_SubjectDropDown", db.Schemes.Single(x => x.Id == scheme));
         }
 
+        [Route("lesson"), HttpPost]
+        public ActionResult ScheduleLesson(int schemeId, int subjectId, int roomId, DateTime date, int blockNumber)
+        {
+            Scheme scheme = db.Schemes.Single(s => s.Id.Equals(schemeId));
+
+            Room room = db.Rooms.Single(r => r.Id.Equals(roomId));
+
+            SubjectDistBlock sdb = scheme.SubjectDistBlocks.Single(s => s.Id.Equals(subjectId)); //db.Subjects.Single(s => s.Id.Equals(subjectId));
+
+            Subject subject = sdb.Subject;
+
+            Teacher teacher = sdb.Teacher; // db.Teachers.Single(t => t.Id.Equals(teacherId)); // TODO fetch from subject
+
+            LessonBlock lesson = new LessonBlock()
+            {
+                BlockNumber = blockNumber,
+                Date = date,
+                Room = room,
+                Subject = subject,
+                Teacher = teacher
+            };
+
+            scheme.LessonBlocks.Add(lesson);
+
+            db.SaveChanges();
+
+            return PartialView("_LessonBlockPartial", lesson);
+        }
+
 
         public ActionResult ChangeScheme(int scheme)
         {
@@ -58,7 +88,7 @@ namespace SkemaSystem.Controllers
             
             DateTime startDate = new DateTime(2014, 5, 25);
 
-            Scheme data = scheme == 1 ? Testdata() : Testdata2();
+            Scheme data = _scheme; //scheme == 1 ? Testdata() : Testdata2();
 
             TableViewModel tvm = new TableViewModel() { ClassName = "12TFake", StartDate = SchedulingService.CalculateStartDate(startDate), Id = 1, TableCells = SchedulingService.buildScheme(startDate, data) };
 
@@ -79,7 +109,8 @@ namespace SkemaSystem.Controllers
                 Id = -1,
                 ClassModel = null,
                 LessonBlocks = new List<LessonBlock>() { 
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 1,
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 26),
                         Room = new Room(){ RoomName = "A.1.12"},
@@ -87,6 +118,7 @@ namespace SkemaSystem.Controllers
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
                     new LessonBlock(){ 
+                        Id = 2,
                         BlockNumber = 1,
                         Date = new DateTime(2014, 5, 26),
                         Room = new Room(){ RoomName = "A.1.12"},
@@ -94,48 +126,55 @@ namespace SkemaSystem.Controllers
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
                     new LessonBlock(){ 
+                        Id = 3,
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 27),
                         Room = new Room(){ RoomName = "A.1.12"},
                         Subject = new Subject(){ Name = "SD"},
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 4,
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 28),
                         Room = new Room(){ RoomName = "A.1.12"},
                         Subject = new Subject(){ Name = "SD"},
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 5,
                         BlockNumber = 1,
                         Date = new DateTime(2014, 5, 28),
                         Room = new Room(){ RoomName = "A.1.12"},
                         Subject = new Subject(){ Name = "SD"},
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 6,
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 29),
                         Room = new Room(){ RoomName = "A.1.12"},
                         Subject = new Subject(){ Name = "SD"},
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 7,
                         BlockNumber = 1,
                         Date = new DateTime(2014, 5, 29),
                         Room = new Room(){ RoomName = "A.1.12"},
                         Subject = new Subject(){ Name = "SD"},
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 8,
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 30),
                         Room = new Room(){ RoomName = "A.1.12"},
                         Subject = new Subject(){ Name = "SD"},
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 9,
                         BlockNumber = 1,
                         Date = new DateTime(2014, 5, 30),
                         Room = new Room(){ RoomName = "A.1.12"},
@@ -155,56 +194,64 @@ namespace SkemaSystem.Controllers
                 Id = -1,
                 ClassModel = null,
                 LessonBlocks = new List<LessonBlock>() { 
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 1,
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 26),
                         Room = new Room(){ RoomName = "A.1.12"},
                         Subject = new Subject(){ Name = "SD"},
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 2,
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 27),
                         Room = new Room(){ RoomName = "A.1.12"},
                         Subject = new Subject(){ Name = "SD"},
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 3,
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 28),
                         Room = new Room(){ RoomName = "A.1.12"},
                         Subject = new Subject(){ Name = "SD"},
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 4,
                         BlockNumber = 1,
                         Date = new DateTime(2014, 5, 28),
                         Room = new Room(){ RoomName = "A.1.12"},
                         Subject = new Subject(){ Name = "SD"},
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 5,
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 29),
                         Room = new Room(){ RoomName = "A.1.12"},
                         Subject = new Subject(){ Name = "SD"},
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 6,
                         BlockNumber = 1,
                         Date = new DateTime(2014, 5, 29),
                         Room = new Room(){ RoomName = "A.1.12"},
                         Subject = new Subject(){ Name = "SD"},
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 7,
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 30),
                         Room = new Room(){ RoomName = "A.1.12"},
                         Subject = new Subject(){ Name = "SD"},
                         Teacher = new Teacher(){ Name = "Hanne"}
                     },
-                    new LessonBlock(){ 
+                    new LessonBlock(){
+                        Id = 8,
                         BlockNumber = 1,
                         Date = new DateTime(2014, 5, 30),
                         Room = new Room(){ RoomName = "A.1.12"},
