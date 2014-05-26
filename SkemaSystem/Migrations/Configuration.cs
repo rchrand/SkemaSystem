@@ -35,6 +35,8 @@ namespace SkemaSystem.Migrations
             SemesterSubjectBlock ssb2 = new SemesterSubjectBlock { Id = 2, Subject = su2, BlocksCount = 20 };
             SemesterSubjectBlock ssb3 = new SemesterSubjectBlock { Id = 3, Subject = su3, BlocksCount = 20 };
             SemesterSubjectBlock ssb4 = new SemesterSubjectBlock { Id = 4, Subject = su1, BlocksCount = 10 };
+            SemesterSubjectBlock ssb5 = new SemesterSubjectBlock { Id = 5, Subject = su1, BlocksCount = 40 };
+            SemesterSubjectBlock ssb6 = new SemesterSubjectBlock { Id = 6, Subject = su1, BlocksCount = 50 };
 
             List<SemesterSubjectBlock> ssdbList1 = new List<SemesterSubjectBlock>();
             ssdbList1.Add(ssb1); ssdbList1.Add(ssb2); ssdbList1.Add(ssb3);
@@ -42,15 +44,28 @@ namespace SkemaSystem.Migrations
             List<SemesterSubjectBlock> ssdbList2 = new List<SemesterSubjectBlock>();
             ssdbList2.Add(ssb4);
 
+            List<SemesterSubjectBlock> ssdbList3 = new List<SemesterSubjectBlock>();
+            ssdbList3.Add(ssb5);
+
+            List<SemesterSubjectBlock> ssdbList4 = new List<SemesterSubjectBlock>();
+            ssdbList4.Add(ssb6);
+
+
             Semester s1 = new Semester { Id = 1, Number = 1, Blocks = ssdbList1 };
             Semester s2 = new Semester { Id = 2, Number = 2, Blocks = ssdbList2 };
+            Semester s3 = new Semester { Id = 3, Number = 3, Blocks = ssdbList3 };
+            Semester s4 = new Semester { Id = 4, Number = 4, Blocks = ssdbList4 };
 
-            Room r1 = new Room() { RoomName = "A1.1", Id = 1 };
-            Room r2 = new Room() { RoomName = "A1.2", Id = 2 };
-            Room r3 = new Room() { RoomName = "A2.1", Id = 3 };
+            Education e1 = new Education { Id = 1, Name = "DMU", NumberOfSemesters = 4 };
+            Education e2 = new Education { Id = 2, Name = "MDU", NumberOfSemesters = 6 };
 
-            Education e1 = new Education { Id = 1, Name = "DMU" };
-            Education e2 = new Education { Id = 2, Name = "MDU" };
+            Scheme sch1 = new Scheme { ClassModel = c1, Semester = s1, Id = 1 };
+            Scheme sch2 = new Scheme { ClassModel = c1, Semester = s2, Id = 2 };
+            Scheme sch3 = new Scheme { ClassModel = c2, Semester = s1, Id = 3 };
+
+            Room r1 = new Room { Id = 1, RoomName = "SH-A1.13" };
+            Room r2 = new Room { Id = 2, RoomName = "SH-A1.8" };
+            Room r3 = new Room { Id = 3, RoomName = "SH-A1.4" };
 
             List<Teacher> tList = new List<Teacher>();
             tList.Add(t1);
@@ -64,11 +79,14 @@ namespace SkemaSystem.Migrations
             List<Semester> sList = new List<Semester>();
             sList.Add(s1);
             sList.Add(s2);
+            sList.Add(s3);
+            sList.Add(s4);
 
             e1.Semesters = sList;
 
             c1.Education = e1;
             c2.Education = e1;
+
 
             context.Educations.AddOrUpdate(
                 e => e.Id,
@@ -93,13 +111,12 @@ namespace SkemaSystem.Migrations
 
             context.Semesters.AddOrUpdate(
                 s => s.Id,
-                s1, s2);
+                s1, s2, s3, s4);
 
             context.Rooms.AddOrUpdate(
                 r => r.Id,
                 r1, r2, r3
             );
         }
-
     }
 }

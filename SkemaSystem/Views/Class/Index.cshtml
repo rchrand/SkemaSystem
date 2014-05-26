@@ -9,11 +9,14 @@
 }
 <p>
     @Html.ActionLink("Opret ny klasse", "Create")
+    @Html.ActionLink("Start nyt semester", "CreateSemester")
 </p>
 <table class="table">
-    <tr>
-        <th>Klassenavn</th>
-        <th>Handlinger</th>
+    <tr>   
+        <th>
+            @Html.DisplayNameFor(model => model.ClassName)
+        </th>
+        <th></th>
     </tr>
 
     @foreach (var item in Model)

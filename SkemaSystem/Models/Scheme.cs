@@ -1,6 +1,8 @@
-﻿using System;
+﻿using SkemaSystem.Models.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -8,9 +10,11 @@ namespace SkemaSystem.Models
 {
     public class Scheme
     {
+        [Key]
         [Required]
         public int Id { get; set; }
         
+
         [Required]
         public virtual ClassModel ClassModel { get; set; }
 
@@ -18,6 +22,12 @@ namespace SkemaSystem.Models
         public virtual Semester Semester { get; set; }
 
         public virtual List<SubjectDistBlock> SubjectDistBlocks { get; set; }
+
+        public DateTime SemesterStart { get; set; }
+
+        public DateTime SemesterFinish { get; set; }
+
+        public virtual List<LessonBlock> LessonBlocks { get; set; }
 
         public Scheme()
         {
@@ -74,5 +84,9 @@ namespace SkemaSystem.Models
             Console.WriteLine(subjectDistBlocks.Count());
             return (totalBlocksCount + tryingToAdd) > highestBlocksCount;
         }
+
+
+        [NotMapped]
+        public TableViewModel TableViewModel { get; set; }
     }
 }

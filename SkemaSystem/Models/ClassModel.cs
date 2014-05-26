@@ -20,6 +20,7 @@ namespace SkemaSystem.Models
 
         public ClassModel()
         {
+            ActiveSchemes = new List<Scheme>();
         }
 
         public bool CreateNewSemester() {
@@ -34,14 +35,6 @@ namespace SkemaSystem.Models
 
         public Semester NextSemester()
         {
-            /*var scheme = (from s in ActiveSchemes
-                         orderby s.Semester.Number descending
-                         select s).FirstOrDefault();
-
-            var highestSemester = (from e in this.Education.Semesters
-                                  orderby e.Number descending
-                                  select e).FirstOrDefault();
-            */
             if (this.ActiveSchemes.Count > 0)
             {
                 return (from s in this.Education.Semesters
