@@ -304,6 +304,8 @@
     <Content Include="Views\Class\CreateSemester.cshtml" />
     <Content Include="Views\OptionalSubjects\Index.cshtml" />
     <Content Include="Views\OptionalSubjects\Create.cshtml" />
+    <Content Include="Views\OptionalSubjects\_ConflictSchemes.cshtml" />
+    <Content Include="Views\OptionalSubjects\_OptionalSubjectsList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -18,6 +18,9 @@ namespace SkemaSystem.Migrations
 
         protected override void Seed(SkemaSystem.Models.SkeamSystemDb context)
         {
+            Education e1 = new Education { Id = 1, Name = "DMU", NumberOfSemesters = 4 };
+            Education e2 = new Education { Id = 2, Name = "MDU", NumberOfSemesters = 6 };
+
             Teacher t1 = new Teacher { Id = 1, Name = "Hanne Sommer", Username = "eaasommer", Password = "fisk123", Role = Models.Enum.UserRoles.Teacher };
             Teacher t2 = new Teacher { Id = 2, Name = "Torben Krøjmand", Username = "eaatk", Password = "fisk123", Role = Models.Enum.UserRoles.Teacher };
             Teacher t3 = new Teacher { Id = 3, Name = "Erik Jacobsen", Username = "eaaej", Password = "fisk123", Role = Models.Enum.UserRoles.Admin };
@@ -27,9 +30,9 @@ namespace SkemaSystem.Migrations
             ClassModel c1 = new ClassModel { Id = 1, ClassName = "12t" };
             ClassModel c2 = new ClassModel { Id = 2, ClassName = "12s" };
 
-            Subject su1 = new Subject { Id = 1, Name = "SK" };
-            Subject su2 = new Subject { Id = 2, Name = "SD" };
-            Subject su3 = new Subject { Id = 3, Name = "ITO" };
+            Subject su1 = new Subject { Id = 1, Name = "SK", Education = e1, OptionalSubject=false };
+            Subject su2 = new Subject { Id = 2, Name = "SD", Education = e1, OptionalSubject = false };
+            Subject su3 = new Subject { Id = 3, Name = "ITO", Education = e1, OptionalSubject = false };
 
             SemesterSubjectBlock ssb1 = new SemesterSubjectBlock { Id = 1, Subject = su1, BlocksCount = 40 };
             SemesterSubjectBlock ssb2 = new SemesterSubjectBlock { Id = 2, Subject = su2, BlocksCount = 20 };
@@ -60,9 +63,6 @@ namespace SkemaSystem.Migrations
             Room r1 = new Room() { RoomName = "A1.1", Id = 1 };
             Room r2 = new Room() { RoomName = "A1.2", Id = 2 };
             Room r3 = new Room() { RoomName = "A2.1", Id = 3 };
-
-            Education e1 = new Education { Id = 1, Name = "DMU", NumberOfSemesters = 4 };
-            Education e2 = new Education { Id = 2, Name = "MDU", NumberOfSemesters = 6 };
 
             Scheme sch1 = new Scheme { ClassModel = c1, Semester = s1, Id = 1 };
             Scheme sch2 = new Scheme { ClassModel = c1, Semester = s2, Id = 2 };

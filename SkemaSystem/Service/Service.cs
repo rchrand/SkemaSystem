@@ -10,7 +10,7 @@ namespace SkemaSystem.Service
     {
         public void setNewSemesterForClass(ClassModel model, Semester semester, DateTime start, DateTime finish)
         {
-            Scheme scheme = new Scheme { ClassModel = model, Semester = semester, SemesterStart = start, SemesterFinish = finish };
+            Scheme scheme = new Scheme { ClassModel = model, Semester = semester, SemesterStart = start, SemesterFinish = finish, YearString = "" };
 
             model.ActiveSchemes.Add(scheme);
         }

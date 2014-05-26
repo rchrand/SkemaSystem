@@ -23,32 +23,37 @@ namespace SkemaSystem.Models
 
         public virtual List<SubjectDistBlock> SubjectDistBlocks { get; set; }
 
-        public DateTime SemesterStart { get; set; }
+        public virtual DateTime SemesterStart { get; set; }
 
-        public DateTime SemesterFinish { get; set; }
+        public virtual DateTime SemesterFinish { get; set; }
 
         [NotMapped]
+        private string YString;
+
         public string YearString
         {
             get
             {
+                return YString;
+            }
+
+            set {
                 if (SemesterStart.Month >= 1 && SemesterStart.Month <= 6)
                 {
-                    return "F" + SemesterStart.Year;
+                    YString = "F" + SemesterStart.Year;
                 }
                 else
                 {
-                    return "E" + SemesterStart.Year;
+                    YString = "E" + SemesterStart.Year;
                 }
             }
-
-            set { }
-        }
-        
+        }        
 
         public Scheme()
         {
             SubjectDistBlocks = new List<SubjectDistBlock>();
+            YearString = "";
+
         }
 
         public List<Subject> NeededSubjects() {

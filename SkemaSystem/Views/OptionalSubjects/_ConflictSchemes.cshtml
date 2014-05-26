@@ -1,0 +1,42 @@
+﻿@model IEnumerable<SkemaSystem.Models.Scheme>
+
+<div class="form-group">
+    <div class="col-sm-8">
+        <table class="table">
+                <tr>
+                    <td colspan="2"><b>Klasser</b></td>
+                </tr>
+                @if (@Model != null)
+                {
+                    foreach (SkemaSystem.Models.Scheme s in @Model) {
+                        if (s.ClassModel != null)
+                        {
+                        <tr>
+                            <td width="30%"><label for="">@s.ClassModel.ClassName</label></td>
+                            <td><input type="checkbox" /></td>
+                        </tr>   
+                        }
+                    }
+                }
+
+                <tr>
+                    <td colspan="2"><b>Valgfag</b></td>
+                </tr>
+
+                @if (@Model != null)
+                {
+                    foreach (SkemaSystem.Models.Scheme s in @Model)
+                    {
+                        if (s.ClassModel == null)
+                        {
+                            <tr>
+                                <td><label for="">@s.Name</label></td>
+                                <td><input type="checkbox" /></td>
+                            </tr>
+                        }
+                    }
+                }
+        </table>
+    </div>
+</div>
+

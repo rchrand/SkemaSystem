@@ -36,6 +36,10 @@ namespace SkemaSystem.Controllers
                                  where e.Name.Equals("DMU")
                                  select e).SingleOrDefault();
 
+            ViewBag.Subjects = from s in db.Subjects
+                               where s.OptionalSubject
+                               select s;
+
             return View();
         }
 
@@ -44,5 +48,29 @@ namespace SkemaSystem.Controllers
         {
             return null;
         }
-	} 
+
+        public ActionResult UpdateConflictsWith(string year, string semester)
+        {
+            int semesterId = Int32.Parse(semester);
+            var schemes = from s in db.Schemes
+                          where s.Semester.Id == semesterId && s.YearString.Equals(year)
+                          select s;
+
+            return PartialView("_ConflictSchemes", schemes);
+        }
+
+        public ActionResult CreateOptionalSubject(string name)
+        {
+
+            Subject su = new Subject { Name = name, OptionalSubject = true, Education = db.Educations.Where(x => x.Name.Equals("DMU")).SingleOrDefault() };
+            db.Subjects.Add(su);
+            db.SaveChanges();
+
+            ViewBag.Subjects = from s in db.Subjects
+                               where s.OptionalSubject
+                               select s;
+
+            return PartialView("_OptionalSubjectsList");
+        }
+	}
 }

@@ -23,8 +23,9 @@
                     <label class="control-label">Semester:</label>
                 </div>
                 <div class="col-sm-6">
-                    <select class="form-control" name="semester" id="semester">
-                        <option>- Vælg semester -</option>
+
+                    <select class="form-control" name="semester" id="semester" onchange="changeOptionalSubjectInfo();" action="@Url.Action("UpdateConflictsWith")">
+                        <option value="">- Vælg semester -</option>
                         @{
                             SkemaSystem.Models.Education edu = ViewBag.Education;
                             List<SkemaSystem.Models.Semester> semesters = edu.Semesters;
@@ -43,8 +44,8 @@
                     <label class="control-label">Årgang:</label>
                 </div>
                 <div class="col-sm-6">
-                    <select class="form-control" name="year" id="year">
-                        <option>- Vælg årgang -</option>
+                    <select class="form-control" name="year" id="year" onchange="changeOptionalSubjectInfo();" action="@Url.Action("UpdateConflictsWith")">
+                        <option value="">- Vælg årgang -</option>
                         @foreach (string val in ViewBag.Years)
                         {
                             <option value="@val">@val</option>
@@ -53,12 +54,42 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-sm-12">
+                    <b>Vælg hvilke klasser og valgfag der skal tjekkes konflikter med nedenfor</b><br /><br />
+                </div>
+            </div>
+
+            <div id="conflictSchemes">
+                @Html.Partial("_ConflictSchemes", null)
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <b>Vælg hvilke fag der skal være i valgfaget</b><br /><br />
+                </div>
+            </div>
+
+            <div id="optionalSubjects">
+                @Html.Partial("_OptionalSubjectsList", null)
+            </div>
         </form>
     </div>
 
     <div class="col-sm-4">
         <div class="box">
             <h2>Opret nyt fag</h2>
+            <form class="form-horizontal" data-schemesys-ajax="true" data-schemesys-target="#optionalSubjects" action="@Url.Action("CreateOptionalSubject")" method="post">
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <label class="control-label">Navn:</label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" id="name" />
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-primary" value="Opret" />
+            </form>
         </div>
     </div>
 </div>
