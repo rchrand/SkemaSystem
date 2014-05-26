@@ -23,8 +23,6 @@ namespace SkemaSystem.Controllers
             return View(db.Classes.ToList());
         }
 
-
-
         // GET: /Class/Details/5
         [Route("details/{id?}")]
         public ActionResult Details(int? id)

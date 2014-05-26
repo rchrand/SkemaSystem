@@ -168,8 +168,10 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClassController.cs" />
+    <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\EducationController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
+    <Compile Include="Controllers\SchedulingController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Helpers\SimpleCheckbox.cs" />
     <Compile Include="Migrations\Configuration.cs" />
@@ -182,6 +184,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Enum\UserRoles.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\LessonBlock.cs" />
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\Scheme.cs" />
     <Compile Include="Models\Semester.cs" />
@@ -190,15 +193,16 @@
     <Compile Include="Models\Subject.cs" />
     <Compile Include="Models\SubjectDistBlock.cs" />
     <Compile Include="Models\Teacher.cs" />
-    <Compile Include="Models\ViewModels\EducationViewModel.cs" />
-    <Compile Include="Models\ViewModels\ClassViewModel.cs" />
-    <Compile Include="Models\ViewModels\SemesterViewModel.cs" />
+    <Compile Include="Models\ViewModels\SchemeViewModel.cs" />
+    <Compile Include="Models\ViewModels\TableViewModel.cs" />
     <Compile Include="Models\ViewModels\TeacherViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\Service.cs" />
+    <Compile Include="Services\ConflictService.cs" />
+    <Compile Include="Services\SchedulingService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\jquery.contextMenu.less" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -244,9 +248,12 @@
     <Content Include="Content\Bootstrap\variables.less" />
     <Content Include="Content\Bootstrap\wells.less" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\context.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.contextMenu.js" />
+    <Content Include="Scripts\jquery.ui.position.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -257,6 +264,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\schemesys.js" />
+    <Content Include="Scripts\tableContextMenu.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -279,6 +287,13 @@
     <Content Include="Views\Education\Details.cshtml" />
     <Content Include="Views\Education\Edit.cshtml" />
     <Content Include="Views\Education\Index.cshtml" />
+    <Content Include="Views\Classes\Create.cshtml" />
+    <Content Include="Views\Classes\Delete.cshtml" />
+    <Content Include="Views\Classes\Details.cshtml" />
+    <Content Include="Views\Classes\Edit.cshtml" />
+    <Content Include="Views\Classes\Index.cshtml" />
+    <None Include="Views\Class\Create.cshtml" />
+    <Content Include="Views\Class\Index.cshtml" />
     <Content Include="Views\Class\SubjectDistribution.cshtml" />
     <Content Include="Views\Class\_SchemeSubjectDistribution.cshtml" />
     <Content Include="Views\Class\Delete.cshtml" />
@@ -287,20 +302,26 @@
     <Content Include="Views\Room\Create.cshtml" />
     <Content Include="Views\Room\Delete.cshtml" />
     <Content Include="Views\Room\Edit.cshtml" />
+    <Content Include="Views\Room\Index.cshtml" />
+    <Content Include="Views\Teacher\Create.cshtml" />
+    <Content Include="Views\Room\Index.cshtml" />
+    <Content Include="Views\Teacher\Create.cshtml" />
     <Content Include="Views\Teacher\Delete.cshtml" />
     <Content Include="Views\Teacher\Details.cshtml" />
     <Content Include="Views\Teacher\Edit.cshtml" />
     <Content Include="Views\Teacher\Index.cshtml" />
-    <Content Include="Views\Education\ModifyTeachers.cshtml" />
-    <Content Include="Views\Room\Details.cshtml" />
-    <Content Include="Views\Education\ModifyRooms.cshtml" />
-    <Content Include="Views\Class\Index.cshtml" />
-    <Content Include="Views\Teacher\Create.cshtml" />
     <Content Include="Views\Class\Create.cshtml" />
-    <Content Include="Views\Account\Demo.cshtml" />
-    <Content Include="Views\Shared\_AdminTabsPartial.cshtml" />
-    <Content Include="Views\Room\Index.cshtml" />
-    <Content Include="Views\Class\CreateSemester.cshtml" />
+    <Content Include="Views\Class\Index.cshtml" />
+    <Content Include="Views\Classes\Create.cshtml" />
+    <Content Include="Views\Classes\Delete.cshtml" />
+    <Content Include="Views\Classes\Details.cshtml" />
+    <Content Include="Views\Classes\Edit.cshtml" />
+    <Content Include="Views\Classes\Index.cshtml" />
+    <Content Include="Views\Room\Details.cshtml" />
+    <Content Include="Views\Scheduling\Index.cshtml" />
+    <Content Include="Views\Scheduling\_SubjectDropDown.cshtml" />
+    <Content Include="Views\Scheduling\_SchedulePartial.cshtml" />
+    <Content Include="Views\Scheduling\_SchemePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -11,7 +11,11 @@ namespace SkemaSystem.Controllers
 {
     public class BaseController : Controller
     {
+<<<<<<< HEAD
         public SkeamSystemDb db;
+=======
+        public SkeamSystemDb db { get; set; }
+>>>>>>> feautre/scheduling
         public IEnumerable<Education> _educationModel;
 
         public BaseController()
