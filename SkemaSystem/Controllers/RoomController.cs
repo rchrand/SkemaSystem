@@ -15,7 +15,7 @@ namespace SkemaSystem.Controllers
     [Route("{action=index}/{id?}")]
     public class RoomController : BaseController
     {
-        private SkeamSystemDb db = new SkeamSystemDb();
+        //private SkeamSystemDb db = new SkeamSystemDb();
 
         // GET: /Room/
         public ActionResult Index()

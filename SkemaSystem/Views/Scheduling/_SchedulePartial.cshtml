@@ -1,0 +1,55 @@
+﻿@model SkemaSystem.Models.ViewModels.TableViewModel
+
+<table class="table scheme editable">
+    <thead>
+        <tr>
+            <th>
+                Uge @Model.Week
+            </th>
+            @{
+                var weekdays = new string[] { "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag" };
+            }
+            @foreach (var item in @weekdays)
+            {
+                <th data-datetime="@Model.StartDate.Date.Date">
+                    @item<span class="pull-right">@Model.StartDate.Date.ToString("dd'/'MM")</span>
+                </th>
+                @Model.AddDay();
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var blocks = new object[][] { new object[] { "08:30", "10:00" }, new object[] { "10:30", "12:00" }, new object[] { "12:30", "14:00" }, new object[] { "14:30", "16:00" } };
+        }
+        @for (int i = 0; i < @blocks.Length; i++)
+        {
+            <tr>
+                <th>@blocks[i][0]<br />@blocks[i][1]</th>
+                @if (@Model.TableCells.ContainsKey(i))
+                {
+                    foreach (var item in @Model.TableCells[i])
+                    {
+                        if (item != null) {
+                            @Html.Partial("_LessonBlockPartial", item)
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    }
+                }
+                else
+                {
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                }
+            </tr>
+        }
+
+    </tbody>
+
+</table>

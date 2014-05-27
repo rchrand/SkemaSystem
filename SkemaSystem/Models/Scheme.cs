@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SkemaSystem.Models.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,7 +13,7 @@ namespace SkemaSystem.Models
         [Key]
         [Required]
         public int Id { get; set; }
-
+        
         public string Name { get; set; }
 
         public virtual ClassModel ClassModel { get; set; }
@@ -26,6 +27,7 @@ namespace SkemaSystem.Models
 
         public virtual DateTime SemesterFinish { get; set; }
 
+        public virtual List<LessonBlock> LessonBlocks { get; set; }
         [InverseProperty("ConflictSchemes")]
         public virtual ICollection<Scheme> ParentConflictSchemes { get; set; }
 
@@ -122,5 +124,9 @@ namespace SkemaSystem.Models
             }
             return (totalBlocksCount + tryingToAdd) > highestBlocksCount;
         }
+
+
+        [NotMapped]
+        public TableViewModel TableViewModel { get; set; }
     }
 }

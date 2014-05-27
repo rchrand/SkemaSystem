@@ -47,7 +47,7 @@ namespace SkemaSystem.Models
         public IDbSet<Scheme> Schemes { get; set; }
         public IDbSet<SemesterSubjectBlock> SemesterSubjectBlocks { get; set; }
         public IDbSet<Room> Rooms { get; set; }
-        //public IDbSet<ConflictScheme> ConflictSchemes { get; set; }
+        public DbSet<LessonBlock> LessonBlocks { get; set; }
 
         public void StateModified(object entity) 
         {

@@ -41,7 +41,6 @@ namespace SkemaSystem.Migrations
             SemesterSubjectBlock ssb5 = new SemesterSubjectBlock { Id = 5, Subject = su1, BlocksCount = 40 };
             SemesterSubjectBlock ssb6 = new SemesterSubjectBlock { Id = 6, Subject = su1, BlocksCount = 50 };
 
-
             List<SemesterSubjectBlock> ssdbList1 = new List<SemesterSubjectBlock>();
             ssdbList1.Add(ssb1); ssdbList1.Add(ssb2); ssdbList1.Add(ssb3);
 
@@ -60,13 +59,13 @@ namespace SkemaSystem.Migrations
             Semester s3 = new Semester { Id = 3, Number = 3, Blocks = ssdbList3 };
             Semester s4 = new Semester { Id = 4, Number = 4, Blocks = ssdbList4 };
 
-            Room r1 = new Room() { RoomName = "A1.1", Id = 1 };
-            Room r2 = new Room() { RoomName = "A1.2", Id = 2 };
-            Room r3 = new Room() { RoomName = "A2.1", Id = 3 };
-
             Scheme sch1 = new Scheme { ClassModel = c1, Semester = s1, Id = 1 };
             Scheme sch2 = new Scheme { ClassModel = c1, Semester = s2, Id = 2 };
             Scheme sch3 = new Scheme { ClassModel = c2, Semester = s1, Id = 3 };
+
+            Room r1 = new Room { Id = 1, RoomName = "SH-A1.13" };
+            Room r2 = new Room { Id = 2, RoomName = "SH-A1.8" };
+            Room r3 = new Room { Id = 3, RoomName = "SH-A1.4" };
 
             List<Teacher> tList = new List<Teacher>();
             tList.Add(t1);
@@ -87,7 +86,7 @@ namespace SkemaSystem.Migrations
 
             c1.Education = e1;
             c2.Education = e1;
-
+            
             context.Educations.AddOrUpdate(
                 e => e.Id,
                 e1, e2
@@ -117,12 +116,6 @@ namespace SkemaSystem.Migrations
                 r => r.Id,
                 r1, r2, r3
             );
-
-            //context.Schemes.AddOrUpdate(
-            //    s => s.Id,
-            //    sch1, sch2, sch3
-            //);
         }
-
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -11,7 +12,8 @@ namespace SkemaSystem.Controllers
 {
     public class BaseController : Controller
     {
-        public SkeamSystemDb db;
+        public SkeamSystemDb db { get; set; }
+
         public IEnumerable<Education> _educationModel;
 
         public BaseController()
@@ -35,6 +37,18 @@ namespace SkemaSystem.Controllers
             }
 
             return false;
+        }
+
+
+
+        protected bool IsTeacher()
+        {
+            return IsRole(UserRoles.Teacher) || IsRole(UserRoles.Admin);
+        }
+
+        protected bool IsAdmin()
+        {
+            return IsRole(UserRoles.Admin);
         }
 	}
 }

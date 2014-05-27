@@ -9,8 +9,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Skema System!</title>
     @Styles.Render("~/Content/less")
-    @Scripts.Render("~/bundles/modernizr")
-
+    @*@Scripts.Render("~/bundles/modernizr")*@
+    @Scripts.Render("~/bundles/scripts")
+    @if (@Request.IsAuthenticated)
+    {
+        @Scripts.Render("~/bundles/scripts/backend")
+    }
+    <script type="text/javascript" src="@Url.Content("/Scripts/schemesys.js")"></script>
 </head>
 <body>
     <header>
@@ -49,8 +54,7 @@
         </div>
     </main>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/schemesys")
+    @*@Scripts.Render("~/bundles/jquery")*@
     @RenderSection("scripts", required: false)
 </body>
 </html>
