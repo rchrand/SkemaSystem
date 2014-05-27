@@ -11,25 +11,7 @@ using System.Data.Entity.Infrastructure;
 
 namespace SkemaSystem.Models
 {
-    
-    // Do not remove or rename this class without premission!
-    public interface ISkemaSystemDb : IDisposable
-    {
-        IDbSet<Teacher> Teachers { get; set; }
-        IDbSet<ClassModel> Classes { get; set; }
-        IDbSet<Education> Educations { get; set; }
-        IDbSet<Subject> Subjects { get; set; }
-        IDbSet<Semester> Semesters { get; set; }
-        IDbSet<Scheme> Schemes { get; set; }
-        IDbSet<SemesterSubjectBlock> SemesterSubjectBlocks { get; set; }
-        IDbSet<Room> Rooms { get; set; }
-
-        int SaveChanges();
-        //DbEntityEntry Entry(object entity);
-        void StateModified(object entity);
-    }
-
-    public class SkeamSystemDb : DbContext, ISkemaSystemDb
+    public class SkeamSystemDb : DbContext
     {
         public SkeamSystemDb()
             : base("name=skeamsysdb")
@@ -37,14 +19,15 @@ namespace SkemaSystem.Models
 
         }
 
-        public IDbSet<Teacher> Teachers { get; set; }
-        public IDbSet<Education> Educations { get; set; }
-        public IDbSet<ClassModel> Classes { get; set; }
-        public IDbSet<Subject> Subjects { get; set; }
-        public IDbSet<Semester> Semesters { get; set; }
-        public IDbSet<Scheme> Schemes { get; set; }
-        public IDbSet<SemesterSubjectBlock> SemesterSubjectBlocks { get; set; }
-        public IDbSet<Room> Rooms { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Education> Educations { get; set; }
+        public DbSet<ClassModel> Classes { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Semester> Semesters { get; set; }
+        public DbSet<Scheme> Schemes { get; set; }
+        public DbSet<SemesterSubjectBlock> SemesterSubjectBlocks { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<LessonBlock> LessonBlocks { get; set; }
 
         public void StateModified(object entity) 
         {

@@ -168,5 +168,106 @@ namespace SkemaSystem.Controllers
             }
             return PartialView("_SchemePartial", model);
         }
+
+        public ActionResult FindAHoleInScheme(int[] blockIds)
+        {
+            //******************************
+            // Get the lessonblocks of the id's
+            List<LessonBlock> choosenBlocks = db.LessonBlocks.Where(lb => blockIds.Contains(lb.Id)).ToList();
+            //******************************
+
+            //******************************
+            // Get the mainScheme
+            Scheme mainScheme = (from s in db.Schemes
+                                where s.LessonBlocks.Contains(choosenBlocks[0])
+                                select s).FirstOrDefault();
+            //******************************
+
+            //******************************
+            // Gets the lessonblocks which may conflict
+            List<LessonBlock> conflictLessons = new List<LessonBlock>();
+            foreach (var item in mainScheme.######ConflictSchemes#####)
+	        {
+		        conflictLessons.AddRange(item);
+	        }
+            //******************************
+
+            ConflictService service = new ConflictService();
+
+            List<DateTime> availableDates = service.FindAHoleInScheme(mainScheme, conflictLessons, choosenBlocks, DateTime.Today);
+
+            //******************************
+            // Do something with the availableDates
+
+            //******************************
+        }
+
+        public ActionResult SetLessonBehindOwnLesson(int[] blockIds)
+        {
+            //******************************
+            // Get the lessonblocks of the id's
+            List<LessonBlock> choosenBlocks = db.LessonBlocks.Where(lb => blockIds.Contains(lb.Id)).ToList();
+            //******************************
+
+            //******************************
+            // Get the mainScheme
+            Scheme mainScheme = (from s in db.Schemes
+                                where s.LessonBlocks.Contains(choosenBlocks[0])
+                                select s).FirstOrDefault();
+            //******************************
+
+            //******************************
+            // Gets the lessonblocks which may conflict
+            List<LessonBlock> conflictLessons = (from cl in db.LessonBlocks
+                                                where cl.Teacher == choosenBlocks[0].Teacher
+                                                select cl).ToList();
+            //******************************
+
+            ConflictService service = new ConflictService();
+
+            List<DateTime> availableDates = service.setLessonBehindOwnLesson(mainScheme, conflictLessons, choosenBlocks, DateTime.Today);
+
+            //******************************
+            // Do something with the availableDates
+
+            //******************************
+        }
+
+        public ActionResult SwitchWithOtherTeacher(int[] blockIds, string choosenTeacherId)
+        {
+            //******************************
+            // Get the lessonblocks of the id's
+            List<LessonBlock> choosenBlocks = db.LessonBlocks.Where(lb => blockIds.Contains(lb.Id)).ToList();
+            //******************************
+
+            //******************************
+            // Get the mainScheme
+            Scheme mainScheme = (from s in db.Schemes
+                                where s.LessonBlocks.Contains(choosenBlocks[0])
+                                select s).FirstOrDefault();
+            //******************************
+
+            //******************************
+            // Get the teacher object
+            Teacher otherTeacher = (from t in db.Teachers
+                                    where t.Id == Convert.ToInt16(choosenTeacherId)
+                                   select t).FirstOrDefault();
+            //******************************
+
+            // Gets the lessonblocks which may conflict
+            List<LessonBlock> conflictLessons = (from cl in db.LessonBlocks
+                                                where cl.Teacher == otherTeacher
+                                                select cl).ToList();
+            //******************************
+
+            ConflictService service = new ConflictService();
+
+            List<DateTime> availableDates = service.switchWithOtherTeacher(mainScheme, conflictLessons, choosenBlocks, otherTeacher, DateTime.Today);
+
+            //******************************
+            // Do something with the availableDates
+
+            //******************************
+        }
 	}
 }

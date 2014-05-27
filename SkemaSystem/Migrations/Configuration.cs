@@ -86,8 +86,7 @@ namespace SkemaSystem.Migrations
 
             c1.Education = e1;
             c2.Education = e1;
-
-
+            
             context.Educations.AddOrUpdate(
                 e => e.Id,
                 e1, e2

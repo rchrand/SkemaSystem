@@ -248,7 +248,7 @@ namespace SkemaSystem.Controllers
         public ActionResult CreateSemester(string[] semesterId, string[] start, string[] finish)
         //public ActionResult CreateSemester(string[] semesterId, string[] start, string[] finish, Education education)
         {
-            Service.Service service = new Service.Service();
+            Services.ConflictService service = new Services.ConflictService();
 
             var classes = from c in db.Classes
                            where c.ActiveSchemes.Count < c.Education.Semesters.Count
