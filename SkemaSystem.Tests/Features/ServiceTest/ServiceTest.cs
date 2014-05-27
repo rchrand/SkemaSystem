@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SkemaSystem.Models;
-using SkemaSystem.Service;
+using SkemaSystem.Services;
 
 namespace SkemaSystem.Tests.Features.ServiceTest
 {
@@ -23,7 +23,7 @@ namespace SkemaSystem.Tests.Features.ServiceTest
             DateTime start = DateTime.Today;
             DateTime finish = DateTime.Today.AddDays(30);
 
-            Service.Service service = new Service.Service();
+            ConflictService service = new ConflictService();
 
             service.setNewSemesterForClass(model, semester1, start, finish);
 
@@ -84,7 +84,7 @@ namespace SkemaSystem.Tests.Features.ServiceTest
 
             List<LessonBlock> blocks = new List<LessonBlock> { lb1_1, lb1_2 };
 
-            Service.Service service = new Service.Service();
+            ConflictService service = new ConflictService();
 
             List<DateTime> availableBlocks = service.FindAHoleInScheme(mainScheme, listConflict, blocks, new DateTime(2014, 5, 26));
 
@@ -167,7 +167,7 @@ namespace SkemaSystem.Tests.Features.ServiceTest
 
             Scheme mainScheme = new Scheme { ClassModel = model1, LessonBlocks = list, SemesterFinish = new DateTime(2014, 6, 7) };
 
-            Service.Service service = new Service.Service();
+            ConflictService service = new ConflictService();
 
             List<LessonBlock> blocks = new List<LessonBlock> { lb0_1, lb0_2 };
             List<DateTime> availableBlocks = service.setLessonBehindOwnLesson(mainScheme, listConflict, blocks, new DateTime(2014, 5, 26));
@@ -246,7 +246,7 @@ namespace SkemaSystem.Tests.Features.ServiceTest
 
             Scheme mainScheme = new Scheme { ClassModel = model, LessonBlocks = list, SemesterFinish = new DateTime(2014, 6, 4) };
 
-            Service.Service service = new Service.Service();
+            ConflictService service = new ConflictService();
 
             List<DateTime> availableBlocks = service.switchWithOtherTeacher(mainScheme, conflictlist, blocks, t2, new DateTime(2014,5,26));
 
