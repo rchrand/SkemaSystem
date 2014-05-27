@@ -6,6 +6,25 @@
 
 <h2>Opret valgfag</h2>
 
+<script type="text/javascript">
+    function changeOptionalSubjectInfo() {
+        var $yearDropdown = $("#year");
+        var $semesterDropdown = $("#semester");
+
+        if ($yearDropdown.val() != "" && $semesterDropdown.val() != "") {
+            var options = {
+                url: $yearDropdown.attr("action"),
+                type: "get",
+                data: $yearDropdown.serialize() + "&" + $semesterDropdown.serialize()
+            };
+
+            $.ajax(options).done(function (data) {
+                $("#conflictSchemes").html(data);
+            });
+        }
+    }
+</script>
+
 <div class="row">
     <div class="col-sm-8">
         <form class="form-horizontal" action="@Url.Action("Create")" method="post">

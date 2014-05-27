@@ -56,20 +56,3 @@
         });
     });
 })(jQuery);
-function changeOptionalSubjectInfo() {
-    var $yearDropdown = $("#year");
-    var $semesterDropdown = $("#semester");
-
-    if ($yearDropdown.val() != "" && $semesterDropdown.val() != "") {
-        var options = {
-        url: $yearDropdown.attr("action"),
-        type: "get",
-        data: $yearDropdown.serialize() + "&" + $semesterDropdown.serialize()
-        };
-
-        $.ajax(options).done(function (data) {
-            $("#conflictSchemes").html(data);
-        });
-    }
-    
-}
