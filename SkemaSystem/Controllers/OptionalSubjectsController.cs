@@ -189,7 +189,6 @@ namespace SkemaSystem.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-
             Scheme scheme = db.Schemes.Find(id);
             if (scheme == null)
             {
@@ -207,17 +206,118 @@ namespace SkemaSystem.Controllers
             return View(scheme);
         }
 
+        [HttpPost]
+        public ActionResult Edit(FormCollection form)
+        {
+            int schemeId = Int32.Parse(form["schemeId"]);
+            Scheme scheme = db.Schemes.SingleOrDefault(x => x.Id == schemeId);
+            Semester semester = scheme.Semester; // ONLY to get the value from the database!
+            List<SubjectDistBlock> s2 = scheme.SubjectDistBlocks; // ONLY to get the value from the database!
+            if (string.IsNullOrEmpty(form["name"]))
+            {
+                // If any of the required fields are empty!
+            }
+
+            scheme.Name = form["name"];
+
+            string[] subjectBlocksCountArray = form["subjectBlockCount"].Split(',');
+            string[] subjectIdArray = form["subjectId"].Split(',');
+            string[] subjectUses = form["subjectUse"].Split(',');
+
+            for (int i = 0; i < subjectBlocksCountArray.Count(); i++)
+            {
+                if (subjectBlocksCountArray[i].Equals("") && subjectUses.Any(x => x.Equals(subjectIdArray[i])))
+                {
+                    // A chosen subject has no block count value!
+                }
+            }
+
+            // If no errors occurs - convert the arrays to int arrays, now we know that every index has correct values!
+            int[] subjectIds = ConvertStringArraytoInt(subjectIdArray);
+            int[] subjectBlockCounts = ConvertStringArraytoInt(subjectBlocksCountArray);
+
+            // Get all the subjects chosen along with it's values!
+            List<SemesterSubjectBlock> optionalSubjectBlocks = new List<SemesterSubjectBlock>();
+            for (int i = 0; i < subjectIds.Count(); i++)
+            {
+                int subjectId = subjectIds[i];
+                if (subjectUses.Contains("" + subjectId))
+                {
+                    Subject su = db.Subjects.Where(x => x.Id == subjectId).SingleOrDefault();
+
+                    int blocksCount = subjectBlockCounts[i];
+                    // The subject has been chosen from the list, and has to be created!
+                    optionalSubjectBlocks.Add(new SemesterSubjectBlock { BlocksCount = blocksCount, Subject = su });
+                }
+            }
+
+            // Get all schemes from the conflict list, and make sure this new scheme has those schemes in it and that the other schemes has this one in their conflicts-list as well!
+            int[] conflictSchemeIds = ConvertStringArraytoInt(form["conflictScheme"].Split(','));
+            List<Scheme> conflictSchemes = new List<Scheme>();
+            foreach (int sId in conflictSchemeIds)
+            {
+                Scheme s = db.Schemes.Where(x => x.Id == sId).SingleOrDefault();
+                conflictSchemes.Add(s);
+            }
+
+            
+            // Update schemes optionalSubject list!
+            List<SemesterSubjectBlock> newOptionalSubjectList = new List<SemesterSubjectBlock>();
+            foreach (SemesterSubjectBlock ssb in optionalSubjectBlocks)
+            {
+                if (scheme.OptionalSubjectBlockList.Any(x => x.Subject.Id == ssb.Subject.Id))
+                {
+                    ssb.Id = scheme.OptionalSubjectBlockList.FirstOrDefault(x => x.Subject.Id == ssb.Subject.Id).Id;
+                }
+                newOptionalSubjectList.Add(ssb);
+            }
+            scheme.OptionalSubjectBlockList = newOptionalSubjectList;
+
+            scheme.SubjectDistBlocks = (scheme.SubjectDistBlocks.Where(x => (scheme.OptionalSubjectBlockList.Any(q => q.Subject.Id == x.Subject.Id)))).ToList();
+
+
+            // Update schemes conflictSchemes list
+            List<Scheme> newConflictList = new List<Scheme>();
+            foreach (Scheme s in scheme.ConflictSchemes)
+            {
+                if (!conflictSchemes.Any(x => x.Id == s.Id))
+                {
+                    // This particular scheme is in the old list of schemes, but not in the new! Remove it from both this and this from the other schemes list!
+                    s.ConflictSchemes.Remove(scheme);
+                }
+                else
+                {
+                    newConflictList.Add(s);
+                }
+            }
+            scheme.ConflictSchemes = newConflictList;
+
+            foreach (Scheme s in conflictSchemes)
+            {
+                if (!scheme.ConflictSchemes.Any(x=> x.Id == s.Id)) {
+                    // If this scheme doesn't already has the loop-scheme in its conflict list - add it now!
+                    scheme.ConflictSchemes.Add(s);
+                }
+                if (!s.ConflictSchemes.Any(x => x.Id == scheme.Id))
+                {
+                    // If the other scheme doesn't already has this scheme in its conflict list - add it now!
+                    s.ConflictSchemes.Add(scheme);
+                }
+            }
+
+            
+
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
         public ActionResult SubjectDistribution(int id)
         {
             Scheme scheme = db.Schemes.Single(x => x.Id == id);
 
-            //List<Teacher> teachers = (from t in db.Teachers
-            //                          where t.Educations.Contains(from e in db.Educations where e.Semesters.Contains(scheme.Semester) select e)
-            //                          select t).ToList();
             Education edu = db.Educations.Where(e=> e.Semesters.Any(s=> s.Id == scheme.Semester.Id)).FirstOrDefault();
             ViewBag.Teachers = db.Teachers.Where(x => x.Educations.Any(e => e.Id == edu.Id)).ToList();
-
-            //ViewBag.Teachers = db.Teachers;//.Where(t => t.Educations.Equals(db.Educations.Where(x => x.Semesters.Contains(scheme.Semester)).FirstOrDefault()));
 
             return View(scheme);
         }

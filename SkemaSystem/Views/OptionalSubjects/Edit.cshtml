@@ -11,6 +11,8 @@
     <div class="col-sm-8">
         <form class="form-horizontal" action="@Url.Action("Edit")" method="post">
 
+            @Html.Hidden("schemeId", Model.Id)
+
             <div class="form-group">
                 <div class="col-sm-2">
                     <label class="control-label" for="name">Navn:</label>
@@ -19,67 +21,64 @@
                     <input class="form-control" value="@Model.Name" type="text" name="name" id="name" placeholder="Valgfags navn" />
                 </div>
             </div>
-            <table class="table">
-                <tr>
-                    <td colspan="2"><b>Klasser</b></td>
-                </tr>
-                @if (@Model != null)
-                {
-                    foreach (SkemaSystem.Models.Scheme s in @ViewBag.Schemes)
-                    {
-                        if (s.ClassModel != null)
-                        {
-                            <tr>
-                                <td width="30%"><label for="@(s.Id)ConflictScheme">@s.ClassModel.ClassName</label></td>
-                                <td><input type="checkbox" name="conflictScheme" id="@(s.Id)ConflictScheme" @(@Model.ConflictSchemes.Contains(s) ? "checked" : "") value="@s.Id" /></td>
-                            </tr>
-                        }
-                    }
-                }
 
-                <tr>
-                    <td colspan="2"><b>Valgfag</b></td>
-                </tr>
+            <div class="row">
+                <div class="col-sm-12">
+                    <b>Vælg hvilke klasser og valgfag der skal tjekkes konflikter med nedenfor</b><br /><br />
+                </div>
+            </div>
 
-                @if (@Model != null)
-                {
-                    foreach (SkemaSystem.Models.Scheme s in @ViewBag.Schemes)
-                    {
-                        if (s.ClassModel == null)
-                        {
-                            <tr>
-                                <td><label for="@(s.Id)ConflictScheme">@s.Name</label></td>
-                                <td><input type="checkbox" id="@(s.Id)ConflictScheme" name="conflictScheme" value="@s.Id" @(@Model.ConflictSchemes.Contains(s) ? "checked": "") /></td>
-                            </tr>
-                        }
-                    }
-                }
-            </table>
-            <table>
-                <thead>
-                    <tr>
-                        <th width="50%">Fag</th>
-                        <th>Antal blokke</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var subject in ViewBag.Subjects)
-                    {
-                        SkemaSystem.Models.Subject su = subject;
-                        
-                        SkemaSystem.Models.SemesterSubjectBlock ssb = @Model.OptionalSubjectBlockList.Where(x=>x.Subject.Id == su.Id).FirstOrDefault();
-                        
-                        bool isChosen = @Model.OptionalSubjectBlockList.Any(x => x.Subject.Id==su.Id);
-
-                        @Html.Hidden("subjectId", su.Id);
-                        <tr style="height:53px;">
-                            <td><input type="checkbox" value="@(su.Id)" name="subjectUse" id="@(su.Id)subjectCheckBox" @(isChosen ? "checked" : "") onclick="$('#@(su.Id)subjectBlockCount').toggle('fast')" />&nbsp;&nbsp; <label for="@(su.Id)subjectCheckBox">@su.Name</label></td>
-                            <td><input type="number" name="subjectBlockCount" id="@(su.Id)subjectBlockCount" placeholder="Antal blokke" class="form-control" @(!isChosen ? "style=display:none;" : "value="+((ssb != null) ? ssb.BlocksCount : 0)+"")  /></td>
+            <div class="form-group">
+                <div class="col-sm-8">
+                    <table class="table">
+                        <tr>
+                            <td colspan="2"><b>Klasser</b></td>
                         </tr>
-                    }
+                        @if (@Model != null)
+                        {
+                            foreach (SkemaSystem.Models.Scheme s in @ViewBag.Schemes)
+                            {
+                                if (s.ClassModel != null)
+                                {
+                                    <tr>
+                                        <td width="30%"><label for="@(s.Id)ConflictScheme">@s.ClassModel.ClassName</label></td>
+                                        <td><input type="checkbox" name="conflictScheme" id="@(s.Id)ConflictScheme" @(@Model.ConflictSchemes.Contains(s) ? "checked" : "") value="@s.Id" /></td>
+                                    </tr>
+                                }
+                            }
+                        }
 
-                </tbody>
-            </table>
+                        <tr>
+                            <td colspan="2"><b>Valgfag</b></td>
+                        </tr>
+
+                        @if (@Model != null)
+                        {
+                            foreach (SkemaSystem.Models.Scheme s in @ViewBag.Schemes)
+                            {
+                                if (s.ClassModel == null && !s.Equals(Model))
+                                {
+                                    <tr>
+                                        <td><label for="@(s.Id)ConflictScheme">@s.Name</label></td>
+                                        <td><input type="checkbox" id="@(s.Id)ConflictScheme" name="conflictScheme" value="@s.Id" @(@Model.ConflictSchemes.Contains(s) ? "checked" : "") /></td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <b>Vælg hvilke fag der skal være i valgfaget</b><br /><br />
+                </div>
+            </div>
+
+            <div id="optionalSubjects">
+                @Html.Partial("_OptionalSubjectsListEdit", Model)
+            </div>
+
+            <input type="submit" class="btn btn-primary" value="Gem ændringer" />
         </form>
     </div>
 
@@ -95,15 +94,13 @@
                         <input type="text" class="form-control" name="name" id="name" />
                     </div>
                 </div>
+                <br />
                 <input type="submit" class="btn btn-primary" value="Opret" />
             </form>
         </div>
     </div>
 </div>
-
-
-
-
+<br />
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Tilbage til valgfagsoversigten", "Index")
 </div>

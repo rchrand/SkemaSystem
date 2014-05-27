@@ -4,10 +4,6 @@
     ViewBag.Title = "Opret valgfag";
 }
 
-@section Subheader {
-    @Html.Partial("_AdminTabsPartial")
-}
-
 <h2>Opret valgfag</h2>
 
 <div class="row">
@@ -99,4 +95,7 @@
         </div>
     </div>
 </div>
-
+<br />
+<div>
+    @Html.ActionLink("Tilbage til valgfagsoversigten", "Index")
+</div>

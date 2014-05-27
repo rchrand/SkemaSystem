@@ -4,7 +4,7 @@
     ViewBag.Title = "Valgfag";
 }
 
-<h2>Administrer valgfag</h2>
+<h2>Administrér valgfag</h2>
 
 <p>
     @Html.ActionLink("Opret nyt valgfag", "Create")
@@ -33,5 +33,5 @@
             </td>
         </tr>
     }
-
 </table>
+@Html.ActionLink("Tilbage til klasseoversigten", "Index", "Class", null, null)
