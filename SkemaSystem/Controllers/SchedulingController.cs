@@ -3,9 +3,12 @@ using SkemaSystem.Models.ViewModels;
 using SkemaSystem.Services;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.SqlServer;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -30,27 +33,172 @@ namespace SkemaSystem.Controllers
                                                      select new SelectListItem { Text = r.RoomName, Value = SqlFunctions.StringConvert((double)r.Id).Trim() };
             ViewBag.rooms = rooms;
 
-            /*Dictionary<int, List<TableCellViewModel>> dic = new Dictionary<int,List<TableCellViewModel>>();
-            dic.Add(0, new List<TableCellViewModel>() { new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { Teacher = db.Teachers.FirstOrDefault(), SubjectName = "SD", Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } } });
-            dic.Add(1, new List<TableCellViewModel>() { new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, null, null, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } } });
-            dic.Add(2, new List<TableCellViewModel>() { new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { Teacher = db.Teachers.FirstOrDefault(), SubjectName = "SD", Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } } });
-            dic.Add(3, new List<TableCellViewModel>() { null, new TableCellViewModel() { Teacher = db.Teachers.FirstOrDefault(), SubjectName = "SD", Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } } });*/
+            ViewBag.SubjectDistBlocks = new List<SubjectDistBlock>();
 
-            DateTime startDate = DateTime.Now;
-
-            TableViewModel tvb = new TableViewModel() { ClassName = "12TFake", StartDate = startDate, Id = 1, TableCells = SchedulingService.buildScheme(startDate, Testdata()) };
-
-            ViewBag.TableViewModel = tvb;
-
-            return View(db.Schemes.FirstOrDefault());
+            return View();
         }
 
 
         public ActionResult ChangeSubjectDropDown(int scheme)
         {
-            return PartialView("_SubjectDropDown", db.Schemes.Single(x => x.Id == scheme));
+            ViewBag.SubjectDistBlocks = db.Schemes.Single(x => x.Id == scheme).SubjectDistBlocks;
+
+            return PartialView("_SubjectDropDown");
         }
 
+        [Route("lesson"), HttpPost]
+        public ActionResult ScheduleLesson(int schemeId, int subjectId, int roomId, DateTime date, int blockNumber)
+        {
+            LessonBlock lesson;
+
+            TransactionOptions options = new TransactionOptions
+            {
+                IsolationLevel = System.Transactions.IsolationLevel.Serializable,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, options))
+            {
+                /*Scheme scheme = db.Schemes.Single(s => s.Id.Equals(schemeId));
+
+                Room room = db.Rooms.Single(r => r.Id.Equals(roomId));
+
+                SubjectDistBlock sdb = scheme.SubjectDistBlocks.Single(s => s.Id.Equals(subjectId));
+
+                Subject subject = sdb.Subject;
+
+                Teacher teacher = sdb.Teacher;
+
+                lesson = new LessonBlock()
+                {
+                    BlockNumber = blockNumber,
+                    Date = date,
+                    Room = room,
+                    Subject = subject,
+                    Teacher = teacher
+                };
+
+                try
+                {
+                    bool conflicting = SchedulingService.IsConflicting(scheme, lesson, db.Rooms, db.Schemes);
+                }
+                catch (Exception e)
+                {
+                    scope.Dispose();
+                    return Json(new { message = e.Message });
+                }
+
+                scheme.LessonBlocks.Add(lesson);
+
+                db.SaveChanges();
+                scope.Complete();*/
+
+                try
+                {
+                    lesson = SchedulingService.ScheduleLesson(schemeId, subjectId, roomId, date, blockNumber, db.Schemes, db.Rooms);
+                    
+                    // if no exception thrown
+                    db.SaveChanges();
+                    scope.Complete();
+                }
+                catch (Exception e)
+                {
+                    scope.Dispose();
+                    return Json(new { message = e.Message });
+                }
+            }
+            return PartialView("_LessonBlockPartial", lesson);
+        }
+
+        [Route("lesson/delete"), HttpPost]
+        public ActionResult DeleteLessons(int schemeId, string lessonIds)
+        {
+            // TODO check permissions
+
+            TransactionOptions options = new TransactionOptions
+            {
+                IsolationLevel = System.Transactions.IsolationLevel.RepeatableRead,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, options))
+            {
+                /*Scheme scheme = db.Schemes.Single(s => s.Id.Equals(schemeId));
+
+                string[] ids = lessonIds.Split(',');
+
+                scheme.LessonBlocks.RemoveAll(l => ids.Contains(l.Id.ToString()));
+
+                db.SaveChanges();
+                scope.Complete();*/
+
+                if (SchedulingService.DeleteLessons(schemeId, lessonIds, db.Schemes))
+                {
+                    db.SaveChanges();
+                    scope.Complete();
+                }
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+        [Route("lesson/relocate"), HttpPost]
+        public ActionResult RelocateLesson(int schemeId, string lessonIds, int roomId)
+        {
+            //// TODO check permissions
+
+            //TransactionOptions options = new TransactionOptions
+            //{
+            //    IsolationLevel = System.Transactions.IsolationLevel.RepeatableRead,
+            //    Timeout = TransactionManager.DefaultTimeout
+            //};
+
+            //using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, options))
+            //{
+            //    Scheme scheme = db.Schemes.Single(s => s.Id.Equals(schemeId));
+
+            //    string[] ids = lessonIds.Split(',');
+
+            //    IEnumerable<LessonBlock> blocks = scheme.LessonBlocks.Where(l => ids.Contains(l.Id.ToString()));
+
+            //    Room room = db.Rooms.Single(r => r.Id.Equals(roomId));
+
+            //    foreach (var block in blocks)
+            //    {
+            //        block.Room = room;
+
+            //        if (!SchedulingService.IsRoomAvailable(db.Schemes, block, scheme))
+            //        {
+            //            scope.Dispose();
+            //            return Json(new { message = "Lokalet er ikke ledigt på det pågældende tidspunkt." });
+            //        }
+            //    }
+
+            //    db.SaveChanges();
+            //    scope.Complete();
+            //}
+            // TODO check permissions
+
+            TransactionOptions options = new TransactionOptions
+            {
+                IsolationLevel = System.Transactions.IsolationLevel.RepeatableRead,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, options))
+            {
+                if (SchedulingService.RelocateLesson(schemeId, lessonIds, roomId, db.Schemes, db.Rooms))
+                {
+                    db.SaveChanges();
+                    scope.Complete();
+                }
+                else
+                {
+                    scope.Dispose();
+                    return Json(new { message = "Lokalet er ikke ledigt på det pågældende tidspunkt." });
+                }
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
 
         public ActionResult ChangeScheme(int scheme)
         {
@@ -58,163 +206,18 @@ namespace SkemaSystem.Controllers
             
             DateTime startDate = new DateTime(2014, 5, 25);
 
-            Scheme data = scheme == 1 ? Testdata() : Testdata2();
+            Scheme data = _scheme;
 
-            TableViewModel tvm = new TableViewModel() { ClassName = "12TFake", StartDate = SchedulingService.CalculateStartDate(startDate), Id = 1, TableCells = SchedulingService.buildScheme(startDate, data) };
+            TableViewModel tvm = new TableViewModel() { ClassName = _scheme.ClassModel.ClassName, StartDate = SchedulingService.CalculateStartDate(startDate), TableCells = SchedulingService.buildScheme(startDate, data) };
 
             SchemeViewModel model = new SchemeViewModel();
-            model.Classname = "12TFake";
+            model.Classname = _scheme.ClassModel.ClassName;
             model.Schemes.Add(tvm);
             if (scheme == 2)
             {
                 model.Schemes.Add(tvm);
             }
             return PartialView("_SchemePartial", model);
-        }
-
-        private static Scheme Testdata()
-        {
-            return new Scheme()
-            {
-                Id = -1,
-                ClassModel = null,
-                LessonBlocks = new List<LessonBlock>() { 
-                    new LessonBlock(){ 
-                        BlockNumber = 0,
-                        Date = new DateTime(2014, 5, 26),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 1,
-                        Date = new DateTime(2014, 5, 26),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 0,
-                        Date = new DateTime(2014, 5, 27),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 0,
-                        Date = new DateTime(2014, 5, 28),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 1,
-                        Date = new DateTime(2014, 5, 28),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 0,
-                        Date = new DateTime(2014, 5, 29),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 1,
-                        Date = new DateTime(2014, 5, 29),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 0,
-                        Date = new DateTime(2014, 5, 30),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 1,
-                        Date = new DateTime(2014, 5, 30),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                },
-                Semester = null,
-                SubjectDistBlocks = null,
-            };
-        }
-
-        private static Scheme Testdata2()
-        {
-            return new Scheme()
-            {
-                Id = -1,
-                ClassModel = null,
-                LessonBlocks = new List<LessonBlock>() { 
-                    new LessonBlock(){ 
-                        BlockNumber = 0,
-                        Date = new DateTime(2014, 5, 26),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 0,
-                        Date = new DateTime(2014, 5, 27),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 0,
-                        Date = new DateTime(2014, 5, 28),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 1,
-                        Date = new DateTime(2014, 5, 28),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 0,
-                        Date = new DateTime(2014, 5, 29),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 1,
-                        Date = new DateTime(2014, 5, 29),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 0,
-                        Date = new DateTime(2014, 5, 30),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                    new LessonBlock(){ 
-                        BlockNumber = 1,
-                        Date = new DateTime(2014, 5, 30),
-                        Room = new Room(){ RoomName = "A.1.12"},
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = new Teacher(){ Name = "Hanne"}
-                    },
-                },
-                Semester = null,
-                SubjectDistBlocks = null,
-            };
         }
 	}
 }

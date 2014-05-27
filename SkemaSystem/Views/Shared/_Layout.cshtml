@@ -13,8 +13,9 @@
     @Scripts.Render("~/bundles/scripts")
     @if (@Request.IsAuthenticated)
     {
-        <script type="text/javascript" src="@Url.Content("/Scripts/schemesys.js")"></script>
+        @Scripts.Render("~/bundles/scripts/backend")
     }
+    <script type="text/javascript" src="@Url.Content("/Scripts/schemesys.js")"></script>
 </head>
 <body>
     <header>

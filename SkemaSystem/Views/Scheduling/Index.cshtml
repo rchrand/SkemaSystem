@@ -1,5 +1,4 @@
-﻿@model SkemaSystem.Models.Scheme
-@{
+﻿@{
     ViewBag.Title = "Skemalægning";
 }
 
@@ -12,16 +11,16 @@
             </form>
         </div>
         <div class="col-sm-3" id="subject-selector">
-            @Html.Partial("_SubjectDropDown", Model)
+            @Html.Partial("_SubjectDropDown")
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-3" id="room-selector">
             <label class="control-label">Lokale</label>
             @Html.DropDownList("rooms", new SelectList(ViewBag.rooms, "Value", "Text"), new { @class = "form-control" })
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-3" id="bulk-selector">
             <label class="control-label">Massehandlinger</label>
             <form>
-                <select class="form-control">
+                <select class="form-control" onchange="$(this.form).submit();">
                     <option value="">- Vælg handling -</option>
                     <option value="delete">Slet markerede</option>
                     <option value="move">Flyt markerede</option>
@@ -32,11 +31,159 @@
 }
 
 @section scripts {
-    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).on('click', '.scheme tbody td', function (e) {
+                var cell = $(this);
+
+                if (cell.children().length == 0) {
+                    // schedule
+                    var schemeId = $('#scheme-selector select option:selected').val();
+                    var subjectId = $('#subject-selector select option:selected').val();
+                    var roomId = $('#room-selector select option:selected').val();
+                    var date = cell.closest('tbody').prev('thead').find('> tr > th:eq(' + cell.index() + ')').attr('data-datetime');
+                    var blockNumber = cell.parent().parent().children().index(this.parentNode);
+                    
+                    if (subjectId == '') {
+                        alert('Vælg det fag du ønsker at skemalægge.');
+                        return false;
+                    }
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("lesson")',
+                        data: 'schemeId=' + schemeId +
+                            '&subjectId=' + subjectId +
+                            '&roomId=' + roomId +
+                            '&date=' + date +
+                            '&blockNumber=' + blockNumber,
+                        success: function (response) {
+                            try {
+                                var response = jQuery.parseJSON(response);
+                            } catch(exception) {}
+                            if (typeof response == 'object') {
+                                alert(response['message']);
+                            } else {
+                                cell.replaceWith(response);
+                            }
+                        }
+                    });
+                } else {
+                    // select for bulk actions
+                    cell.toggleClass('selected');
+                }
+            });
+
+            $(document).on('submit', '#bulk-selector form', function (e) {
+                var action = $(this).find('select option:selected').val();
+
+                callAction(action, undefined);
+
+                return false;
+            });
+
+            $.contextMenu({
+                selector: '.scheme tbody td[data-lesson-id]',
+                callback: function (key, options) {
+                    callAction(key, $(this));
+                },
+                items: {
+                    "move": { name: "Flyt lokale" },
+                    "delete": { name: "Slet lokale" }
+                }
+            });
+
+            $(document).on('click', 'form#room-relocator input[type="button"]', function () {
+                $('#overlay').fadeOut('fast');
+                $('#modal').fadeOut('fast');
+
+                var form = $(this).parents('form:first');
+                form.unbind('submit');
+            });
+        });
+
+        function callAction(action, cell) {
+            var cells = cell == undefined ? $('.scheme tbody td.selected') : cell;
+            var schemeId = $('#scheme-selector select option:selected').val();
+            var ids = [];
+
+            $.each(cells, function (index, element) {
+                ids.push($(element).attr('data-lesson-id'));
+            });
+
+            if (action == 'delete') {
+                if (confirm('Er du sikker på, at du vil slette alle valgte blokke?')) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("lesson/delete")',
+                        data: 'schemeId=' + schemeId + '&lessonIds=' + ids.join(','),
+                        success: function (response) {
+                            $.each(cells, function (index, element) {
+                                $(element).html('');
+                            });
+                        }
+                    });
+                }
+            } else if (action == 'move') {
+                var form = $('form#room-relocator');
+
+                form.find('select option:first').prop('selected', true);
+
+                $('#overlay').fadeToggle('fast');
+                $('#modal').fadeToggle('fast');
+
+                $('form#room-relocator').bind('submit', function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("lesson/relocate")',
+                        data: 'schemeId=' + schemeId + '&lessonIds=' + ids.join(',') + '&' + form.serialize(),
+                        success: function (response) {
+                            try {
+                                var response = jQuery.parseJSON(response);
+                            } catch (exception) { }
+                            if (typeof response == 'object') {
+                                alert(response['message']);
+                            } else {
+                                var room = form.find('select option:selected').text();
+                                $.each(cells, function (index, element) {
+                                    $(element).children('.scheme-roomname').text(room);
+                                });
+                                $('#overlay').fadeOut('fast');
+                                $('#modal').fadeOut('fast');
+                                form.unbind('submit');
+                            }
+                        }
+                    });
+                    return false;
+                });
+            }
+
+            $('#bulk-selector select option:first').prop('selected', true);
+
+            cells.removeClass('selected');
+        }
+    </script>
 }
 
 <div id="schemes">
     
 </div>
 
-<script type="text/javascript" src="@Url.Content("/Scripts/tableContextMenu.js")"></script>
+<div id="overlay" style="position:fixed; top:0; right:0; bottom:0; left:0; background-color:#FFFFFF; opacity:0.8; display:none;"></div>
+<div id="modal" style="position:fixed; width:400px; top:100px; left:50%; margin-left:-200px; background:#FFFFFF; border:1px solid #DDDDDD; box-shadow:0 0 20px rgba(0,0,0,.2); padding:20px 20px 5px 20px; display:none;">
+    <form class="form-horizontal" id="room-relocator">
+        <div class="form-group">
+            <label class="control-label col-md-2">Flyt til:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("roomId", new SelectList(ViewBag.rooms, "Value", "Text"), "- Vælg lokale -", new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Flyt" class="btn btn-primary" />
+                <input type="button" value="Annuller" class="btn btn-default" />
+            </div>
+        </div>
+    </form>
+</div>

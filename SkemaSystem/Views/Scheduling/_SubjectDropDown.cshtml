@@ -1,4 +1,2 @@
-﻿@model SkemaSystem.Models.Scheme
-
-<label class="control-label">Fag</label>
-@Html.DropDownList("subject", new SelectList(@Model.SubjectDistBlocks, "Id", "BeatifulString", 50), "- Vælg fag -", new { @class = "form-control" })
+﻿<label class="control-label">Fag</label>
+@Html.DropDownList("subject", new SelectList(@ViewBag.SubjectDistBlocks, "Id", "BeatifulString"), "- Vælg fag -", new { @class = "form-control" })
