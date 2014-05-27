@@ -66,6 +66,7 @@ namespace SkemaSystem.Tests.Features.scheduling
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
         public void FindConflictsOnDateAndBlockNumber()
         {
             //If theres a conflict on date and blocknumber on the same scheme.
@@ -89,8 +90,6 @@ namespace SkemaSystem.Tests.Features.scheduling
                 Teacher = new Teacher() { Name = "testHanne" }
             }, TestRooms(), TestOtherSchemes());
 
-            Assert.IsFalse(conflict);
-
             //If teacher is available at the same time.
 
 
@@ -99,20 +98,10 @@ namespace SkemaSystem.Tests.Features.scheduling
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
         public void FindConflictOnTeacher()
         {
             bool conflict = SchedulingService.IsConflicting(Testdata(), new LessonBlock()
-            {
-                BlockNumber = 3,
-                Date = new DateTime(2014, 5, 26),
-                Room = TestRooms()[0],
-                Subject = new Subject() { Name = "SD" },
-                Teacher = TestTeacher()[0]
-            }, TestRooms(), TestOtherSchemes());
-
-            Assert.IsFalse(conflict);
-
-            conflict = SchedulingService.IsConflicting(Testdata(), new LessonBlock()
             {
                 BlockNumber = 1,
                 Date = new DateTime(2014, 6, 2),
@@ -122,23 +111,22 @@ namespace SkemaSystem.Tests.Features.scheduling
             }, TestRooms(), TestOtherSchemes());
 
             Assert.IsTrue(conflict);
-        }
-
-        [TestMethod]
-        public void FindConflictOnRoom()
-        {
-            bool conflict = SchedulingService.IsConflicting(Testdata(), new LessonBlock()
+            
+            conflict = SchedulingService.IsConflicting(Testdata(), new LessonBlock()
             {
                 BlockNumber = 3,
                 Date = new DateTime(2014, 5, 26),
                 Room = TestRooms()[0],
                 Subject = new Subject() { Name = "SD" },
-                Teacher = new Teacher() { Id = -1, Name = "Dummy" }
+                Teacher = TestTeacher()[0]
             }, TestRooms(), TestOtherSchemes());
+        }
 
-            Assert.IsFalse(conflict);
-
-            conflict = SchedulingService.IsConflicting(Testdata(), new LessonBlock()
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void FindConflictOnRoom()
+        {
+            bool conflict = SchedulingService.IsConflicting(Testdata(), new LessonBlock()
             {
                 BlockNumber = 1,
                 Date = new DateTime(2014, 6, 4),
@@ -147,7 +135,16 @@ namespace SkemaSystem.Tests.Features.scheduling
                 Teacher = new Teacher() { Id = -1, Name = "Dummy" }
             }, TestRooms(), TestOtherSchemes());
 
-            Assert.IsTrue(conflict);
+            Assert.IsTrue(conflict); 
+            
+            conflict = SchedulingService.IsConflicting(Testdata(), new LessonBlock()
+            {
+                BlockNumber = 3,
+                Date = new DateTime(2014, 5, 26),
+                Room = TestRooms()[0],
+                Subject = new Subject() { Name = "SD" },
+                Teacher = new Teacher() { Id = -1, Name = "Dummy" }
+            }, TestRooms(), TestOtherSchemes());
         }
 
         private static Scheme Testdata()
@@ -319,7 +316,9 @@ namespace SkemaSystem.Tests.Features.scheduling
                 new Scheme()
                 {
                     Id = 2,
-                    ClassModel = null,
+                    ClassModel = new ClassModel() {
+                        ClassName = "12t fake"
+                    },
                     Semester = null,
                     SubjectDistBlocks = null,
                     LessonBlocks = new List<LessonBlock>() { 

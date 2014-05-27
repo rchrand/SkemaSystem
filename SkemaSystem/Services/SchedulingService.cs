@@ -100,7 +100,8 @@ namespace SkemaSystem.Services
             if (scheme.LessonBlocks.FirstOrDefault(l => l.Date.Equals(lessonBlock.Date) && l.BlockNumber == lessonBlock.BlockNumber) != null)
             {
                 // block already existing on current scheme
-                return true;
+                throw new Exception("Der ligger allerede en blok på denne plads.");
+                //return true;
             }
 
             // find blocks in all schemes, where date, blocknumber and teacher match with lessonBlock
@@ -109,17 +110,41 @@ namespace SkemaSystem.Services
             // if we found any block, conflict
             if (blocks.Count() > 0)
             {
-                return true;
+                //return true;
+                throw new Exception("Underviseren er ikke ledig på det pågældende tidspunkt. (" + schemes.First(s => s.LessonBlocks.Contains(blocks.First())).ClassModel.ClassName + ")");
             }
 
-            blocks = schemes.SelectMany(s => s.LessonBlocks).Where(l => l.Date.Equals(lessonBlock.Date) && l.BlockNumber.Equals(lessonBlock.BlockNumber) && l.Room.Id.Equals(lessonBlock.Room.Id));
+            /*blocks = schemes.SelectMany(s => s.LessonBlocks).Where(l => l.Date.Equals(lessonBlock.Date) && l.BlockNumber.Equals(lessonBlock.BlockNumber) && l.Room.Id.Equals(lessonBlock.Room.Id));
 
             // if we found any block, conflict
             if (blocks.Count() > 0)
             {
-                return true;
+                //return true;
+                throw new Exception("Lokalet er ikke ledigt på det pågældende tidspunkt.");
+            }*/
+
+            if (!IsRoomAvailable(schemes, lessonBlock, null))
+            {
+                throw new Exception("Lokalet er ikke ledigt på det pågældende tidspunkt.");
             }
             return false;
+        }
+
+        public static bool IsRoomAvailable(IEnumerable<Scheme> schemes, LessonBlock lessonBlock, Scheme ignoreScheme)
+        {
+            IEnumerable<Scheme> _schemes;
+
+            if (ignoreScheme != null)
+            {
+                _schemes = schemes.Where(s => s.Id != ignoreScheme.Id);
+            }
+            else{
+                _schemes = schemes;
+            }
+
+            var blocks = _schemes.SelectMany(s => s.LessonBlocks).Where(l => l.Date.Equals(lessonBlock.Date) && l.BlockNumber.Equals(lessonBlock.BlockNumber) && l.Room.Id.Equals(lessonBlock.Room.Id));
+
+            return blocks.Count() == 0;
         }
     }
 }
