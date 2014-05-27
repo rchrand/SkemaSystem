@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Transactions;
 using System.Web;
 
 namespace SkemaSystem.Services
@@ -145,6 +146,70 @@ namespace SkemaSystem.Services
             var blocks = _schemes.SelectMany(s => s.LessonBlocks).Where(l => l.Date.Equals(lessonBlock.Date) && l.BlockNumber.Equals(lessonBlock.BlockNumber) && l.Room.Id.Equals(lessonBlock.Room.Id));
 
             return blocks.Count() == 0;
+        }
+
+        public static LessonBlock ScheduleLesson(int schemeId, int subjectId, int roomId, DateTime date, int blockNumber, IEnumerable<Scheme> schemes, IEnumerable<Room> rooms)
+        {
+            Scheme scheme = schemes.Single(s => s.Id.Equals(schemeId));
+
+            Room room = rooms.Single(r => r.Id.Equals(roomId));
+
+            SubjectDistBlock sdb = scheme.SubjectDistBlocks.Single(s => s.Id.Equals(subjectId));
+
+            Subject subject = sdb.Subject;
+
+            Teacher teacher = sdb.Teacher;
+
+            LessonBlock lesson = new LessonBlock()
+            {
+                BlockNumber = blockNumber,
+                Date = date,
+                Room = room,
+                Subject = subject,
+                Teacher = teacher
+            };
+
+            bool conflicting = SchedulingService.IsConflicting(scheme, lesson, rooms, schemes); // throws expcetion if conflicting
+
+            scheme.LessonBlocks.Add(lesson);
+
+            return lesson;
+        }
+
+        public static bool DeleteLessons(int schemeId, string lessonIds, IEnumerable<Scheme> schemes)
+        {
+            Scheme scheme = schemes.Single(s => s.Id.Equals(schemeId));
+
+            string[] ids = lessonIds.Split(',');
+
+            scheme.LessonBlocks.RemoveAll(l => ids.Contains(l.Id.ToString()));
+
+            return true;
+        }
+
+        public static bool RelocateLesson(int schemeId, string lessonIds, int roomId, IEnumerable<Scheme> schemes, IEnumerable<Room> rooms)
+        {
+            // TODO check permissions
+            
+            Scheme scheme = schemes.Single(s => s.Id.Equals(schemeId));
+
+            string[] ids = lessonIds.Split(',');
+
+            IEnumerable<LessonBlock> blocks = scheme.LessonBlocks.Where(l => ids.Contains(l.Id.ToString()));
+
+            Room room = rooms.Single(r => r.Id.Equals(roomId));
+
+            foreach (var block in blocks)
+            {
+                block.Room = room;
+
+                if (!SchedulingService.IsRoomAvailable(schemes, block, scheme))
+                {
+                    return false;// Json(new { message = "Lokalet er ikke ledigt på det pågældende tidspunkt." });
+                }
+            }
+
+            return true;
         }
     }
 }

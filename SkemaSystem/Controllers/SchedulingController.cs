@@ -59,7 +59,7 @@ namespace SkemaSystem.Controllers
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, options))
             {
-                Scheme scheme = db.Schemes.Single(s => s.Id.Equals(schemeId));
+                /*Scheme scheme = db.Schemes.Single(s => s.Id.Equals(schemeId));
 
                 Room room = db.Rooms.Single(r => r.Id.Equals(roomId));
 
@@ -91,13 +91,27 @@ namespace SkemaSystem.Controllers
                 scheme.LessonBlocks.Add(lesson);
 
                 db.SaveChanges();
-                scope.Complete();
+                scope.Complete();*/
+
+                try
+                {
+                    lesson = SchedulingService.ScheduleLesson(schemeId, subjectId, roomId, date, blockNumber, db.Schemes, db.Rooms);
+                    
+                    // if no exception thrown
+                    db.SaveChanges();
+                    scope.Complete();
+                }
+                catch (Exception e)
+                {
+                    scope.Dispose();
+                    return Json(new { message = e.Message });
+                }
             }
             return PartialView("_LessonBlockPartial", lesson);
         }
 
         [Route("lesson/delete"), HttpPost]
-        public ActionResult DeleteLesson(int schemeId, string lessonIds)
+        public ActionResult DeleteLessons(int schemeId, string lessonIds)
         {
             // TODO check permissions
 
@@ -109,14 +123,20 @@ namespace SkemaSystem.Controllers
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, options))
             {
-                Scheme scheme = db.Schemes.Single(s => s.Id.Equals(schemeId));
+                /*Scheme scheme = db.Schemes.Single(s => s.Id.Equals(schemeId));
 
                 string[] ids = lessonIds.Split(',');
 
                 scheme.LessonBlocks.RemoveAll(l => ids.Contains(l.Id.ToString()));
 
                 db.SaveChanges();
-                scope.Complete();
+                scope.Complete();*/
+
+                if (SchedulingService.DeleteLessons(schemeId, lessonIds, db.Schemes))
+                {
+                    db.SaveChanges();
+                    scope.Complete();
+                }
             }
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
@@ -124,6 +144,38 @@ namespace SkemaSystem.Controllers
         [Route("lesson/relocate"), HttpPost]
         public ActionResult RelocateLesson(int schemeId, string lessonIds, int roomId)
         {
+            //// TODO check permissions
+
+            //TransactionOptions options = new TransactionOptions
+            //{
+            //    IsolationLevel = System.Transactions.IsolationLevel.RepeatableRead,
+            //    Timeout = TransactionManager.DefaultTimeout
+            //};
+
+            //using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, options))
+            //{
+            //    Scheme scheme = db.Schemes.Single(s => s.Id.Equals(schemeId));
+
+            //    string[] ids = lessonIds.Split(',');
+
+            //    IEnumerable<LessonBlock> blocks = scheme.LessonBlocks.Where(l => ids.Contains(l.Id.ToString()));
+
+            //    Room room = db.Rooms.Single(r => r.Id.Equals(roomId));
+
+            //    foreach (var block in blocks)
+            //    {
+            //        block.Room = room;
+
+            //        if (!SchedulingService.IsRoomAvailable(db.Schemes, block, scheme))
+            //        {
+            //            scope.Dispose();
+            //            return Json(new { message = "Lokalet er ikke ledigt på det pågældende tidspunkt." });
+            //        }
+            //    }
+
+            //    db.SaveChanges();
+            //    scope.Complete();
+            //}
             // TODO check permissions
 
             TransactionOptions options = new TransactionOptions
@@ -134,27 +186,16 @@ namespace SkemaSystem.Controllers
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, options))
             {
-                Scheme scheme = db.Schemes.Single(s => s.Id.Equals(schemeId));
-
-                string[] ids = lessonIds.Split(',');
-
-                IEnumerable<LessonBlock> blocks = scheme.LessonBlocks.Where(l => ids.Contains(l.Id.ToString()));
-
-                Room room = db.Rooms.Single(r => r.Id.Equals(roomId));
-
-                foreach (var block in blocks)
+                if (SchedulingService.RelocateLesson(schemeId, lessonIds, roomId, db.Schemes, db.Rooms))
                 {
-                    block.Room = room;
-
-                    if (!SchedulingService.IsRoomAvailable(db.Schemes, block, scheme))
-                    {
-                        scope.Dispose();
-                        return Json(new { message = "Lokalet er ikke ledigt på det pågældende tidspunkt." });
-                    }
+                    db.SaveChanges();
+                    scope.Complete();
                 }
-
-                db.SaveChanges();
-                scope.Complete();
+                else
+                {
+                    scope.Dispose();
+                    return Json(new { message = "Lokalet er ikke ledigt på det pågældende tidspunkt." });
+                }
             }
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }

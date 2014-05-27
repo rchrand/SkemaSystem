@@ -147,6 +147,71 @@ namespace SkemaSystem.Tests.Features.scheduling
             }, TestRooms(), TestOtherSchemes());
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void CreateLessonBlockWithNoComplications()
+        {
+            List<Scheme> schemes = TestOtherSchemes();
+            List<Room> rooms = TestRooms();
+
+            LessonBlock lessonBlock = SchedulingService.ScheduleLesson(
+                schemes[0].Id,
+                schemes[0].SubjectDistBlocks[0].Subject.Id,
+                rooms[0].Id,
+                new DateTime(2014, 6, 23),
+                0,
+                schemes,
+                rooms);
+
+            Assert.IsNotNull(lessonBlock);
+
+            // fails, throw exception
+            lessonBlock = SchedulingService.ScheduleLesson(
+                schemes[0].Id,
+                schemes[0].SubjectDistBlocks[0].Subject.Id,
+                rooms[0].Id,
+                new DateTime(2014, 6, 20),
+                2,
+                schemes,
+                rooms);
+        }
+
+        [TestMethod]
+        public void DeleteSeveralLessonBlocks()
+        {
+            List<Scheme> schemes = TestOtherSchemes();
+
+            Assert.AreEqual(10, schemes[0].LessonBlocks.Count);
+
+            string lessonIds = "1,2,10,11"; // 11 doesn't exists, but shouldn't conflict
+
+            bool result = SchedulingService.DeleteLessons(schemes[0].Id, lessonIds, schemes);
+
+            Assert.IsTrue(result);
+
+            Assert.AreEqual(7, schemes[0].LessonBlocks.Count);
+        }
+
+        [TestMethod]
+        public void RelocateSeveralLessonBlocks()
+        {
+            List<Scheme> schemes = TestOtherSchemes();
+            List<Room> rooms = TestRooms();
+
+            string lessonIds = "1,2,10,11"; // 11 doesn't exists, but shouldn't conflict
+
+            bool result = SchedulingService.RelocateLesson(schemes[0].Id, lessonIds, rooms[2].Id, schemes, rooms);
+
+            Assert.IsTrue(result);
+
+            // this lesson can't be relocated to room[1], because its in use
+            lessonIds = "1";
+
+            result = SchedulingService.RelocateLesson(schemes[0].Id, lessonIds, rooms[1].Id, schemes, rooms);
+
+            Assert.IsFalse(result);
+        }
+
         private static Scheme Testdata()
         {
             return new Scheme()
@@ -239,14 +304,16 @@ namespace SkemaSystem.Tests.Features.scheduling
                     Id = 1,
                     ClassModel = null,
                     LessonBlocks = new List<LessonBlock>() { 
-                        new LessonBlock(){ 
+                        new LessonBlock(){
+                            Id = 1,
                             BlockNumber = 0,
                             Date = new DateTime(2014, 5, 26),
                             Room = TestRooms()[0],
                             Subject = new Subject(){ Name = "SD"},
                             Teacher = TestTeacher()[0]
                         },
-                        new LessonBlock(){ 
+                        new LessonBlock() {
+                            Id = 2,
                             BlockNumber = 1,
                             Date = new DateTime(2014, 5, 26),
                             Room = TestRooms()[0],
@@ -254,6 +321,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                             Teacher = TestTeacher()[0]
                         },
                         new LessonBlock(){ 
+                            Id = 3,
                             BlockNumber = 0,
                             Date = new DateTime(2014, 5, 27),
                             Room = TestRooms()[0],
@@ -261,6 +329,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                             Teacher = TestTeacher()[0]
                         },
                         new LessonBlock(){ 
+                            Id = 4,
                             BlockNumber = 0,
                             Date = new DateTime(2014, 5, 28),
                             Room = TestRooms()[0],
@@ -268,6 +337,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                             Teacher = TestTeacher()[0]
                         },
                         new LessonBlock(){ 
+                            Id = 5,
                             BlockNumber = 1,
                             Date = new DateTime(2014, 5, 28),
                             Room = TestRooms()[0],
@@ -275,6 +345,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                             Teacher = TestTeacher()[0]
                         },
                         new LessonBlock(){ 
+                            Id = 6,
                             BlockNumber = 0,
                             Date = new DateTime(2014, 5, 29),
                             Room = TestRooms()[0],
@@ -282,6 +353,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                             Teacher = TestTeacher()[0]
                         },
                         new LessonBlock(){ 
+                            Id = 7,
                             BlockNumber = 1,
                             Date = new DateTime(2014, 5, 29),
                             Room = TestRooms()[0],
@@ -289,6 +361,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                             Teacher = TestTeacher()[0]
                         },
                         new LessonBlock(){ 
+                            Id = 8,
                             BlockNumber = 0,
                             Date = new DateTime(2014, 5, 30),
                             Room = TestRooms()[0],
@@ -296,6 +369,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                             Teacher = TestTeacher()[0]
                         },
                         new LessonBlock(){ 
+                            Id = 9,
                             BlockNumber = 1,
                             Date = new DateTime(2014, 5, 30),
                             Room = TestRooms()[0],
@@ -303,6 +377,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                             Teacher = TestTeacher()[0]
                         },
                         new LessonBlock(){ 
+                            Id = 10,
                             BlockNumber = 2,
                             Date = new DateTime(2014, 6, 20),
                             Room = TestRooms()[0],
@@ -311,7 +386,13 @@ namespace SkemaSystem.Tests.Features.scheduling
                         },
                     },
                     Semester = null,
-                    SubjectDistBlocks = null,
+                    SubjectDistBlocks = new List<SubjectDistBlock>() {
+                        new SubjectDistBlock() {
+                            Id = 1,
+                            Subject = new Subject(){ Id = 1, Name = "SD" },
+                            Teacher = TestTeacher()[0] 
+                        }
+                    },
                 },
                 new Scheme()
                 {
@@ -320,7 +401,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                         ClassName = "12t fake"
                     },
                     Semester = null,
-                    SubjectDistBlocks = null,
+                    SubjectDistBlocks = new List<SubjectDistBlock>(),
                     LessonBlocks = new List<LessonBlock>() { 
                         new LessonBlock()
                         {
@@ -393,6 +474,14 @@ namespace SkemaSystem.Tests.Features.scheduling
                             Room = TestRooms()[1],
                             Subject = new Subject() { Name = "SD" },
                             Teacher = TestTeacher()[0]
+                        },
+                        new LessonBlock()
+                        {
+                            BlockNumber = 0,
+                            Date = new DateTime(2014, 5, 26),
+                            Room = TestRooms()[1],
+                            Subject = new Subject() { Name = "SD" },
+                            Teacher = TestTeacher()[1]
                         }
                     }
                 }
@@ -413,7 +502,8 @@ namespace SkemaSystem.Tests.Features.scheduling
             return new List<Room>()
             {
                 new Room(){ Id = 1, RoomName = "A1.12" },
-                new Room(){ Id = 2, RoomName = "A2.13" }
+                new Room(){ Id = 2, RoomName = "A2.13" },
+                new Room(){ Id = 3, RoomName = "A2.14" }
             };
         }
     }
