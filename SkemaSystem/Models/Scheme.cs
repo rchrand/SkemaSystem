@@ -13,7 +13,7 @@ namespace SkemaSystem.Models
         [Key]
         [Required]
         public int Id { get; set; }
-        
+
 
         [Required]
         public virtual ClassModel ClassModel { get; set; }
