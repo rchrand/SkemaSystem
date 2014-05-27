@@ -21,6 +21,10 @@ namespace SkemaSystem.Controllers
     {
         public ActionResult Index()
         {
+            if (!IsTeacher())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
             IEnumerable<SelectListItem> schemes = from s in db.Schemes
                                                   select new SelectListItem { Text = s.ClassModel.ClassName + " " + SqlFunctions.StringConvert((double)s.Semester.Number).Trim() + ". semester", Value = SqlFunctions.StringConvert((double)s.Id).Trim() };
             ViewBag.schemes = schemes;
@@ -41,6 +45,10 @@ namespace SkemaSystem.Controllers
 
         public ActionResult ChangeSubjectDropDown(int scheme)
         {
+            if (!IsTeacher())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
             ViewBag.SubjectDistBlocks = db.Schemes.Single(x => x.Id == scheme).SubjectDistBlocks;
 
             return PartialView("_SubjectDropDown");
@@ -49,6 +57,10 @@ namespace SkemaSystem.Controllers
         [Route("lesson"), HttpPost]
         public ActionResult ScheduleLesson(int schemeId, int subjectId, int roomId, DateTime date, int blockNumber)
         {
+            if (!IsTeacher())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
             LessonBlock lesson;
 
             TransactionOptions options = new TransactionOptions
@@ -59,40 +71,6 @@ namespace SkemaSystem.Controllers
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, options))
             {
-                /*Scheme scheme = db.Schemes.Single(s => s.Id.Equals(schemeId));
-
-                Room room = db.Rooms.Single(r => r.Id.Equals(roomId));
-
-                SubjectDistBlock sdb = scheme.SubjectDistBlocks.Single(s => s.Id.Equals(subjectId));
-
-                Subject subject = sdb.Subject;
-
-                Teacher teacher = sdb.Teacher;
-
-                lesson = new LessonBlock()
-                {
-                    BlockNumber = blockNumber,
-                    Date = date,
-                    Room = room,
-                    Subject = subject,
-                    Teacher = teacher
-                };
-
-                try
-                {
-                    bool conflicting = SchedulingService.IsConflicting(scheme, lesson, db.Rooms, db.Schemes);
-                }
-                catch (Exception e)
-                {
-                    scope.Dispose();
-                    return Json(new { message = e.Message });
-                }
-
-                scheme.LessonBlocks.Add(lesson);
-
-                db.SaveChanges();
-                scope.Complete();*/
-
                 try
                 {
                     lesson = SchedulingService.ScheduleLesson(schemeId, subjectId, roomId, date, blockNumber, db.Schemes, db.Rooms);
@@ -113,6 +91,10 @@ namespace SkemaSystem.Controllers
         [Route("lesson/delete"), HttpPost]
         public ActionResult DeleteLessons(int schemeId, string lessonIds)
         {
+            if (!IsTeacher())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
             // TODO check permissions
 
             TransactionOptions options = new TransactionOptions
@@ -123,15 +105,6 @@ namespace SkemaSystem.Controllers
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, options))
             {
-                /*Scheme scheme = db.Schemes.Single(s => s.Id.Equals(schemeId));
-
-                string[] ids = lessonIds.Split(',');
-
-                scheme.LessonBlocks.RemoveAll(l => ids.Contains(l.Id.ToString()));
-
-                db.SaveChanges();
-                scope.Complete();*/
-
                 if (SchedulingService.DeleteLessons(schemeId, lessonIds, db.Schemes))
                 {
                     db.SaveChanges();
@@ -144,38 +117,10 @@ namespace SkemaSystem.Controllers
         [Route("lesson/relocate"), HttpPost]
         public ActionResult RelocateLesson(int schemeId, string lessonIds, int roomId)
         {
-            //// TODO check permissions
-
-            //TransactionOptions options = new TransactionOptions
-            //{
-            //    IsolationLevel = System.Transactions.IsolationLevel.RepeatableRead,
-            //    Timeout = TransactionManager.DefaultTimeout
-            //};
-
-            //using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, options))
-            //{
-            //    Scheme scheme = db.Schemes.Single(s => s.Id.Equals(schemeId));
-
-            //    string[] ids = lessonIds.Split(',');
-
-            //    IEnumerable<LessonBlock> blocks = scheme.LessonBlocks.Where(l => ids.Contains(l.Id.ToString()));
-
-            //    Room room = db.Rooms.Single(r => r.Id.Equals(roomId));
-
-            //    foreach (var block in blocks)
-            //    {
-            //        block.Room = room;
-
-            //        if (!SchedulingService.IsRoomAvailable(db.Schemes, block, scheme))
-            //        {
-            //            scope.Dispose();
-            //            return Json(new { message = "Lokalet er ikke ledigt på det pågældende tidspunkt." });
-            //        }
-            //    }
-
-            //    db.SaveChanges();
-            //    scope.Complete();
-            //}
+            if (!IsTeacher())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
             // TODO check permissions
 
             TransactionOptions options = new TransactionOptions
@@ -202,6 +147,10 @@ namespace SkemaSystem.Controllers
 
         public ActionResult ChangeScheme(int scheme)
         {
+            if (!IsTeacher())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
             Scheme _scheme = db.Schemes.Single(x => x.Id == scheme);
             
             DateTime startDate = new DateTime(2014, 5, 25);
