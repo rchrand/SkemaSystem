@@ -12,8 +12,8 @@
                         if (s.ClassModel != null)
                         {
                         <tr>
-                            <td width="30%"><label for="">@s.ClassModel.ClassName</label></td>
-                            <td><input type="checkbox" name="conflictScheme" value="@s.Id" /></td>
+                            <td width="30%"><label for="@(s.Id)ConflictScheme">@s.ClassModel.ClassName</label></td>
+                            <td><input type="checkbox" name="conflictScheme" id="@(s.Id)ConflictScheme" value="@s.Id" /></td>
                         </tr>   
                         }
                     }
@@ -30,8 +30,8 @@
                         if (s.ClassModel == null)
                         {
                             <tr>
-                                <td><label for="">@s.Name</label></td>
-                                <td><input type="checkbox" /></td>
+                                <td><label for="@(s.Id)ConflictScheme">@s.Name</label></td>
+                                <td><input type="checkbox" id="@(s.Id)ConflictScheme" name="conflictScheme" value="@s.Id" /></td>
                             </tr>
                         }
                     }

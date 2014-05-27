@@ -175,6 +175,7 @@
     <Compile Include="Helpers\SimpleCheckbox.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ClassModel.cs" />
+    <Compile Include="Models\ConflictScheme.cs" />
     <Compile Include="Models\Education.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -307,6 +308,9 @@
     <Content Include="Views\OptionalSubjects\Create.cshtml" />
     <Content Include="Views\OptionalSubjects\_ConflictSchemes.cshtml" />
     <Content Include="Views\OptionalSubjects\_OptionalSubjectsList.cshtml" />
+    <Content Include="Views\OptionalSubjects\_SchemeSubjectDistribution.cshtml" />
+    <Content Include="Views\OptionalSubjects\SubjectDistribution.cshtml" />
+    <Content Include="Views\OptionalSubjects\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

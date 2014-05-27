@@ -6,6 +6,7 @@ using System.Data.Objects;
 using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -46,12 +47,11 @@ namespace SkemaSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(FormCollection form)//string semesterId, string name, string[] subjectId, string[] subjectBlockCount, string[] subjectUse)
+        public ActionResult Create(FormCollection form)
         {
             if (string.IsNullOrEmpty(form["semester"]) || string.IsNullOrEmpty(form["name"]) || string.IsNullOrEmpty(form["year"]))
             {
                 // If any of the required fields are empty!
-
             }
 
             string[] subjectBlocksCountArray = form["subjectBlockCount"].Split(',');
@@ -101,10 +101,17 @@ namespace SkemaSystem.Controllers
 
             // random scheme to get the startdate and enddate of this particular semester!
             // If the randomScheme is empty, then we aren't able to start an optionalSubject! Error message has to be shown!
-            Scheme randomScheme = db.Schemes.Where(x => x.YearString.Equals(year)).Where(x => x.Semester.Id == semester.Id).SingleOrDefault();
+            Scheme randomScheme = db.Schemes.Where(x => x.YearString.Equals(year) && x.Semester.Id == semester.Id).FirstOrDefault();
             if (randomScheme != null)
             {
-                Scheme newScheme = new Scheme { Name = name, OptionalSubjectBlockList = optionalSubjectBlocks, Semester = semester, ConflictSchemes = conflictSchemes, SemesterStart = randomScheme.SemesterStart, SemesterFinish = randomScheme.SemesterFinish};
+                //List<ConflictScheme> cSchemeList = new List<ConflictScheme>();
+
+                    //cSchemeList.Add(new ConflictScheme { scheme = conflictSchemes });
+
+                    Scheme newScheme = new Scheme { Name = name, OptionalSubjectBlockList = optionalSubjectBlocks, ConflictSchemes = conflictSchemes, Semester = semester, SemesterStart = randomScheme.SemesterStart, SemesterFinish = randomScheme.SemesterFinish, YearString = "" };
+
+                //List<Scheme> temp = new List<Scheme>();
+                //temp.Add(newScheme);
 
                 foreach (Scheme otherScheme in conflictSchemes)
                 {
@@ -154,6 +161,95 @@ namespace SkemaSystem.Controllers
                                select s;
 
             return PartialView("_OptionalSubjectsList");
+        }
+       
+        public ActionResult Delete(int id)
+        {
+            var scheme = (from s in db.Schemes
+                          where s.Id == id
+                          select s).FirstOrDefault();
+
+            if (scheme != null)
+            {
+                scheme.OptionalSubjectBlockList.Clear();
+                scheme.SubjectDistBlocks.Clear();
+                foreach (var item in scheme.ConflictSchemes)
+                {
+                    item.ConflictSchemes.Remove(scheme);
+                }
+                scheme.ConflictSchemes = null;
+                scheme.Semester = null;
+                db.Schemes.Remove(scheme);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+
+            Scheme scheme = db.Schemes.Find(id);
+            if (scheme == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.Schemes = from s in db.Schemes
+                          where s.Semester.Id == scheme.Semester.Id && s.YearString.Equals(scheme.YearString)
+                          select s;
+
+            ViewBag.Subjects = from s in db.Subjects
+                               where s.OptionalSubject
+                               select s;
+
+            return View(scheme);
+        }
+
+        public ActionResult SubjectDistribution(int id)
+        {
+            Scheme scheme = db.Schemes.Single(x => x.Id == id);
+
+            //List<Teacher> teachers = (from t in db.Teachers
+            //                          where t.Educations.Contains(from e in db.Educations where e.Semesters.Contains(scheme.Semester) select e)
+            //                          select t).ToList();
+            Education edu = db.Educations.Where(e=> e.Semesters.Any(s=> s.Id == scheme.Semester.Id)).FirstOrDefault();
+            ViewBag.Teachers = db.Teachers.Where(x => x.Educations.Any(e => e.Id == edu.Id)).ToList();
+
+            //ViewBag.Teachers = db.Teachers;//.Where(t => t.Educations.Equals(db.Educations.Where(x => x.Semesters.Contains(scheme.Semester)).FirstOrDefault()));
+
+            return View(scheme);
+        }
+
+        [HttpPost]
+        public PartialViewResult AddSubjectDistBlock(int scheme, int add_subject, int add_teacher, int add_blockscount)
+        {
+            Scheme theScheme = db.Schemes.Single(x => x.Id == scheme);
+
+            Education edu = db.Educations.Where(e => e.Semesters.Any(s => s.Id == theScheme.Semester.Id)).FirstOrDefault();
+            ViewBag.Teachers = db.Teachers.Where(x => x.Educations.Any(e => e.Id == edu.Id)).ToList();
+
+            if (add_blockscount > 0 && add_blockscount < 100 && theScheme.AddLessonBlock(db.Teachers.SingleOrDefault(x => x.Id == add_teacher), db.Subjects.SingleOrDefault(x => x.Id == add_subject), add_blockscount))
+            {
+                db.SaveChanges();
+            }
+            else
+            {
+                // Didn't succeed!
+                ViewBag.add_subject = add_subject;
+                ViewBag.add_teacher = add_teacher;
+                ViewBag.add_blockscount = add_blockscount;
+                if (add_blockscount < 0 || add_blockscount > 100)
+                {
+                    ViewBag.Error = "- Antal blokke skal være mellem 0 og 100.";
+                }
+                else
+                {
+                    ViewBag.Error = "- Der er ikke nok ledige blokke på semestret til, at udføre denne handling.";
+                }
+            }
+            return PartialView("_SchemeSubjectDistribution", theScheme);
         }
 	}
 }

@@ -1,0 +1,19 @@
+﻿@model SkemaSystem.Models.Scheme
+
+@{
+    ViewBag.Title = "SubjectDistribution";
+}
+
+@section Subheader {
+    @Html.Partial("_AdminTabsPartial")
+}
+
+<h1>Fagfordeling for @Model.Name</h1>
+<div class="row">
+    <div class="col-sm-7">
+        <div id="subject_dist">
+            @Html.Partial("_SchemeSubjectDistribution", @Model)
+        </div>
+    </div>
+</div>
+

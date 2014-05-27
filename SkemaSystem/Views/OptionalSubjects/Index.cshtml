@@ -6,20 +6,30 @@
 
 <h2>Administrer valgfag</h2>
 
+<p>
+    @Html.ActionLink("Opret nyt valgfag", "Create")
+</p>
+
 <table class="table">
     <tr>
         <th>Valgfags navn</th>
         <th>Semester/årgang</th>
+        <th>Handlinger</th>
     </tr>
 
     @foreach (var scheme in Model)
-    {
+    {       
         <tr>
             <td>
                 @scheme.Name
             </td>
             <td>
                 @(scheme.Semester.Number). semester / @scheme.YearString
+            </td>
+            <td>
+                @Html.ActionLink("Fagfordeling", "SubjectDistribution", new { id = scheme.Id })
+                @Html.ActionLink("Ændre", "Edit", new { id = scheme.Id })
+                @Html.ActionLink("Slet", "Delete", new { id = scheme.Id} , new { onclick = "return confirm('Er du sikker på du vil slette "+scheme.Name+"?');" })
             </td>
         </tr>
     }

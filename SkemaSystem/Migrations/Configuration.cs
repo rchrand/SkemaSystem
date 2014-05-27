@@ -30,7 +30,7 @@ namespace SkemaSystem.Migrations
             ClassModel c1 = new ClassModel { Id = 1, ClassName = "12t" };
             ClassModel c2 = new ClassModel { Id = 2, ClassName = "12s" };
 
-            Subject su1 = new Subject { Id = 1, Name = "SK", Education = e1, OptionalSubject=false };
+            Subject su1 = new Subject { Id = 1, Name = "SK", Education = e1, OptionalSubject = false };
             Subject su2 = new Subject { Id = 2, Name = "SD", Education = e1, OptionalSubject = false };
             Subject su3 = new Subject { Id = 3, Name = "ITO", Education = e1, OptionalSubject = false };
 
