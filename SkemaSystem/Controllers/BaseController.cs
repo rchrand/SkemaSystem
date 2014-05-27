@@ -1,4 +1,5 @@
 ﻿using SkemaSystem.Models;
+using SkemaSystem.Models.Enum;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -11,6 +12,7 @@ namespace SkemaSystem.Controllers
     public class BaseController : Controller
     {
         public SkeamSystemDb db { get; set; }
+
         public IEnumerable<Education> _educationModel;
 
         public BaseController()
@@ -21,6 +23,19 @@ namespace SkemaSystem.Controllers
                 _educationModel = db.Educations.ToList();
                 ViewBag.EducationModel = _educationModel;
             }
+        }
+
+        protected bool IsRole(UserRoles role)
+        {
+            var user = User.Identity.Name;
+            var username = db.Teachers.SingleOrDefault(t => t.Username == user && t.Role == role);
+
+            if (username != null)
+            {
+                return true;
+            }
+
+            return false;
         }
 	}
 }

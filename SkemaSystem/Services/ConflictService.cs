@@ -7,5 +7,6 @@ namespace SkemaSystem.Services
 {
     public class ConflictService
     {
+        
     }
 }

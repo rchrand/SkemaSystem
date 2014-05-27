@@ -12,6 +12,16 @@ namespace SkemaSystem.Controllers
     [RouteArea("Admin", AreaPrefix="admin")]
     public class AccountController : BaseController
     {
+        /*
+         * ONLY FOR DEMO PURPOSE
+         */
+
+        [Route("")]
+        public ActionResult Demo()
+        {
+            return View();// Content("<a href='teachers'>Lærere</a><br /><a href='classes'>Klasser</a><br />");
+        }
+
         [HttpGet]
         [Route("login")]
         public ActionResult Login()
@@ -23,10 +33,10 @@ namespace SkemaSystem.Controllers
         [Route("login")]
         public ActionResult Login(Teacher model)
         {
-            if (model.IsValid(model.UserName, model.Password))
+            if (model.IsValid(model.Username, model.Password))
             {
-                FormsAuthentication.SetAuthCookie(model.UserName, true);
-                return Redirect("/");
+                FormsAuthentication.SetAuthCookie(model.Username, true);
+                return RedirectToAction("Demo");
             }
             else
             {
@@ -52,20 +62,6 @@ namespace SkemaSystem.Controllers
             }
 
             return Content("Teacher,");
-        }
-
-        private bool IsRole(UserRoles role)
-        {
-            var db = new SkeamSystemDb();
-            var user = User.Identity.Name;
-            var userName = db.Teachers.SingleOrDefault(t => t.UserName == user && t.Role == role);
-
-            if (userName != null)
-            {
-                return true;
-            }
-            
-            return false;
         }
     }
 }

@@ -1,33 +1,85 @@
 ﻿@model SkemaSystem.Models.Education
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detaljer";
 }
 
-<h2>Details</h2>
+@section Subheader {
+    @Html.Partial("_AdminTabsPartial")
+}
 
-<div class="row">
-    <div class="col-sm-8">Table</div>
-    <div class="col-sm-4">
-        <div class="box">Box</div>
-    </div>
-</div>
+<h2>Detaljer</h2>
 
 <div>
-    <h4>Education</h4>
+    <h4>@Html.DisplayFor(model => model.Name)</h4>
 	<hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+    <div class="row">
+        <div class="col-sm-3" style="font-weight: bold">
+            Uddannelsens navn:
+        </div>
+        <div class="col-sm-9">
+            @Model.Name
+        </div>
+    </div>
+    <hr />
+    <br />
+    <div class="row">
+        <div class="col-sm-3" style="font-weight: bold">
+            Uddannelsens tilknyttede Lærerer:
+        </div>
+        <div class="col-sm-9">
+            @foreach (var item in Model.Teachers)
+            {
+                @item.Name <br/>
+            }
+            
+        </div>
+    </div>
+    <hr />
+    <br />
+    <div class="row">
+        <div class="col-sm-3" style="font-weight: bold">
+            Uddannelsens tilknyttede Lokaler:
+        </div>
+        <div class="col-sm-9">
+            @foreach (var item in Model.Rooms)
+            {
+                @item.RoomName<br />
+            }
 
-    </dl>
+        </div>
+    </div>
+    <hr />
+    <br />
+    <div class="row">
+        <div class="col-sm-3" style="font-weight: bold">
+            Uddannelsens tilknyttede Klasser:
+        </div>
+        <div class="col-sm-9">
+            @foreach (var item in Model.Schemes)
+            {
+                @item.ClassModel.ClassName<br />
+            }
+
+        </div>
+    </div>
+    <hr />
+    <br />
+    <div class="row">
+        <div class="col-sm-3" style="font-weight: bold">
+            Antal semestre på uddannelsen:
+        </div>
+        <div class="col-sm-9">
+            @Model.NumberOfSemesters
+        </div>
+    </div>
+    <hr />
 </div>
+
+<br />
+<br />
 <p>
-    @Html.ActionLink("Edit", "Edit", new { education = Model }) |
+    @Html.ActionLink("Opdatér uddannelsen", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

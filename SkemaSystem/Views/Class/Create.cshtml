@@ -1,41 +1,49 @@
-﻿@model SkemaSystem.Models.ClassModel
+﻿@model SkemaSystem.Models.ViewModels.ClassViewModel
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Opret ny klasse";
 }
 
-<h2>Create</h2>
+@section Subheader {
+    @Html.Partial("_AdminTabsPartial")
+}
 
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>ClassModel</h4>
-        <hr />
         @Html.ValidationSummary(true)
-
         <div class="form-group">
-            @Html.LabelFor(model => model.ClassName, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ClassName)
-                @Html.ValidationMessageFor(model => model.ClassName)
+            <div class="col-sm-2">
+                @Html.LabelFor(model => model.ClassModel.ClassName,"Klassenavn:",htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-sm-4">
+                @Html.TextBoxFor(model => model.ClassModel.ClassName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ClassModel.ClassName)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                @Html.LabelFor(model => model.Education, "Uddannelse:", htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-sm-4">
+                @Html.DropDownListFor(model => model.Education, new SelectList(@ViewBag.Educations, "Value", "Text"), "- Vælg uddannelse -", new { @class = "form-control" })
+                @*@Html.DropDownList("Education", new SelectList(@ViewBag.Educations, "Value", "Text"), "- Vælg uddannelse -", new { @class = "form-control" })*@
+                @Html.ValidationMessageFor(model => model.Education)
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+            <div class="col-sm-offset-2 col-sm-4">
+                <input type="submit" value="Opret" class="btn btn-primary" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Tilbage til klasseoversigten", "Index")
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

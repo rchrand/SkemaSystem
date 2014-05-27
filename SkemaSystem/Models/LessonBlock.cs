@@ -14,9 +14,11 @@ namespace SkemaSystem.Models
         [Required]
         public virtual Subject Subject { get; set; }
 
+        //Only the date!
         [Required]
         public DateTime Date { get; set; }
 
+        //The block number of the day! (so, 8:30-10:00 = block 1, 10:30-12:00 = block 2
         [Required]
         public int BlockNumber { get; set; }
 

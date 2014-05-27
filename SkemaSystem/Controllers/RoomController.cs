@@ -10,9 +10,12 @@ using SkemaSystem.Models;
 
 namespace SkemaSystem.Controllers
 {
-    public class RoomController : Controller
+    [RouteArea("Admin", AreaPrefix="admin")]
+    [RoutePrefix("rooms")]
+    [Route("{action=index}/{id?}")]
+    public class RoomController : BaseController
     {
-        private SkeamSystemDb db = new SkeamSystemDb();
+        //private SkeamSystemDb db = new SkeamSystemDb();
 
         // GET: /Room/
         public ActionResult Index()
@@ -21,6 +24,7 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Room/Details/5
+        [Route("details/{id?}")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,6 +40,7 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Room/Create
+        [Route("create")]
         public ActionResult Create()
         {
             return View();
@@ -44,8 +49,8 @@ namespace SkemaSystem.Controllers
         // POST: /Room/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("create"), HttpPost]
         public ActionResult Create([Bind(Include="ID,RoomName")] Room room)
         {
             if (ModelState.IsValid)
@@ -59,6 +64,7 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Room/Edit/5
+        [Route("edit/{id?}")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -78,6 +84,7 @@ namespace SkemaSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("edit/{id?}")]
         public ActionResult Edit([Bind(Include="ID,RoomName")] Room room)
         {
             if (ModelState.IsValid)
@@ -90,6 +97,7 @@ namespace SkemaSystem.Controllers
         }
 
         // GET: /Room/Delete/5
+        [Route("delete/{id?}")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -107,6 +115,7 @@ namespace SkemaSystem.Controllers
         // POST: /Room/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("delete/{id?}")]
         public ActionResult DeleteConfirmed(int id)
         {
             Room room = db.Rooms.Find(id);
