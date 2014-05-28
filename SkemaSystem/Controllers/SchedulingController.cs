@@ -200,10 +200,10 @@ namespace SkemaSystem.Controllers
             //******************************
             // Gets the lessonblocks which may conflict
             List<LessonBlock> conflictLessons = new List<LessonBlock>();
-            foreach (var item in mainScheme.######ConflictSchemes#####)
+            /*foreach (var item in mainScheme.######ConflictSchemes#####)
 	        {
 		        conflictLessons.AddRange(item);
-	        }
+	        }*/
             //******************************
 
             ConflictService service = new ConflictService();
@@ -214,6 +214,8 @@ namespace SkemaSystem.Controllers
             // Do something with the availableDates
 
             //******************************
+
+            return null;
         }
 
         public ActionResult SetLessonBehindOwnLesson(int[] blockIds)
@@ -245,6 +247,8 @@ namespace SkemaSystem.Controllers
             // Do something with the availableDates
 
             //******************************
+
+            return null;
         }
 
         public ActionResult SwitchWithOtherTeacher(int[] blockIds, string choosenTeacherId)
@@ -282,6 +286,8 @@ namespace SkemaSystem.Controllers
             // Do something with the availableDates
 
             //******************************
+
+            return null;
         }
 	}
 }
