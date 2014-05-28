@@ -53,6 +53,10 @@ namespace SkemaSystem.Controllers
 
             ViewBag.SubjectDistBlocks = new List<SubjectDistBlock>();
 
+            IEnumerable<SelectListItem> teachers = from e in db.Teachers
+                                                   select new SelectListItem { Text = e.Name, Value = SqlFunctions.StringConvert((double)e.Id).Trim() };
+            ViewBag.teachers = teachers;
+
             return View();
         }
 
@@ -183,7 +187,7 @@ namespace SkemaSystem.Controllers
             return PartialView("_SchemePartial", model);
         }
 
-        public ActionResult FindAHoleInScheme(int[] blockIds)
+        public ActionResult FindAHoleInScheme(string blockIds)
         {
             //******************************
             // Get the lessonblocks of the id's
@@ -218,7 +222,7 @@ namespace SkemaSystem.Controllers
             return null;
         }
 
-        public ActionResult SetLessonBehindOwnLesson(int[] blockIds)
+        public ActionResult SetLessonBehindOwnLesson(string blockIds)
         {
             //******************************
             // Get the lessonblocks of the id's
@@ -251,7 +255,7 @@ namespace SkemaSystem.Controllers
             return null;
         }
 
-        public ActionResult SwitchWithOtherTeacher(int[] blockIds, string choosenTeacherId)
+        public ActionResult SwitchWithOtherTeacher(string blockIds, string choosenTeacherId)
         {
             //******************************
             // Get the lessonblocks of the id's

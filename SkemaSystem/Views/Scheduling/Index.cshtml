@@ -24,6 +24,7 @@
                     <option value="">- Vælg handling -</option>
                     <option value="delete">Slet markerede</option>
                     <option value="move">Skift lokale for markerede</option>
+                    <option value="reschedule">Flyt markerede blokke</option>
                 </select>
             </form>
         </div>
@@ -95,10 +96,20 @@
 
             $(document).on('click', 'form#room-relocator input[type="button"]', function () {
                 $('#overlay').fadeOut('fast');
-                $('#modal').fadeOut('fast');
+                $('#relocate').fadeOut('fast');
 
                 var form = $(this).parents('form:first');
                 form.unbind('submit');
+            });
+
+            $(document).on('click', '#reschedule form input[type="button"]', function () {
+                $('#overlay').fadeOut('fast');
+                $('#reschedule').fadeOut('fast');
+
+                var form = $(this).parents('form:first');
+                form.unbind('submit');
+
+                unbindReschedule();
             });
         });
 
@@ -133,7 +144,7 @@
                 form.find('select option:first').prop('selected', true);
 
                 $('#overlay').fadeToggle('fast');
-                $('#modal').fadeToggle('fast');
+                $('#relocate').fadeToggle('fast');
 
                 $('form#room-relocator').bind('submit', function () {
                     $.ajax({
@@ -152,7 +163,7 @@
                                     $(element).children('.scheme-roomname').text(room);
                                 });
                                 $('#overlay').fadeOut('fast');
-                                $('#modal').fadeOut('fast');
+                                $('#relocate').fadeOut('fast');
                                 form.unbind('submit');
 
                                 cells.removeClass('selected');
@@ -161,9 +172,52 @@
                     });
                     return false;
                 });
+            } else if (action == "reschedule") {
+                // TODO if muliple cells chosen, they must be in row
+
+                var form = $('#reschedule form');
+
+                form.find('select option:first').prop('selected', true);
+
+                $('#overlay').fadeToggle('fast');
+                $('#reschedule').fadeToggle('fast');
+
+                var button = form.find('input[type="submit"]');
+
+                form.find('select#reschedule-method').change(function () {
+                    var method = $(this).children('option:selected').val();
+
+                    if (method == "teacher") {
+                        $('#reschedule-teacher option:first').prop('selected', true);
+                        $('#reschedule-teacher').show();
+                        button.prop('disabled', true);
+
+                        $('#reschedule-teacher').find('select').change(function () {
+                            var teacher = $(this).children('option:selected').val();
+
+                            button.prop('disabled', teacher == '');
+                        });
+                    } else if (method == '') {
+                        $('#reschedule-teacher').hide();
+                        button.prop('disabled', true);
+                    } else {
+                        $('#reschedule-teacher').hide();
+                        button.prop('disabled', false);
+                    }
+                });
+
+                $(form).bind('submit', function () {
+                    return false;
+                });
             }
 
             $('#bulk-selector select option:first').prop('selected', true);
+        }
+
+        function unbindReschedule() {
+            var form = $('#reschedule form');
+            form.find('select#reschedule-method').unbind('change');
+            form.find('#reschedule-teacher select').unbind('change');
         }
     </script>
 }
@@ -173,7 +227,7 @@
 </div>
 
 <div id="overlay"></div>
-<div id="modal">
+<div id="relocate" class="modal">
     <form class="form-horizontal" id="room-relocator">
         <div class="form-group">
             <label class="control-label col-md-2">Flyt til:</label>
@@ -185,6 +239,44 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Flyt" class="btn btn-primary" />
+                <input type="button" value="Annuller" class="btn btn-default" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="reschedule" class="modal">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-md-3">Metode:</label>
+            <div class="col-md-9">
+                <select id="reschedule-method" class="form-control">
+                    <option value="">- Vælg metode -</option>
+                    <option value="hole">Find hul i skema</option>
+                    <option value="behind">Flyt i forlængelse af egne timer</option>
+                    <option value="teacher">Byt med lærer</option>
+                </select>
+            </div>
+        </div>
+        <div id="reschedule-teacher" class="form-group" style="display:none;">
+            <label class="control-label col-md-3">Byt med:</label>
+            <div class="col-md-9">
+                @Html.DropDownList("reschedule-teacher-select", new SelectList(ViewBag.teachers, "Value", "Text"), "- Vælg lærer -", new { @class = "form-control" })
+                @*<select class="form-control">
+                    <option>- Vælg lærer -</option>
+                    <option value="hole">Find hul i skema</option>
+                    <option value="behind">Flyt i forlængelse af egne timer</option>
+                    <option value="teacher">Byt med lærer</option>
+                </select>*@
+            </div>
+        </div>
+
+        <div id="reschedule-results"></div>
+        @*@Html.Partial("_RescheduleResults")*@
+
+        <div class="form-group">
+            <div class="col-md-offset-3 col-md-9">
+                <input type="submit" value="Flyt" class="btn btn-primary" disabled="disabled" />
                 <input type="button" value="Annuller" class="btn btn-default" />
             </div>
         </div>
