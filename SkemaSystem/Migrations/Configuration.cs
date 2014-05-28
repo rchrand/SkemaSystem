@@ -116,6 +116,253 @@ namespace SkemaSystem.Migrations
                 r => r.Id,
                 r1, r2, r3
             );
+
+            //Testdata for TeacherSwitch
+            ClassModel model1 = new ClassModel { Id = 100, Education = e1, ClassName = "Main Scheme" };
+            ClassModel model2 = new ClassModel { Id = 101, Education = e1, ClassName = "Conflict Scheme" };
+
+            context.Classes.AddOrUpdate(
+                x => x.Id,
+                model1, model2
+            );
+
+            LessonBlock lb1_1 = new LessonBlock { Id = 1, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 0, Subject = su1, Room = r3 };
+            LessonBlock lb1_2 = new LessonBlock { Id = 2, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 1, Subject = su1, Room = r3 };
+
+            LessonBlock lb2_1 = new LessonBlock { Id = 3, Teacher = t5, Date = new DateTime(2014, 5, 27), BlockNumber = 0, Subject = su2, Room = r3 };
+            LessonBlock lb2_2 = new LessonBlock { Id = 4, Teacher = t5, Date = new DateTime(2014, 5, 27), BlockNumber = 1, Subject = su2, Room = r3 };
+
+            LessonBlock lb3_1 = new LessonBlock { Id = 5, Teacher = t5, Date = new DateTime(2014, 5, 28), BlockNumber = 0, Subject = su2, Room = r3 };
+            LessonBlock lb3_2 = new LessonBlock { Id = 6, Teacher = t5, Date = new DateTime(2014, 5, 28), BlockNumber = 1, Subject = su2, Room = r3 };
+            LessonBlock lb3_3 = new LessonBlock { Id = 7, Teacher = t4, Date = new DateTime(2014, 5, 28), BlockNumber = 2, Subject = su1, Room = r3 };
+
+            LessonBlock lb4_1 = new LessonBlock { Id = 8, Teacher = t4, Date = new DateTime(2014, 5, 29), BlockNumber = 0, Subject = su1, Room = r3 };
+            LessonBlock lb4_2 = new LessonBlock { Id = 9, Teacher = t5, Date = new DateTime(2014, 5, 29), BlockNumber = 1, Subject = su2, Room = r3 };
+            LessonBlock lb4_3 = new LessonBlock { Id = 10, Teacher = t5, Date = new DateTime(2014, 5, 29), BlockNumber = 2, Subject = su2, Room = r3 };
+            LessonBlock lb4_4 = new LessonBlock { Id = 11, Teacher = t5, Date = new DateTime(2014, 5, 29), BlockNumber = 3, Subject = su2, Room = r3 };
+
+            LessonBlock lb5_1 = new LessonBlock { Id = 12, Teacher = t5, Date = new DateTime(2014, 5, 30), BlockNumber = 0, Subject = su2, Room = r3 };
+            LessonBlock lb5_2 = new LessonBlock { Id = 13, Teacher = t5, Date = new DateTime(2014, 5, 30), BlockNumber = 1, Subject = su2, Room = r3 };
+
+            LessonBlock lb6_1 = new LessonBlock { Id = 14, Teacher = t5, Date = new DateTime(2014, 6, 2), BlockNumber = 0, Subject = su2, Room = r3 };
+            LessonBlock lb6_2 = new LessonBlock { Id = 15, Teacher = t5, Date = new DateTime(2014, 6, 2), BlockNumber = 1, Subject = su2, Room = r3 };
+            LessonBlock lb6_3 = new LessonBlock { Id = 16, Teacher = t5, Date = new DateTime(2014, 6, 2), BlockNumber = 2, Subject = su2, Room = r3 };
+
+            LessonBlock lb7_1 = new LessonBlock { Id = 17, Teacher = t5, Date = new DateTime(2014, 6, 3), BlockNumber = 0, Subject = su2, Room = r3 };
+            LessonBlock lb7_2 = new LessonBlock { Id = 18, Teacher = t5, Date = new DateTime(2014, 6, 3), BlockNumber = 1, Subject = su2, Room = r3 };
+
+            List<LessonBlock> list = new List<LessonBlock> { 
+                lb1_1, lb1_2,
+                lb2_1, lb2_2,
+                lb3_1, lb3_2, lb3_3,
+                lb4_1, lb4_2, lb4_3, lb4_4,
+                lb5_1, lb5_2, 
+                lb6_1, lb6_2, lb6_3,
+                lb7_1, lb7_2
+            };
+
+            LessonBlock lb_1_1 = new LessonBlock { Id = 19, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 0, Subject = su1, Room = r2 };
+
+            LessonBlock lb_3_2 = new LessonBlock { Id = 20, Teacher = t4, Date = new DateTime(2014, 5, 28), BlockNumber = 1, Subject = su1, Room = r3 };
+            LessonBlock lb_3_3 = new LessonBlock { Id = 21, Teacher = t4, Date = new DateTime(2014, 5, 28), BlockNumber = 2, Subject = su1, Room = r3 };
+
+
+
+            List<LessonBlock> listConflict = new List<LessonBlock>
+            {
+                lb_1_1,
+                lb_3_2, lb_3_3
+            };
+
+            context.LessonBlocks.AddOrUpdate(
+                x => x.Id,
+                lb1_1, lb1_2,
+                lb2_1, lb2_2,
+                lb3_1, lb3_2, lb3_3,
+                lb4_1, lb4_2, lb4_3, lb4_4,
+                lb5_1, lb5_2, 
+                lb6_1, lb6_2, lb6_3,
+                lb7_1, lb7_2,
+
+                lb_1_1,
+                lb_3_2, lb_3_3
+            );
+
+            Scheme mainScheme = new Scheme { Semester = s1, Id = 100, ClassModel = model1, LessonBlocks = list, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 4) };
+            Scheme conflictScheme = new Scheme { Semester = s1, Id = 101, ClassModel = model2, LessonBlocks = listConflict, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 4) };
+
+            context.Schemes.AddOrUpdate(
+                x => x.Id,
+                mainScheme, conflictScheme
+            );
+
+
+            //Testdata for set lessen behind own lessonblock
+            //ClassModel model1 = new ClassModel { Id = 100, Education = e1, ClassName = "Main Scheme" };
+            //ClassModel model2 = new ClassModel { Id = 101, Education = e1, ClassName = "Conflict Scheme" };
+
+            //context.Classes.AddOrUpdate(
+            //    x => x.Id,
+            //    model1, model2
+            //);
+
+            //LessonBlock lb1_1 = new LessonBlock { Id = 1, Teacher = t4, Date = new DateTime(2014, 5, 25), BlockNumber = 0, Subject = su1, Room = r3 };
+            //LessonBlock lb1_2 = new LessonBlock { Id = 2, Teacher = t4, Date = new DateTime(2014, 5, 25), BlockNumber = 1, Subject = su1, Room = r3 };
+            //LessonBlock lb1_3 = new LessonBlock { Id = 3, Teacher = t4, Date = new DateTime(2014, 5, 25), BlockNumber = 2, Subject = su1, Room = r3 };
+
+            //LessonBlock lb2_1 = new LessonBlock { Id = 4, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 0, Subject = su1, Room = r3 };
+
+            //LessonBlock lb3_1 = new LessonBlock { Id = 5, Teacher = t4, Date = new DateTime(2014, 5, 27), BlockNumber = 0, Subject = su1, Room = r3 };
+            //LessonBlock lb3_2 = new LessonBlock { Id = 6, Teacher = t5, Date = new DateTime(2014, 5, 27), BlockNumber = 1, Subject = su2, Room = r3 };
+
+            //LessonBlock lb4_1 = new LessonBlock { Id = 7, Teacher = t5, Date = new DateTime(2014, 5, 28), BlockNumber = 0, Subject = su2, Room = r3 };
+            //LessonBlock lb4_2 = new LessonBlock { Id = 8, Teacher = t5, Date = new DateTime(2014, 5, 28), BlockNumber = 1, Subject = su2, Room = r3 };
+            //LessonBlock lb4_3 = new LessonBlock { Id = 9, Teacher = t5, Date = new DateTime(2014, 5, 28), BlockNumber = 2, Subject = su2, Room = r3 };
+
+            //LessonBlock lb5_1 = new LessonBlock { Id = 10, Teacher = t4, Date = new DateTime(2014, 5, 29), BlockNumber = 0, Subject = su1, Room = r3 };
+            //LessonBlock lb5_2 = new LessonBlock { Id = 11, Teacher = t5, Date = new DateTime(2014, 5, 29), BlockNumber = 1, Subject = su2, Room = r3 };
+            //LessonBlock lb5_3 = new LessonBlock { Id = 12, Teacher = t5, Date = new DateTime(2014, 5, 29), BlockNumber = 2, Subject = su2, Room = r3 };
+            //LessonBlock lb5_4 = new LessonBlock { Id = 13, Teacher = t5, Date = new DateTime(2014, 5, 29), BlockNumber = 3, Subject = su2, Room = r3 };
+
+            //LessonBlock lb6_1 = new LessonBlock { Id = 14, Teacher = t4, Date = new DateTime(2014, 5, 30), BlockNumber = 1, Subject = su1, Room = r3 };
+
+            //LessonBlock lb7_1 = new LessonBlock { Id = 15, Teacher = t4, Date = new DateTime(2014, 6, 2), BlockNumber = 0, Subject = su1, Room = r3 };
+
+            //List<LessonBlock> list = new List<LessonBlock> { 
+            //    lb1_1, lb1_2, lb1_3,
+            //    lb2_1, 
+            //    lb3_1, lb3_2, 
+            //    lb4_1, lb4_2, lb4_3, 
+            //    lb5_1, lb5_2, lb5_3, lb5_4,
+            //    lb6_1,
+            //    lb7_1,
+            //};
+
+            //LessonBlock lb_1_1 = new LessonBlock { Id = 16, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 0, Subject = su1, Room = r2 };
+            //LessonBlock lb_1_4 = new LessonBlock { Id = 17, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 3, Subject = su1, Room = r2 };
+
+            //LessonBlock lb_2_1 = new LessonBlock { Id = 18, Teacher = t4, Date = new DateTime(2014, 5, 27), BlockNumber = 0, Subject = su1, Room = r3 };
+            //LessonBlock lb_2_2 = new LessonBlock { Id = 19, Teacher = t4, Date = new DateTime(2014, 5, 27), BlockNumber = 1, Subject = su1, Room = r3 };
+            //LessonBlock lb_2_3 = new LessonBlock { Id = 20, Teacher = t4, Date = new DateTime(2014, 5, 27), BlockNumber = 2, Subject = su1, Room = r3 };
+
+            //LessonBlock lb_3_1 = new LessonBlock { Id = 21, Teacher = t4, Date = new DateTime(2014, 5, 28), BlockNumber = 0, Subject = su1, Room = r3 };
+            //LessonBlock lb_3_2 = new LessonBlock { Id = 22, Teacher = t4, Date = new DateTime(2014, 5, 28), BlockNumber = 1, Subject = su1, Room = r3 };
+
+            //LessonBlock lb_4_1 = new LessonBlock { Id = 23, Teacher = t4, Date = new DateTime(2014, 5, 29), BlockNumber = 0, Subject = su1, Room = r3 };
+
+            //LessonBlock lb_5_1 = new LessonBlock { Id = 24, Teacher = t4, Date = new DateTime(2014, 5, 30), BlockNumber = 0, Subject = su1, Room = r3 };
+            //LessonBlock lb_5_2 = new LessonBlock { Id = 25, Teacher = t4, Date = new DateTime(2014, 5, 30), BlockNumber = 1, Subject = su1, Room = r3 };
+
+            //LessonBlock lb_6_1 = new LessonBlock { Id = 26, Teacher = t4, Date = new DateTime(2014, 6, 2), BlockNumber = 0, Subject = su1, Room = r3 };
+
+
+
+            //List<LessonBlock> listConflict = new List<LessonBlock>
+            //{
+            //    lb_1_1, lb_1_4,
+            //    lb_2_1, lb_2_2, lb_2_3,
+            //    lb_3_1, lb_3_2,
+            //    lb_4_1,
+            //    lb_5_1, lb_5_2,
+            //    lb_6_1
+            //};
+
+            //context.LessonBlocks.AddOrUpdate(
+            //    x => x.Id,
+            //    lb1_1, lb1_2, lb1_3,
+            //    lb2_1,
+            //    lb3_1, lb3_2,
+            //    lb4_1, lb4_2, lb4_3,
+            //    lb5_1, lb5_2, lb5_3, lb5_4,
+            //    lb6_1,
+            //    lb7_1,
+
+            //    lb_1_1, lb_1_4,
+            //    lb_2_1, lb_2_2, lb_2_3,
+            //    lb_3_1, lb_3_2,
+            //    lb_4_1,
+            //    lb_5_1, lb_5_2,
+            //    lb_6_1
+            //);
+
+            //Scheme mainScheme = new Scheme { Semester = s1, Id = 100, ClassModel = model1, LessonBlocks = list, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 7) };
+            //Scheme conflictScheme = new Scheme { Semester = s1, Id = 101, ClassModel = model2, LessonBlocks = listConflict, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 7) };
+
+            //context.Schemes.AddOrUpdate(
+            //    x => x.Id,
+            //    mainScheme, conflictScheme
+            //);
+
+            //TestData for FindAHole
+            //ClassModel model1 = new ClassModel { Id = 100, Education = e1, ClassName = "Main Scheme" };
+            //ClassModel model2 = new ClassModel { Id = 101, Education = e1, ClassName = "Conflict Scheme" };
+
+            //context.Classes.AddOrUpdate(
+            //    x => x.Id,
+            //    model1, model2
+            //);
+
+            //LessonBlock lb1_1 = new LessonBlock { Id = 1, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 0 , Subject = su1, Room = r3};
+            //LessonBlock lb1_2 = new LessonBlock { Id = 2, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 1, Subject = su1, Room = r3 };
+            //LessonBlock lb1_3 = new LessonBlock { Id = 3, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 2, Subject = su1, Room = r3 };
+            //LessonBlock lb1_4 = new LessonBlock { Id = 4, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 3, Subject = su1, Room = r3 };
+
+            //LessonBlock lb2_1 = new LessonBlock { Id = 5, Teacher = t5, Date = new DateTime(2014, 5, 27), BlockNumber = 0, Subject = su2, Room = r3 };
+            //LessonBlock lb2_2 = new LessonBlock { Id = 6, Teacher = t5, Date = new DateTime(2014, 5, 27), BlockNumber = 1, Subject = su2, Room = r3 };
+
+            //LessonBlock lb3_1 = new LessonBlock { Id = 7, Teacher = t4, Date = new DateTime(2014, 5, 28), BlockNumber = 0, Subject = su1, Room = r3 };
+            //LessonBlock lb3_2 = new LessonBlock { Id = 8, Teacher = t4, Date = new DateTime(2014, 5, 28), BlockNumber = 1, Subject = su1, Room = r3 };
+
+            //LessonBlock lb4_1 = new LessonBlock { Id = 9, Teacher = t5, Date = new DateTime(2014, 5, 29), BlockNumber = 0, Subject = su2, Room = r3 };
+            //LessonBlock lb4_2 = new LessonBlock { Id = 10, Teacher = t5, Date = new DateTime(2014, 5, 29), BlockNumber = 1, Subject = su2, Room = r3 };
+
+            //LessonBlock lb5_1 = new LessonBlock { Id = 11, Teacher = t4, Date = new DateTime(2014, 5, 30), BlockNumber = 0, Subject = su1, Room = r3 };
+            //LessonBlock lb5_2 = new LessonBlock { Id = 12, Teacher = t4, Date = new DateTime(2014, 5, 30), BlockNumber = 1, Subject = su1, Room = r3 };
+
+            //LessonBlock lb7_1 = new LessonBlock { Id = 13, Teacher = t5, Date = new DateTime(2014, 6, 3), BlockNumber = 0, Subject = su2, Room = r3 };
+            //LessonBlock lb7_2 = new LessonBlock { Id = 14, Teacher = t5, Date = new DateTime(2014, 6, 3), BlockNumber = 1, Subject = su2, Room = r3 };
+
+            //LessonBlock lb9_1 = new LessonBlock { Id = 15, Teacher = t4, Date = new DateTime(2014, 6, 5), BlockNumber = 0, Subject = su1, Room = r3 };
+            //LessonBlock lb9_2 = new LessonBlock { Id = 16, Teacher = t4, Date = new DateTime(2014, 6, 5), BlockNumber = 1, Subject = su1, Room = r3 };
+
+            //List<LessonBlock> list = new List<LessonBlock> { 
+            //    lb1_1, lb1_2, lb1_3, lb1_4,
+            //    lb2_1, lb2_2, 
+            //    lb3_1, lb3_2, 
+            //    lb4_1, lb4_2, 
+            //    lb5_1, lb5_2,
+            //    lb7_1, lb7_2,
+            //    lb9_1, lb9_2
+            //};
+
+            //LessonBlock lb_1_1 = new LessonBlock { Id = 17, Teacher = t4, Date = new DateTime(2014, 6, 2), BlockNumber = 0, Subject = su1, Room = r2 };
+            //LessonBlock lb_1_2 = new LessonBlock { Id = 18, Teacher = t4, Date = new DateTime(2014, 6, 2), BlockNumber = 1, Subject = su1, Room = r2 };
+
+            //List<LessonBlock> listConflict = new List<LessonBlock>
+            //{
+            //    lb_1_1, lb_1_2
+            //};
+
+            //context.LessonBlocks.AddOrUpdate(
+            //    x => x.Id,
+            //    lb1_1, lb1_2, lb1_3, lb1_4,
+            //    lb2_1, lb2_2,
+            //    lb3_1, lb3_2,
+            //    lb4_1, lb4_2,
+            //    lb5_1, lb5_2,
+            //    lb7_1, lb7_2,
+            //    lb9_1, lb9_2,
+
+            //    lb_1_1, lb_1_2
+            //);
+
+            //Scheme mainScheme = new Scheme { Semester = s1, Id = 100, ClassModel = model1, LessonBlocks = list, SemesterStart = new DateTime(2014,5,26), SemesterFinish = new DateTime(2014, 6, 15) };
+            //Scheme conflictScheme = new Scheme { Semester = s1, Id = 101, ClassModel = model2, LessonBlocks = listConflict, SemesterStart = new DateTime(2014,5,26), SemesterFinish = new DateTime(2014, 6,15) };
+
+            //context.Schemes.AddOrUpdate(
+            //    x => x.Id,
+            //    mainScheme, conflictScheme
+            //);
         }
     }
 }

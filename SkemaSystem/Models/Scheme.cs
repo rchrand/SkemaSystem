@@ -28,6 +28,7 @@ namespace SkemaSystem.Models
         public virtual DateTime SemesterFinish { get; set; }
 
         public virtual List<LessonBlock> LessonBlocks { get; set; }
+
         [InverseProperty("ConflictSchemes")]
         public virtual ICollection<Scheme> ParentConflictSchemes { get; set; }
 

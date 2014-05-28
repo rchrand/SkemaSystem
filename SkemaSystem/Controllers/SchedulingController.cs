@@ -187,32 +187,43 @@ namespace SkemaSystem.Controllers
             return PartialView("_SchemePartial", model);
         }
 
-        public ActionResult FindAHoleInScheme(string blockIds)
+        public ActionResult FindAHoleInScheme(string blockIdsString)
         {
+            string[] block = blockIdsString.Split(',');
+            int[] blockIds = ConvertStringArraytoInt(block);
+
             //******************************
             // Get the lessonblocks of the id's
-            List<LessonBlock> choosenBlocks = db.LessonBlocks.Where(lb => blockIds.Contains(lb.Id)).ToList();
+            var choosenBlocks = db.LessonBlocks.Where(lb => blockIds.Contains(lb.Id));
             //******************************
 
             //******************************
             // Get the mainScheme
-            Scheme mainScheme = (from s in db.Schemes
-                                where s.LessonBlocks.Contains(choosenBlocks[0])
-                                select s).FirstOrDefault();
+            var mainScheme = db.Schemes.Where(sc => sc.LessonBlocks.FirstOrDefault().Id == choosenBlocks.FirstOrDefault().Id).SingleOrDefault();
             //******************************
 
             //******************************
             // Gets the lessonblocks which may conflict
             List<LessonBlock> conflictLessons = new List<LessonBlock>();
-            /*foreach (var item in mainScheme.######ConflictSchemes#####)
-	        {
-		        conflictLessons.AddRange(item);
-	        }*/
+            foreach (var item in mainScheme.ConflictSchemes)
+            {
+                conflictLessons.AddRange(item.LessonBlocks);
+            }
+            var teacherConflicts = (from x in db.LessonBlocks
+                                    where choosenBlocks.FirstOrDefault().Teacher.Id == x.Teacher.Id
+                                    select x).ToList();
+            foreach (var item in teacherConflicts)
+            {
+                if (conflictLessons.Any(x => x.Id == item.Id) == false && mainScheme.LessonBlocks.Any(x => x.Id == item.Id) == false)
+                    conflictLessons.Add(item);
+            }
             //******************************
 
             ConflictService service = new ConflictService();
 
-            List<DateTime> availableDates = service.FindAHoleInScheme(mainScheme, conflictLessons, choosenBlocks, DateTime.Today);
+            //Original, out commented for testing
+            //List<DateTime> availableDates = service.FindAHoleInScheme(mainScheme, conflictLessons, choosenBlocks.ToList(), DateTime.Today < mainScheme.SemesterStart ? mainScheme.SemesterStart : DateTime.Today);
+            List<DateTime> availableDates = service.FindAHoleInScheme(mainScheme, conflictLessons, choosenBlocks.ToList(), new DateTime(2014,5,26));
 
             //******************************
             // Do something with the availableDates
@@ -222,30 +233,34 @@ namespace SkemaSystem.Controllers
             return null;
         }
 
-        public ActionResult SetLessonBehindOwnLesson(string blockIds)
+        public ActionResult SetLessonBehindOwnLesson(string blockIdsString)
         {
+            string[] block = blockIdsString.Split(',');
+            int[] blockIds = ConvertStringArraytoInt(block);
+
             //******************************
             // Get the lessonblocks of the id's
-            List<LessonBlock> choosenBlocks = db.LessonBlocks.Where(lb => blockIds.Contains(lb.Id)).ToList();
+            var choosenBlocks = db.LessonBlocks.Where(lb => blockIds.Contains(lb.Id));
             //******************************
 
             //******************************
             // Get the mainScheme
-            Scheme mainScheme = (from s in db.Schemes
-                                where s.LessonBlocks.Contains(choosenBlocks[0])
-                                select s).FirstOrDefault();
+            var mainScheme = db.Schemes.Where(sc => sc.LessonBlocks.FirstOrDefault().Id == choosenBlocks.FirstOrDefault().Id).SingleOrDefault();
+            //Scheme mainScheme = (from s in db.Schemes
+            //                    where s.LessonBlocks.Contains(choosenBlocks[0])
+            //                    select s).FirstOrDefault();
             //******************************
 
             //******************************
             // Gets the lessonblocks which may conflict
-            List<LessonBlock> conflictLessons = (from cl in db.LessonBlocks
-                                                where cl.Teacher == choosenBlocks[0].Teacher
-                                                select cl).ToList();
+            List<LessonBlock> conflictLessons = (from x in db.LessonBlocks
+                                                 where choosenBlocks.FirstOrDefault().Teacher.Id == x.Teacher.Id
+                                                select x).ToList();
             //******************************
 
             ConflictService service = new ConflictService();
 
-            List<DateTime> availableDates = service.setLessonBehindOwnLesson(mainScheme, conflictLessons, choosenBlocks, DateTime.Today);
+            List<DateTime> availableDates = service.setLessonBehindOwnLesson(mainScheme, conflictLessons, choosenBlocks.ToList(), new DateTime(2014, 5, 26));
 
             //******************************
             // Do something with the availableDates
@@ -255,36 +270,43 @@ namespace SkemaSystem.Controllers
             return null;
         }
 
-        public ActionResult SwitchWithOtherTeacher(string blockIds, string choosenTeacherId)
+        public ActionResult SwitchWithOtherTeacher(string blockIdsString, string choosenTeacherId)
         {
+            string[] block = blockIdsString.Split(',');
+            int[] blockIds = ConvertStringArraytoInt(block);
+
             //******************************
             // Get the lessonblocks of the id's
-            List<LessonBlock> choosenBlocks = db.LessonBlocks.Where(lb => blockIds.Contains(lb.Id)).ToList();
+            var choosenBlocks = db.LessonBlocks.Where(lb => blockIds.Contains(lb.Id));
             //******************************
 
             //******************************
             // Get the mainScheme
-            Scheme mainScheme = (from s in db.Schemes
-                                where s.LessonBlocks.Contains(choosenBlocks[0])
-                                select s).FirstOrDefault();
+            var mainScheme = db.Schemes.Where(sc => sc.LessonBlocks.FirstOrDefault().Id == choosenBlocks.FirstOrDefault().Id).SingleOrDefault();
+            //Scheme mainScheme = (from s in db.Schemes
+            //                    where s.LessonBlocks.Contains(choosenBlocks[0])
+            //                    select s).FirstOrDefault();
             //******************************
 
             //******************************
             // Get the teacher object
-            Teacher otherTeacher = (from t in db.Teachers
-                                    where t.Id == Convert.ToInt16(choosenTeacherId)
-                                   select t).FirstOrDefault();
+            int id = Convert.ToInt32(choosenTeacherId);
+            var otherTeacher = db.Teachers.Where(x => x.Id == id).SingleOrDefault();
+            //var otherTeacher = (from t in db.Teachers
+            //                        where t.Id == Convert.ToInt16(choosenTeacherId)
+            //                       select t).FirstOrDefault();
             //******************************
 
             // Gets the lessonblocks which may conflict
-            List<LessonBlock> conflictLessons = (from cl in db.LessonBlocks
-                                                where cl.Teacher == otherTeacher
-                                                select cl).ToList();
+            List<LessonBlock> conflictLessons = (from x in db.LessonBlocks
+                                                 where choosenBlocks.FirstOrDefault().Teacher.Id == x.Teacher.Id
+                                                 //where otherTeacher.Id == x.Teacher.Id
+                                                select x).ToList();
             //******************************
 
             ConflictService service = new ConflictService();
 
-            List<DateTime> availableDates = service.switchWithOtherTeacher(mainScheme, conflictLessons, choosenBlocks, otherTeacher, DateTime.Today);
+            List<DateTime> availableDates = service.switchWithOtherTeacher(mainScheme, conflictLessons, choosenBlocks.ToList(), otherTeacher, DateTime.Today);
 
             //******************************
             // Do something with the availableDates
@@ -292,6 +314,16 @@ namespace SkemaSystem.Controllers
             //******************************
 
             return null;
+        }
+
+        private int[] ConvertStringArraytoInt(string[] item)
+        {
+            int[] result = new int[item.Length];
+            for (int i = 0; i < item.Length; i++)
+            {
+                result[i] = (item[i].Equals("")) ? 0 : Int32.Parse(item[i]);
+            }
+            return result;
         }
 	}
 }
