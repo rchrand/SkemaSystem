@@ -24,7 +24,10 @@
             $.ajax(options).done(function (data) {
                 var $target = $($form.attr("data-schemesys-target"));
                 $target.html(data);
+                $form.find("input[type=text]").val("");
             });
+
+            
 
             return false;
         }

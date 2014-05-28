@@ -170,6 +170,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\EducationController.cs" />
+    <Compile Include="Controllers\OptionalSubjectsController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\SchedulingController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="HttpModules\SuppressFormsAuthenticationRedirectModule.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ClassModel.cs" />
+    <Compile Include="Models\ConflictScheme.cs" />
     <Compile Include="Models\Education.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -199,6 +201,7 @@
     <Compile Include="Models\ViewModels\ClassViewModel.cs" />
     <Compile Include="Models\ViewModels\EducationViewModel.cs" />
     <Compile Include="Models\ViewModels\SchemeViewModel.cs" />
+    <Compile Include="Models\ViewModels\OptionalSubjectViewModel.cs" />
     <Compile Include="Models\ViewModels\SemesterViewModel.cs" />
     <Compile Include="Models\ViewModels\TableViewModel.cs" />
     <Compile Include="Models\ViewModels\TeacherViewModel.cs" />
@@ -326,6 +329,14 @@
     <Content Include="Views\Shared\_AdminTabsPartial.cshtml" />
     <Content Include="Views\Education\ModifyRooms.cshtml" />
     <Content Include="Views\Education\ModifyTeachers.cshtml" />
+    <Content Include="Views\OptionalSubjects\Index.cshtml" />
+    <Content Include="Views\OptionalSubjects\Create.cshtml" />
+    <Content Include="Views\OptionalSubjects\_ConflictSchemes.cshtml" />
+    <Content Include="Views\OptionalSubjects\_OptionalSubjectsList.cshtml" />
+    <Content Include="Views\OptionalSubjects\_SchemeSubjectDistribution.cshtml" />
+    <Content Include="Views\OptionalSubjects\SubjectDistribution.cshtml" />
+    <Content Include="Views\OptionalSubjects\Edit.cshtml" />
+    <Content Include="Views\OptionalSubjects\_OptionalSubjectsListEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />

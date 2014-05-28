@@ -8,8 +8,9 @@
     @Html.Partial("_AdminTabsPartial")
 }
 <p>
-    @Html.ActionLink("Opret ny klasse", "Create")
-    @Html.ActionLink("Start nyt semester", "CreateSemester")
+    @Html.ActionLink("Opret ny klasse", "Create") &nbsp; &nbsp; | &nbsp;&nbsp;
+    @Html.ActionLink("Start nyt semester", "CreateSemester") &nbsp; &nbsp; | &nbsp;&nbsp;
+    @Html.ActionLink("Administrér valgfag", "Index", "OptionalSubjects", null, null)
 </p>
 <table class="table">
     <tr>   

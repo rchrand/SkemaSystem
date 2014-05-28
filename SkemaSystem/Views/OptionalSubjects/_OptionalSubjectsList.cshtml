@@ -1,0 +1,25 @@
+﻿<div class="form-group">
+    <div class="col-sm-8">
+        <table>
+            <thead>
+                <tr>
+                    <th width="50%">Fag</th>
+                    <th>Antal blokke</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var subject in ViewBag.Subjects)
+                {
+                    SkemaSystem.Models.Subject su = subject;
+                    
+                    @Html.Hidden("subjectId", su.Id)
+                    <tr style="height:53px;">
+                        <td><input type="checkbox" value="@(su.Id)" name="subjectUse" id="@(su.Id)subjectCheckBox" onclick="$('#@(su.Id)subjectBlockCount').toggle('fast')" />&nbsp;&nbsp; <label for="@(su.Id)subjectCheckBox">@su.Name</label></td>
+                        <td><input type="number" name="subjectBlockCount" id="@(su.Id)subjectBlockCount" placeholder="Antal blokke" class="form-control" style="display:none;" /></td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>

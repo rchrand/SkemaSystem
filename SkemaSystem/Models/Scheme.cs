@@ -13,9 +13,9 @@ namespace SkemaSystem.Models
         [Key]
         [Required]
         public int Id { get; set; }
+        
+        public string Name { get; set; }
 
-
-        [Required]
         public virtual ClassModel ClassModel { get; set; }
 
         [Required]
@@ -23,15 +23,48 @@ namespace SkemaSystem.Models
 
         public virtual List<SubjectDistBlock> SubjectDistBlocks { get; set; }
 
-        public DateTime SemesterStart { get; set; }
+        public virtual DateTime SemesterStart { get; set; }
 
-        public DateTime SemesterFinish { get; set; }
+        public virtual DateTime SemesterFinish { get; set; }
 
         public virtual List<LessonBlock> LessonBlocks { get; set; }
+        [InverseProperty("ConflictSchemes")]
+        public virtual ICollection<Scheme> ParentConflictSchemes { get; set; }
+
+        [InverseProperty("ParentConflictSchemes")]
+        public virtual ICollection<Scheme> ConflictSchemes { get; set; }
+
+        //public virtual ICollection<ConflictScheme> ConflictScheme { get; set; }
+
+        public virtual List<SemesterSubjectBlock> OptionalSubjectBlockList { get; set; }
+
+        [NotMapped]
+        private string YString;
+
+        public string YearString
+        {
+            get
+            {
+                return YString;
+            }
+
+            set {
+                if (SemesterStart.Month >= 1 && SemesterStart.Month <= 6)
+                {
+                    YString = "F" + SemesterStart.Year;
+                }
+                else
+                {
+                    YString = "E" + SemesterStart.Year;
+                }
+            }
+        }        
 
         public Scheme()
         {
             SubjectDistBlocks = new List<SubjectDistBlock>();
+            YearString = "";
+
         }
 
         public List<Subject> NeededSubjects() {
@@ -75,13 +108,20 @@ namespace SkemaSystem.Models
                                     where sdb.Subject.Equals(s)
                                     select sdb;
 
-            int highestBlocksCount = Semester.Blocks.SingleOrDefault(x => x.Subject.Equals(s)).BlocksCount;
+            int highestBlocksCount = 0;
+            if (ClassModel != null)
+            {
+                highestBlocksCount = Semester.Blocks.SingleOrDefault(x => x.Subject.Equals(s)).BlocksCount;
+            }
+            else
+            {
+                highestBlocksCount = OptionalSubjectBlockList.SingleOrDefault(x => x.Subject.Equals(s)).BlocksCount;
+            }
             int totalBlocksCount = 0;
             foreach (SubjectDistBlock sdb in subjectDistBlocks)
             {
                 totalBlocksCount += sdb.BlocksCount;
             }
-            Console.WriteLine(subjectDistBlocks.Count());
             return (totalBlocksCount + tryingToAdd) > highestBlocksCount;
         }
 

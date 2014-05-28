@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using System.Web;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 
 namespace SkemaSystem.Models
 {
@@ -23,6 +24,7 @@ namespace SkemaSystem.Models
         IDbSet<Scheme> Schemes { get; set; }
         IDbSet<SemesterSubjectBlock> SemesterSubjectBlocks { get; set; }
         IDbSet<Room> Rooms { get; set; }
+        //IDbSet<ConflictScheme> ConflictSchemes { get; set; }
 
         int SaveChanges();
         //DbEntityEntry Entry(object entity);
@@ -45,6 +47,7 @@ namespace SkemaSystem.Models
         public IDbSet<Scheme> Schemes { get; set; }
         public IDbSet<SemesterSubjectBlock> SemesterSubjectBlocks { get; set; }
         public IDbSet<Room> Rooms { get; set; }
+        public DbSet<LessonBlock> LessonBlocks { get; set; }
 
         public void StateModified(object entity) 
         {
@@ -64,6 +67,29 @@ namespace SkemaSystem.Models
             base.OnModelCreating(modelBuilder);*/
         }
 
+        public override int SaveChanges()
+        {
+            try
+            {
+                return base.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                // Retrieve the error messages as a list of strings.
+                var errorMessages = ex.EntityValidationErrors
+                        .SelectMany(x => x.ValidationErrors)
+                        .Select(x => x.ErrorMessage);
+
+                // Join the list to a single string.
+                var fullErrorMessage = string.Join("; ", errorMessages);
+
+                // Combine the original exception message with the new one.
+                var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+
+                // Throw a new DbEntityValidationException with the improved exception message.
+                throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+            }
+        }
         
     }
 }

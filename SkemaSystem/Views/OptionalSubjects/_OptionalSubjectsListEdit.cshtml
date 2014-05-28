@@ -1,0 +1,31 @@
+﻿@model SkemaSystem.Models.Scheme
+
+<div class="form-group">
+    <div class="col-sm-8">
+        <table>
+            <thead>
+                <tr>
+                    <th width="50%">Fag</th>
+                    <th>Antal blokke</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var subject in ViewBag.Subjects)
+                {
+                    SkemaSystem.Models.Subject su = subject;
+
+                    SkemaSystem.Models.SemesterSubjectBlock ssb = @Model.OptionalSubjectBlockList.Where(x => x.Subject.Id == su.Id).FirstOrDefault();
+
+                    bool isChosen = @Model.OptionalSubjectBlockList.Any(x => x.Subject.Id == su.Id);
+
+
+                    <tr style="height:53px;">
+                        <td>@Html.Hidden("subjectId", su.Id)<input type="checkbox" value="@(su.Id)" name="subjectUse" id="@(su.Id)subjectCheckBox" @(isChosen ? "checked" : "") onclick="$('#@(su.Id)subjectBlockCount').toggle('fast')" />&nbsp;&nbsp; <label for="@(su.Id)subjectCheckBox">@su.Name</label></td>
+                        <td><input type="number" name="subjectBlockCount" id="@(su.Id)subjectBlockCount" placeholder="Antal blokke" class="form-control" @(!isChosen ? "style=display:none;" : "value=" + ((ssb != null) ? ssb.BlocksCount : 0) + "") /></td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
