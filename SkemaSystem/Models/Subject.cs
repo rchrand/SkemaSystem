@@ -13,5 +13,12 @@ namespace SkemaSystem.Models
 
         [Required]
         public string Name { get; set; }
+
+        [Required]
+        public Education Education { get; set; }
+
+        public bool OptionalSubject { get; set; }
+
+        public virtual List<Subject> conflictSubjects { get; set; }
     }
 }
