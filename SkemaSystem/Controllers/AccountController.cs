@@ -16,8 +16,8 @@ namespace SkemaSystem.Controllers
          * ONLY FOR DEMO PURPOSE
          */
 
-        [Route("")]
-        public ActionResult Demo()
+        [Route("{education?}")]
+        public ActionResult Index(string education)
         {
             return View();// Content("<a href='teachers'>Lærere</a><br /><a href='classes'>Klasser</a><br />");
         }
@@ -36,7 +36,9 @@ namespace SkemaSystem.Controllers
             if (model.IsValid(model.Username, model.Password))
             {
                 FormsAuthentication.SetAuthCookie(model.Username, true);
-                return RedirectToAction("Demo");
+                Teacher teacher = db.Teachers.SingleOrDefault(t => t.Username.Equals(model.Username));
+                Session["UserRole"] = teacher.Role;
+                return RedirectToAction("Index");
             }
             else
             {

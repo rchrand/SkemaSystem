@@ -5,9 +5,9 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace SkemaSystem
+namespace SkemaSystem.Helpers
 {
-    public static class Helpers
+    public static class HtmlHelpers
     {
         public static MvcHtmlString SimpleCheckbox(this HtmlHelper htmlHelper, string name)
         {

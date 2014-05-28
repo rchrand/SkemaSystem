@@ -1,4 +1,5 @@
-﻿
+﻿@using SkemaSystem.Helpers
+
 @{
     ViewBag.Title = "Demo";
 }
@@ -7,4 +8,4 @@
     @Html.Partial("_AdminTabsPartial")
 }
 
-<h2>Hej Torben</h2>
+<h2>Hej @User.Name()</h2>

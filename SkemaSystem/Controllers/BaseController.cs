@@ -26,9 +26,15 @@ namespace SkemaSystem.Controllers
             }
         }
 
+        protected virtual new Teacher User
+        {
+            get { return HttpContext.User as Teacher; }
+        }
+
         protected bool IsRole(UserRoles role)
         {
-            var user = User.Identity.Name;
+            return true;
+            /*var user = User.Identity.Name;
             var username = db.Teachers.SingleOrDefault(t => t.Username == user && t.Role == role);
 
             if (username != null)
@@ -36,19 +42,27 @@ namespace SkemaSystem.Controllers
                 return true;
             }
 
-            return false;
+            return false;*/
         }
-
-
 
         protected bool IsTeacher()
         {
-            return IsRole(UserRoles.Teacher) || IsRole(UserRoles.Admin);
+            return IsRole(UserRoles.Teacher) || IsAdmin();
         }
 
         protected bool IsAdmin()
         {
-            return IsRole(UserRoles.Admin);
+            return IsRole(UserRoles.Admin) || IsMaster();
+        }
+
+        protected bool IsMaster()
+        {
+            return IsRole(UserRoles.Master);
+        }
+
+        protected ActionResult Deny()
+        {
+            return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
         }
 	}
 }

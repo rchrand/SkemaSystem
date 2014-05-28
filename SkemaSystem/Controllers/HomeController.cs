@@ -9,15 +9,10 @@ using System.Web.Mvc;
 
 namespace SkemaSystem.Controllers
 {
+    [RouteArea("Default", AreaPrefix="")]
     public class HomeController : BaseController
     {
-        SkeamSystemDb _db;
-        
-        public HomeController()
-        {
-            _db = new SkeamSystemDb();
-        }
-
+        [Route("{education?}")]
         public ActionResult Index(string education)
         {
             if (education != null)
@@ -25,18 +20,11 @@ namespace SkemaSystem.Controllers
                 //RedirectToAction("Index", "Education");
             }
             var model =
-                from t in _db.Teachers
+                from t in db.Teachers
                 orderby t.Name ascending
                 select t;
 
             return View(model);
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "This is a quite awesome about page!";
-
-            return View();
         }
     }
 }

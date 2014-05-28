@@ -1,4 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
+
+@{string action = ViewContext.RouteData.Values["education"] == null ? "Redirect" : "Index";}
+
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("Logout", "Account", new { Area = "Admin" }, FormMethod.Get, new { id = "logoutForm" }))
@@ -6,7 +9,10 @@
     @Html.AntiForgeryToken()
     <ul>
         <li>
-            @Html.ActionLink("Administration", "Demo", "Account", new { Area = "Admin" }, null)
+            @Html.ActionLink("Skemalægning", action, "Scheduling", new { Area = "Admin" }, null)
+        </li>
+        <li>
+            @Html.ActionLink("Administration", "Index", "Account", new { Area = "Admin" }, null)
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log ud</a></li>
     </ul>

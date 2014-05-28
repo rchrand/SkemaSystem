@@ -12,13 +12,23 @@ using SkemaSystem.Models.ViewModels;
 namespace SkemaSystem.Controllers
 {
     [RouteArea("Admin", AreaPrefix = "admin")]
-    [RoutePrefix("classes")]
+    [RoutePrefix("{education}/classes")]
     [Route("{action=index}/{id?}")]
+    [Authorize(Roles="Admin,Master")]
     public class ClassController : BaseController
     {
+        [Route("~/admin/classes")]
+        public ActionResult Redirect()
+        {
+            Teacher teacher = db.Teachers.SingleOrDefault(t => t.Id.Equals(User.Id));
+
+            Education education = teacher.Educations.FirstOrDefault();
+
+            return RedirectToAction("Index", new { education = education.Name.ToLower() });
+        }
+
         // GET: /Class/
-        [Route("")]
-        public ActionResult Index()
+        public ActionResult Index(string education)
         {
             return View(db.Classes.ToList());
         }

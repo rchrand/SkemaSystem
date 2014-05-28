@@ -4,11 +4,18 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using SkemaSystem.Models.Enum;
+using System.Security.Principal;
+using SkemaSystem.Models.Interfaces;
 
 namespace SkemaSystem.Models
 {
-    public class Teacher
+    // http://stackoverflow.com/questions/1064271/asp-net-mvc-set-custom-iidentity-or-iprincipal
+    // http://www.codeproject.com/Articles/578374/AplusBeginner-splusTutorialplusonplusCustomplusF
+
+    public class Teacher : ITeacherPrincipal
     {
+        public IIdentity Identity { get; /*private*/ set; }
+
         [Required]
         public int Id { get; set; }
 
@@ -27,6 +34,11 @@ namespace SkemaSystem.Models
 
         public virtual ICollection<Education> Educations { get; set; }
 
+        public Teacher()
+        {
+            //this.Identity = new GenericIdentity(Username);
+        }
+
         public bool IsValid(string _username, string _password)
         {
             var db = new SkeamSystemDb();
@@ -36,6 +48,11 @@ namespace SkemaSystem.Models
                 return true;
             }
             return false;
+        }
+
+        public bool IsInRole(string role)
+        {
+            return Role.ToString() == role;
         }
     }
 }

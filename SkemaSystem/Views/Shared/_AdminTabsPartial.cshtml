@@ -1,9 +1,37 @@
-﻿@{string Action = (string) ViewContext.RouteData.Values["Action"];}
+﻿@using SkemaSystem.Helpers
+
+@*@functions
+{
+    //Global functions: http://stackoverflow.com/questions/12204410/global-functions-in-razor-view-engine
+    
+    bool IsAdmin()
+    {
+        return Session["UserRole"] != null && SkemaSystem.Models.Enum.UserRoles.Admin == (SkemaSystem.Models.Enum.UserRoles)Session["UserRole"] || IsMaster();
+    }
+    bool IsMaster()
+    {
+        return Session["UserRole"] != null && SkemaSystem.Models.Enum.UserRoles.Master == (SkemaSystem.Models.Enum.UserRoles)Session["UserRole"];
+    }
+}*@
+@{string Action = (string)ViewContext.RouteData.Values["Action"];}
 @{string Controller = (string) ViewContext.RouteData.Values["Controller"];}
+@{string action = ViewContext.RouteData.Values["education"] == null ? "Redirect" : "Index";}
 <ul class="tabs">
-    <li>@Html.ActionLink("Velkommen", "Demo", "Account", new { Area = "Admin" }, new { @class = ("Account".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
-    <li>@Html.ActionLink("Lærere", "Index", "Teacher", new { Area = "Admin" }, new { @class = ("Teacher".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
-    <li>@Html.ActionLink("Klasser", "index", "Class", new { Area = "Admin" }, new { @class = ("Class".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
-    <li>@Html.ActionLink("Lokaler", "index", "Room", new { Area = "Admin" }, new { @class = ("Room".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
-    <li>@Html.ActionLink("Uddannelser", "index", "Education", new { Area = "Admin" }, new { @class = ("Education".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
+    <li>@Html.ActionLink("Velkommen", "Index", "Account", new { Area = "Admin" }, new { @class = ("Account".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
+    @if (@User.IsAdmin())
+    {
+        <li>@Html.ActionLink("Klasser", action, "Class", new { Area = "Admin" }, new { @class = ("Class".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
+    }
+    @if (@User.IsAdmin())
+    {
+        <li>@Html.ActionLink("Lærere", action, "Teacher", new { Area = "Admin" }, new { @class = ("Teacher".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
+    }
+    @if (@User.IsAdmin())
+    {
+        <li>@Html.ActionLink("Lokaler", action, "Room", new { Area = "Admin" }, new { @class = ("Room".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
+    }
+    @if (@User.IsMaster())
+    {
+        <li>@Html.ActionLink("Uddannelser", "Index", "Education", new { Area = "Admin" }, new { @class = ("Education".Equals(Controller, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
+    }
 </ul>

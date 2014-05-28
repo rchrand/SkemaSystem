@@ -51,5 +51,11 @@
 
             return false;
         });
+
+        $(document).ajaxError(function (event, jqxhr, settings, exception) {
+            if (jqxhr.status == 302) {
+                window.location.href = '/admin/login';
+            }
+        });
     });
 })(jQuery);

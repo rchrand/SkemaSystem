@@ -7,6 +7,6 @@ namespace SkemaSystem.Models.Enum
 {
     public enum UserRoles
     {
-        Admin, Teacher
+        Annonym, Admin, Teacher, Master
     }
 }

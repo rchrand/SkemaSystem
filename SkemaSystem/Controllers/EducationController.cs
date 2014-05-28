@@ -14,6 +14,7 @@ namespace SkemaSystem.Controllers
     //add rooms
     //add semesters (wait)
 
+    [Authorize(Roles="Master")]
     [RouteArea("Admin", AreaPrefix="admin")]
     [RoutePrefix("educations")]
     [Route("{action=index}/{id?}")]
@@ -22,6 +23,10 @@ namespace SkemaSystem.Controllers
         [Route("")]
         public ActionResult Index()
         {
+            if (!IsMaster())
+            {
+                return Deny();
+            }
             return View(db.Educations.ToList());
         }
         // GET: /Education/Details/5
@@ -30,6 +35,10 @@ namespace SkemaSystem.Controllers
         //public ActionResult Details(string name)
         public ActionResult Details(int? id)
         {
+            if (!IsMaster())
+            {
+                return Deny();
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -48,6 +57,10 @@ namespace SkemaSystem.Controllers
         [Route("create")]
         public ActionResult Create()
         {
+            if (!IsMaster())
+            {
+                return Deny();
+            }
             return View();
         }
 
@@ -58,6 +71,10 @@ namespace SkemaSystem.Controllers
         [Route("create"), HttpPost]
         public ActionResult Create([Bind(Include="Id,Name,NumberOfSemesters")] Education education)
         {
+            if (!IsMaster())
+            {
+                return Deny();
+            }
             if (ModelState.IsValid && CheckIfNameIsAvailable(education.Name) && CheckIfIdIsAvailable(education.Id))
             {
                 db.Educations.Add(education);
@@ -68,28 +85,14 @@ namespace SkemaSystem.Controllers
             return View(education);
         }
 
-        private bool CheckIfIdIsAvailable(int id)
-        {
-            if (db.Educations.SingleOrDefault(x => x.Id == id) != null)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        private bool CheckIfNameIsAvailable(string name)
-        {
-            if (db.Educations.SingleOrDefault(x => x.Name.Equals(name)) != null)
-            {
-                return false;
-            }
-            return true;
-        }
-
         // GET: /Education/Edit/5
         [Route("edit/{id?}")]
         public ActionResult Edit(int? id)
         {
+            if (!IsMaster())
+            {
+                return Deny();
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -110,6 +113,10 @@ namespace SkemaSystem.Controllers
         [Route("edit/{id}")]
         public ActionResult Edit([Bind(Include="Id,Name,NumberOfSemesters")] Education education)
         {
+            if (!IsMaster())
+            {
+                return Deny();
+            }
             //needs to check if the new name is already used
             if (ModelState.IsValid)
             {
@@ -126,6 +133,10 @@ namespace SkemaSystem.Controllers
         [Route("teachers/{id?}")]
         public ActionResult ModifyTeachers(int? id)
         {
+            if (!IsMaster())
+            {
+                return Deny();
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -153,6 +164,10 @@ namespace SkemaSystem.Controllers
         [Route("teachers/{id}")]
         public ActionResult ModifyTeachers([Bind(Include = "Education,PostedTeachers")] EducationViewModel result)
         {
+            if (!IsMaster())
+            {
+                return Deny();
+            }
             Education education = result.Education;
             List<Teacher> _teachers = GetTeachers(result.PostedTeachers);
 
@@ -173,32 +188,15 @@ namespace SkemaSystem.Controllers
             return RedirectToAction("index");
         }
 
-        private List<Teacher> GetTeachers(PostedTeachers postedTeachers)
-        {
-            var selectedTeachers = new List<Teacher>();
-            var postedTeacherIds = new string[0];
-
-            if (postedTeachers != null && postedTeachers.TeacherIds != null && postedTeachers.TeacherIds.Any())
-            {
-                postedTeacherIds = postedTeachers.TeacherIds;
-            }
-
-            if (postedTeacherIds.Any())
-            {
-                IEnumerable<Teacher> teachers = db.Teachers;
-                selectedTeachers = teachers
-                 .Where(x => postedTeacherIds.Any(s => x.Id.ToString().Equals(s)))
-                 .ToList();
-            }
-
-            return selectedTeachers;
-        }
-
         // GET
         [HttpGet]
         [Route("rooms/{id?}")]
         public ActionResult ModifyRooms(int? id)
         {
+            if (!IsMaster())
+            {
+                return Deny();
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -226,6 +224,10 @@ namespace SkemaSystem.Controllers
         [Route("rooms/{id}")]
         public ActionResult ModifyRooms([Bind(Include = "Education,PostedRooms")] EducationViewModel result)
         {
+            if (!IsMaster())
+            {
+                return Deny();
+            }
             Education education = result.Education;
             List<Room> _rooms = GetRooms(result.PostedRooms);
 
@@ -244,6 +246,93 @@ namespace SkemaSystem.Controllers
             }
 
             return RedirectToAction("index");
+        }
+
+        // GET: /Education/Delete/5
+        [Route("delete/{id?}")]
+        public ActionResult Delete(int? id)
+        {
+            if (!IsMaster())
+            {
+                return Deny();
+            }
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            //Education education = db.Educations.Find(id);
+            Education _education = db.Educations.Find(id);
+            if (_education == null)
+            {
+                return HttpNotFound();
+            }
+            return View(_education);
+        }
+
+        // POST: /Education/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Route("delete/{id}")]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            if (!IsMaster())
+            {
+                return Deny();
+            }
+            Education _education = db.Educations.Find(id);
+            db.Educations.Remove(_education);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        /* THE FOLLOWING SHOULD ME MOVED TO SERVICE */
+
+        private bool CheckIfIdIsAvailable(int id)
+        {
+            if (db.Educations.SingleOrDefault(x => x.Id == id) != null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool CheckIfNameIsAvailable(string name)
+        {
+            if (db.Educations.SingleOrDefault(x => x.Name.Equals(name)) != null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private List<Teacher> GetTeachers(PostedTeachers postedTeachers)
+        {
+            var selectedTeachers = new List<Teacher>();
+            var postedTeacherIds = new string[0];
+
+            if (postedTeachers != null && postedTeachers.TeacherIds != null && postedTeachers.TeacherIds.Any())
+            {
+                postedTeacherIds = postedTeachers.TeacherIds;
+            }
+
+            if (postedTeacherIds.Any())
+            {
+                IEnumerable<Teacher> teachers = db.Teachers;
+                selectedTeachers = teachers
+                 .Where(x => postedTeacherIds.Any(s => x.Id.ToString().Equals(s)))
+                 .ToList();
+            }
+
+            return selectedTeachers;
         }
 
         private List<Room> GetRooms(PostedRooms postedRooms)
@@ -265,44 +354,6 @@ namespace SkemaSystem.Controllers
             }
 
             return selectedRooms;
-        }
-
-        // GET: /Education/Delete/5
-        [Route("delete/{id?}")]
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            //Education education = db.Educations.Find(id);
-            Education _education = db.Educations.Find(id);
-            if (_education == null)
-            {
-                return HttpNotFound();
-            }
-            return View(_education);
-        }
-
-        // POST: /Education/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Route("delete/{id}")]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Education _education = db.Educations.Find(id);
-            db.Educations.Remove(_education);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

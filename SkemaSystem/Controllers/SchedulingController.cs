@@ -14,13 +14,27 @@ using System.Web.Mvc;
 
 namespace SkemaSystem.Controllers
 {
-    [RouteArea("admin")]
-    [RoutePrefix("scheduling")]
+    [Authorize(Roles="Teacher,Admin,Master")]
+    [RouteArea("Admin", AreaPrefix = "admin")]
+    [RoutePrefix("{education}/scheduling")]
     [Route("{action=index}")]
     public class SchedulingController : BaseController
     {
-        public ActionResult Index()
+        [Route("~/admin/scheduling")]
+        public ActionResult Redirect()
         {
+            Teacher teacher = db.Teachers.SingleOrDefault(t => t.Id.Equals(User.Id));
+
+            Education education = teacher.Educations.FirstOrDefault();
+
+            return RedirectToAction("Index", new { education = education.Name.ToLower() });
+        }
+
+        //[Route("~/admin/{education?}/scheduling", Name = "Schedule")]
+        public ActionResult Index(string education)
+        {
+            Education _education = db.Educations.FirstOrDefault(e => e.Name.Equals(education));
+
             if (!IsTeacher())
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);

@@ -32,7 +32,16 @@
                 @{var e = ViewContext.RouteData.Values["education"];}
                 @foreach (var education in @EducationModel)
                 {
-                    <li>@Html.ActionLink(education.Name, "Details", "Education", new { education = education, Area = "Default" }, new { @class = (e != null && e.ToString() == education.Name) ? "selected" : "" })</li>
+                    if (ViewContext.RouteData.DataTokens.ContainsKey("area") && ViewContext.RouteData.DataTokens["area"].Equals("Admin"))
+                    {
+                        @*var clazz = (e != null && e.ToString().Equals(education.Name, StringComparison.OrdinalIgnoreCase)) ? "selected" : "";
+                        <li><a href="@Url.RouteUrl("Schedule", new { education = education.Name.ToLower() })" class="@clazz">@education.Name</a></li>*@
+                        <li>@Html.ActionLink(education.Name, "Index", new { education = education.Name.ToLower() }, new { @class = (e != null && e.ToString().Equals(education.Name, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink(education.Name, "Index", "Home", new { education = education.Name.ToLower(), Area = "Default" }, new { @class = (e != null && e.ToString().Equals(education.Name, StringComparison.OrdinalIgnoreCase)) ? "selected" : "" })</li>
+                    }
                 }
             </ul>
         </nav>

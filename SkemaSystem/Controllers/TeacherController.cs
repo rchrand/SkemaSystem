@@ -14,14 +14,22 @@ using System.Web.Security;
 
 namespace SkemaSystem.Controllers
 {
-    //[Authorize(Roles="teacher")]
+    [Authorize(Roles="Admin,Master")]
     [RouteArea("Admin", AreaPrefix="admin")]
-    [RoutePrefix("teachers")]
+    [RoutePrefix("{education}/teachers")]
     [Route("{action=index}/{id?}")]
     public class TeacherController : BaseController
     {
+        [Route("~/admin/teachers")]
+        public ActionResult Redirect()
+        {
+            Teacher teacher = db.Teachers.SingleOrDefault(t => t.Id.Equals(User.Id));
+
+            Education education = teacher.Educations.FirstOrDefault();
+
+            return RedirectToAction("Index", new { education = education.Name.ToLower() });
+        }
         // GET: /admin/teachers/
-        [Route("")]
         public ActionResult Index()
         {
             return View(db.Teachers.ToList());

@@ -10,12 +10,21 @@ using SkemaSystem.Models;
 
 namespace SkemaSystem.Controllers
 {
+    [Authorize(Roles="Admin,Master")]
     [RouteArea("Admin", AreaPrefix="admin")]
-    [RoutePrefix("rooms")]
+    [RoutePrefix("{education}/rooms")]
     [Route("{action=index}/{id?}")]
     public class RoomController : BaseController
     {
-        //private SkeamSystemDb db = new SkeamSystemDb();
+        [Route("~/admin/rooms")]
+        public ActionResult Redirect()
+        {
+            Teacher teacher = db.Teachers.SingleOrDefault(t => t.Id.Equals(User.Id));
+
+            Education education = teacher.Educations.FirstOrDefault();
+
+            return RedirectToAction("Index", new { education = education.Name.ToLower() });
+        }
 
         // GET: /Room/
         public ActionResult Index()
