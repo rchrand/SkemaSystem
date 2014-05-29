@@ -72,7 +72,7 @@ namespace SkemaSystem.Services
                             DateTime dt = currentDay;
 
                             //Adds the date and starting block for replacement
-                            availableBlocks.Add(dt, availableBlocks.Count == 0 ? 0 : availableBlocks.Count); // dt   
+                            availableBlocks.Add(dt, 0); // dt   
 
                             found++;
                         }
