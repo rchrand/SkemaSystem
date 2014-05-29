@@ -1,6 +1,8 @@
 ﻿(function ($) {
     $(document).ready(function () {
-        jQuery.fn.extend({
+        $(".subheader").sticky({ topSpacing: 0 });
+
+        /*jQuery.fn.extend({
             
             toggleVisibility: function () {
                 return this.each(function () {
@@ -11,7 +13,7 @@
                     }
                 });
             }
-        });
+        });*/
 
         var ajaxSemesterFormSubmit = function () {
 
