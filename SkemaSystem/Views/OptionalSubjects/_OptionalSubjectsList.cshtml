@@ -11,11 +11,17 @@
                 @foreach (var subject in ViewBag.Subjects)
                 {
                     SkemaSystem.Models.Subject su = subject;
-                    
-                    @Html.Hidden("subjectId", su.Id)
+                    bool isChosen = false;
+                    SkemaSystem.Models.SemesterSubjectBlock ssb = null;
+                    if (ViewBag.Error_OptionalSubjectBlocks != null) { 
+                        ssb = ((List<SkemaSystem.Models.SemesterSubjectBlock>) ViewBag.Error_OptionalSubjectBlocks).Where(x => x.Subject.Id == su.Id).FirstOrDefault();//@Model.OptionalSubjectBlockList.Where(x => x.Subject.Id == su.Id).FirstOrDefault();
+
+                        isChosen = ((List<SkemaSystem.Models.SemesterSubjectBlock>) ViewBag.Error_OptionalSubjectBlocks).Any(x => x.Subject.Id == su.Id);
+                    }
+                    @Html.Hidden("subjectId", su.Id);
                     <tr style="height:53px;">
-                        <td><input type="checkbox" value="@(su.Id)" name="subjectUse" id="@(su.Id)subjectCheckBox" onclick="$('#@(su.Id)subjectBlockCount').toggle('fast')" />&nbsp;&nbsp; <label for="@(su.Id)subjectCheckBox">@su.Name</label></td>
-                        <td><input type="number" name="subjectBlockCount" id="@(su.Id)subjectBlockCount" placeholder="Antal blokke" class="form-control" style="display:none;" /></td>
+                        <td><input type="checkbox" value="@(su.Id)" name="subjectUse" id="@(su.Id)subjectCheckBox" @(isChosen ? "checked" : "") onclick="$('#@(su.Id)subjectBlockCount').toggle('fast')" />&nbsp;&nbsp; <label for="@(su.Id)subjectCheckBox">@su.Name</label></td>
+                        <td><input type="number" name="subjectBlockCount" id="@(su.Id)subjectBlockCount" placeholder="Antal blokke" @(!isChosen ? "style=display:none;" : "value=" + ((ssb != null) ? ssb.BlocksCount : 0) + "") class="form-control" /></td>
                     </tr>
                 }
 

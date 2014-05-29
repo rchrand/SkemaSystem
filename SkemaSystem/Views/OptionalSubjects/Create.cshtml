@@ -6,6 +6,13 @@
 
 <h2>Opret valgfag</h2>
 
+@if (@ViewBag.ErrorMessage != null)
+{
+    <div style="color:#F00;">
+        - @ViewBag.ErrorMessage<br /><br />
+    </div>
+}
+
 <script type="text/javascript">
     function changeOptionalSubjectInfo() {
         var $yearDropdown = $("#year");
@@ -34,7 +41,7 @@
                     <label class="control-label" for="name">Navn:</label>
                 </div>
                 <div class="col-sm-6">
-                    <input class="form-control" type="text" name="name" id="name" placeholder="Valgfags navn" />
+                    <input class="form-control" type="text" name="name" id="name" placeholder="Valgfags navn" value="@((ViewBag.Error_Name != null) ? ViewBag.Error_Name : "")" />
                 </div>
             </div>
 
@@ -53,7 +60,7 @@
 
                         @foreach (SkemaSystem.Models.Semester semester in semesters)
                         {
-                            <option value="@semester.Id">@(semester.Number). semester</option>
+                            <option value="@semester.Id" @((ViewBag.Error_SemesterId != null && (""+semester.Id).Equals(ViewBag.Error_SemesterId)) ? "selected" : "")>@(semester.Number). semester</option>
                         }
                     </select>
                 </div>
@@ -68,7 +75,7 @@
                         <option value="">- Vælg årgang -</option>
                         @foreach (string val in ViewBag.Years)
                         {
-                            <option value="@val">@val</option>
+                            <option value="@val" @((ViewBag.Error_Year != null && val.Equals(ViewBag.Error_Year)) ? "selected" : "")>@val</option>
                         }
                     </select>
                 </div>
@@ -81,7 +88,7 @@
             </div>
 
             <div id="conflictSchemes">
-                @Html.Partial("_ConflictSchemes", null)
+                @Html.Partial("_ConflictSchemes", ((ViewBag.Error_SchemesList != null) ? (List<SkemaSystem.Models.Scheme>)ViewBag.Error_SchemesList : null))
             </div>
 
             <div class="row">
@@ -91,7 +98,7 @@
             </div>
 
             <div id="optionalSubjects">
-                @Html.Partial("_OptionalSubjectsList", null)
+                @Html.Partial("_OptionalSubjectsList")
             </div>
             <input type="submit" class="btn btn-primary" value="Opret Valgfag" />
         </form>
