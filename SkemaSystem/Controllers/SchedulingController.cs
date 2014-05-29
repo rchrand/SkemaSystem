@@ -302,7 +302,7 @@ namespace SkemaSystem.Controllers
 
             //Original, out commented for testing
             //List<DateTime> availableDates = service.FindAHoleInScheme(mainScheme, conflictLessons, choosenBlocks.ToList(), DateTime.Today < mainScheme.SemesterStart ? mainScheme.SemesterStart : DateTime.Today);
-            List<DateTime> availableDates = service.FindAHoleInScheme(mainScheme, conflictLessons, choosenBlocks.ToList(), new DateTime(2014,5,26));
+            Dictionary<DateTime, int> availableDates = service.FindAHoleInScheme(mainScheme, conflictLessons, choosenBlocks.ToList(), new DateTime(2014,5,26));
 
             //******************************
             // Do something with the availableDates
@@ -341,7 +341,7 @@ namespace SkemaSystem.Controllers
 
             ConflictService service = new ConflictService();
 
-            List<DateTime> availableDates = service.setLessonBehindOwnLesson(mainScheme, conflictLessons, choosenBlocks.ToList(), new DateTime(2014, 5, 26));
+            Dictionary<DateTime, int> availableDates = service.setLessonBehindOwnLesson(mainScheme, conflictLessons, choosenBlocks.ToList(), new DateTime(2014, 5, 26));
 
             //******************************
             // Do something with the availableDates
@@ -390,7 +390,7 @@ namespace SkemaSystem.Controllers
 
             ConflictService service = new ConflictService();
 
-            List<DateTime> availableDates = service.switchWithOtherTeacher(mainScheme, conflictLessons, choosenBlocks.ToList(), otherTeacher, DateTime.Today);
+            Dictionary<DateTime, int> availableDates = service.switchWithOtherTeacher(mainScheme, conflictLessons, choosenBlocks.ToList(), otherTeacher, new DateTime(2014, 5, 26));
 
             //******************************
             // Do something with the availableDates

@@ -295,7 +295,7 @@ namespace SkemaSystem.Migrations
             //    mainScheme, conflictScheme
             //);
 
-            //TestData for FindAHole
+            ////TestData for FindAHole
             //ClassModel model1 = new ClassModel { Id = 100, Education = e1, ClassName = "Main Scheme" };
             //ClassModel model2 = new ClassModel { Id = 101, Education = e1, ClassName = "Conflict Scheme" };
 
@@ -304,7 +304,7 @@ namespace SkemaSystem.Migrations
             //    model1, model2
             //);
 
-            //LessonBlock lb1_1 = new LessonBlock { Id = 1, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 0 , Subject = su1, Room = r3};
+            //LessonBlock lb1_1 = new LessonBlock { Id = 1, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 0, Subject = su1, Room = r3 };
             //LessonBlock lb1_2 = new LessonBlock { Id = 2, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 1, Subject = su1, Room = r3 };
             //LessonBlock lb1_3 = new LessonBlock { Id = 3, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 2, Subject = su1, Room = r3 };
             //LessonBlock lb1_4 = new LessonBlock { Id = 4, Teacher = t4, Date = new DateTime(2014, 5, 26), BlockNumber = 3, Subject = su1, Room = r3 };
@@ -358,8 +358,8 @@ namespace SkemaSystem.Migrations
             //    lb_1_1, lb_1_2
             //);
 
-            //Scheme mainScheme = new Scheme { Semester = s1, Id = 100, ClassModel = model1, LessonBlocks = list, SemesterStart = new DateTime(2014,5,26), SemesterFinish = new DateTime(2014, 6, 15) };
-            //Scheme conflictScheme = new Scheme { Semester = s1, Id = 101, ClassModel = model2, LessonBlocks = listConflict, SemesterStart = new DateTime(2014,5,26), SemesterFinish = new DateTime(2014, 6,15) };
+            //Scheme mainScheme = new Scheme { Semester = s1, Id = 100, ClassModel = model1, LessonBlocks = list, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 15) };
+            //Scheme conflictScheme = new Scheme { Semester = s1, Id = 101, ClassModel = model2, LessonBlocks = listConflict, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 15) };
 
             //context.Schemes.AddOrUpdate(
             //    x => x.Id,
