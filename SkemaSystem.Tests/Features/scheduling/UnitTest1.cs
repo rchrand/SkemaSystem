@@ -140,36 +140,6 @@ namespace SkemaSystem.Tests.Features.scheduling
             Assert.AreEqual(11, schemes[0].LessonBlocks.Count);
         }
 
-        //[TestMethod]
-        //[ExpectedException(typeof(Exception))]
-        //public void CreateLessonBlockWithNoComplications()
-        //{
-        //    List<Scheme> schemes = TestOtherSchemes();
-        //    List<Room> rooms = TestRooms();
-
-        //    LessonBlock lessonBlock = SchedulingService.ScheduleLesson(
-        //        schemes[0].Id,
-        //        schemes[0].SubjectDistBlocks[0].Subject.Id,
-        //        rooms[0].Id,
-        //        new DateTime(2014, 6, 23),
-        //        0,
-        //        schemes,
-        //        rooms);
-
-        //    Assert.IsNotNull(lessonBlock);
-
-        //    // fails, throw exception
-        //    lessonBlock = SchedulingService.ScheduleLesson(
-        //        schemes[0].Id,
-        //        schemes[0].SubjectDistBlocks[0].Subject.Id,
-        //        rooms[0].Id,
-        //        new DateTime(2014, 6, 20),
-        //        2,
-        //        schemes,
-        //        rooms);
-        //}
-
-
         [TestMethod]
         public void US11_4_1_FindConflictOnOptionalSchedule()
         {
@@ -236,6 +206,20 @@ namespace SkemaSystem.Tests.Features.scheduling
             Assert.AreEqual("A1.12", lesson1.Room.RoomName);
             Assert.AreEqual("A1.12", lesson3.Room.RoomName);
             Assert.AreEqual("A1.12", lesson10.Room.RoomName);
+        }
+
+        [TestMethod]
+        public void US11_INT_1_IsSchemeAssociatedWithNewLessonBlock() 
+        {
+            List<Scheme> schemes = TestOtherSchemes();
+            List<Room> rooms = TestRooms();
+
+            Assert.AreEqual(10, schemes[0].LessonBlocks.Count);
+
+            SchedulingService.ScheduleLesson(1, 1, 1, new DateTime(2014, 6, 10), 3, schemes, rooms);
+
+            Assert.AreEqual(11, schemes[0].LessonBlocks.Count);
+            Assert.AreEqual("2014-06-10", schemes[0].LessonBlocks[10].Date.ToString("yyyy-MM-dd"));
         }
 
         private static Scheme Testdata()
