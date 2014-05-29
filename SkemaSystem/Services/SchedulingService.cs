@@ -171,7 +171,7 @@ namespace SkemaSystem.Services
             }
             return false;
         }
-
+        
         public static bool IsRoomAvailable(IEnumerable<Scheme> schemes, LessonBlock lessonBlock, Scheme ignoreScheme)
         {
             IEnumerable<Scheme> _schemes;
@@ -195,7 +195,7 @@ namespace SkemaSystem.Services
 
             Room room = rooms.Single(r => r.Id.Equals(roomId));
 
-            SubjectDistBlock sdb = scheme.SubjectDistBlocks.Single(s => s.Id.Equals(subjectId));
+            SubjectDistBlock sdb = scheme.SubjectDistBlocks.FirstOrDefault(s => s.Id.Equals(subjectId));
             //SubjectDistBlock sdb = scheme.SubjectDistBlocks.Single(s => s.Subject.Id.Equals(subjectId));
 
             Subject subject = sdb.Subject;
@@ -222,11 +222,19 @@ namespace SkemaSystem.Services
         {
             Scheme scheme = schemes.Single(s => s.Id.Equals(schemeId));
 
+            int preCount = scheme.LessonBlocks.Count;
+
             string[] ids = lessonIds.Split(',');
 
             scheme.LessonBlocks.RemoveAll(l => ids.Contains(l.Id.ToString()));
 
-            return true;
+            int postCount = scheme.LessonBlocks.Count;
+
+            if(postCount != preCount){
+                return true;
+            } else{
+                return false;
+            }
         }
 
         public static bool RelocateLesson(int schemeId, string lessonIds, int roomId, IEnumerable<Scheme> schemes, IEnumerable<Room> rooms)
@@ -237,19 +245,27 @@ namespace SkemaSystem.Services
 
             string[] ids = lessonIds.Split(',');
 
-            IEnumerable<LessonBlock> blocks = scheme.LessonBlocks.Where(l => ids.Contains(l.Id.ToString()));
+            IEnumerable<LessonBlock> blocks = new List<LessonBlock>(scheme.LessonBlocks.Where(l => ids.Contains(l.Id.ToString())));
 
             Room room = rooms.Single(r => r.Id.Equals(roomId));
 
             foreach (var block in blocks)
             {
-                block.Room = room;
-
-                if (!SchedulingService.IsRoomAvailable(schemes, block, scheme))
+                LessonBlock tempBlock = new LessonBlock()
+                {
+                    BlockNumber = block.BlockNumber,
+                    Date = block.Date,
+                    Id = block.Id,
+                    Room = room,
+                    Subject = block.Subject,
+                    Teacher = block.Teacher
+                };
+                if (!SchedulingService.IsRoomAvailable(schemes, tempBlock, scheme))
                 {
                     return false;// Json(new { message = "Lokalet er ikke ledigt på det pågældende tidspunkt." });
                 }
             }
+            blocks.ToList().ForEach(b => b.Room = room);
 
             return true;
         }

@@ -67,117 +67,123 @@ namespace SkemaSystem.Tests.Features.scheduling
 
         [TestMethod]
         [ExpectedException(typeof(Exception))]
-        public void FindConflictsOnDateAndBlockNumber()
+        public void US11_1_1_FindConflictsOnDateAndBlockNumber()
         {
-            //If theres a conflict on date and blocknumber on the same scheme.
-            bool conflict = SchedulingService.IsConflicting(TestOtherSchemes()[0], new LessonBlock()
-            {
-                BlockNumber = 0,
-                Date = new DateTime(2014, 5, 26),
-                Room = new Room() { Id = -1, RoomName = "temproom"},
-                Subject = new Subject() { Name = "SD" },
-                Teacher = new Teacher() { Name = "testHanne"}
-            }, TestRooms(), TestOtherSchemes());
-
-            Assert.IsTrue(conflict);
-
-            conflict = SchedulingService.IsConflicting(TestOtherSchemes()[0], new LessonBlock()
-            {
-                BlockNumber = 3,
-                Date = new DateTime(2014, 5, 26),
-                Room = new Room() { Id = -1, RoomName = "temproom"},
-                Subject = new Subject() { Name = "SD" },
-                Teacher = new Teacher() { Name = "testHanne" }
-            }, TestRooms(), TestOtherSchemes());
-
-            //If teacher is available at the same time.
-
-
-            //If the room is available at the same time.
-
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void FindConflictOnTeacher()
-        {
-            bool conflict = SchedulingService.IsConflicting(Testdata(), new LessonBlock()
-            {
-                BlockNumber = 1,
-                Date = new DateTime(2014, 6, 2),
-                Room = TestRooms()[0],
-                Subject = new Subject() { Name = "SD" },
-                Teacher = TestTeacher()[0]
-            }, TestRooms(), TestOtherSchemes());
-
-            Assert.IsTrue(conflict);
+            List<Scheme> schemes = TestOtherSchemes();
             
-            conflict = SchedulingService.IsConflicting(Testdata(), new LessonBlock()
-            {
-                BlockNumber = 3,
-                Date = new DateTime(2014, 5, 26),
-                Room = TestRooms()[0],
-                Subject = new Subject() { Name = "SD" },
-                Teacher = TestTeacher()[0]
-            }, TestRooms(), TestOtherSchemes());
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void FindConflictOnRoom()
-        {
-            bool conflict = SchedulingService.IsConflicting(Testdata(), new LessonBlock()
-            {
-                BlockNumber = 1,
-                Date = new DateTime(2014, 6, 4),
-                Room = TestRooms()[1],
-                Subject = new Subject() { Name = "SD" },
-                Teacher = new Teacher() { Id = -1, Name = "Dummy" }
-            }, TestRooms(), TestOtherSchemes());
-
-            Assert.IsTrue(conflict); 
+            Assert.AreEqual(10, schemes[0].LessonBlocks.Count);
             
-            conflict = SchedulingService.IsConflicting(Testdata(), new LessonBlock()
-            {
-                BlockNumber = 3,
-                Date = new DateTime(2014, 5, 26),
-                Room = TestRooms()[0],
-                Subject = new Subject() { Name = "SD" },
-                Teacher = new Teacher() { Id = -1, Name = "Dummy" }
-            }, TestRooms(), TestOtherSchemes());
+            SchedulingService.ScheduleLesson(1, 1, 1, new DateTime(2014, 5, 26), 0, schemes, TestRooms());
+
+            Assert.AreEqual(10, schemes[0].LessonBlocks.Count);
+        }
+
+        [TestMethod]
+        public void US11_1_2_NoConflictsOnDateAndBlockNumber()
+        {
+            List<Scheme> schemes = TestOtherSchemes();
+
+            Assert.AreEqual(10, schemes[0].LessonBlocks.Count);
+
+            SchedulingService.ScheduleLesson(1, 1, 1, new DateTime(2014, 5, 26), 4, schemes, TestRooms());
+
+            Assert.AreEqual(11, schemes[0].LessonBlocks.Count);
         }
 
         [TestMethod]
         [ExpectedException(typeof(Exception))]
-        public void CreateLessonBlockWithNoComplications()
+        public void US11_2_1_FindConflictOnTeacher()
         {
             List<Scheme> schemes = TestOtherSchemes();
             List<Room> rooms = TestRooms();
+            Assert.AreEqual(10, schemes[0].LessonBlocks.Count);
 
-            LessonBlock lessonBlock = SchedulingService.ScheduleLesson(
-                schemes[0].Id,
-                schemes[0].SubjectDistBlocks[0].Subject.Id,
-                rooms[0].Id,
-                new DateTime(2014, 6, 23),
-                0,
-                schemes,
-                rooms);
+            SchedulingService.ScheduleLesson(2,1,2, new DateTime(2014, 6, 2), 1, schemes, rooms);
 
-            Assert.IsNotNull(lessonBlock);
-
-            // fails, throw exception
-            lessonBlock = SchedulingService.ScheduleLesson(
-                schemes[0].Id,
-                schemes[0].SubjectDistBlocks[0].Subject.Id,
-                rooms[0].Id,
-                new DateTime(2014, 6, 20),
-                2,
-                schemes,
-                rooms);
+            Assert.AreEqual(10, schemes[0].LessonBlocks.Count);
         }
 
         [TestMethod]
-        public void DeleteSeveralLessonBlocks()
+        public void US11_2_2_FindNoConflictOnTeacher()
+        {
+            List<Scheme> schemes = TestOtherSchemes();
+            List<Room> rooms = TestRooms();
+            Assert.AreEqual(10, schemes[1].LessonBlocks.Count);
+
+            SchedulingService.ScheduleLesson(2, 1, 2, new DateTime(2014, 5, 26), 3, schemes, rooms);
+
+            Assert.AreEqual(11, schemes[1].LessonBlocks.Count);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void US11_3_1_FindConflictOnRoom()
+        {
+            List<Scheme> schemes = TestOtherSchemes();
+            List<Room> rooms = TestRooms();
+            Assert.AreEqual(10, schemes[0].LessonBlocks.Count);
+
+            SchedulingService.ScheduleLesson(1, 1, 2, new DateTime(2014, 6, 4), 1, schemes, rooms);
+
+            Assert.AreEqual(10, schemes[0].LessonBlocks.Count);
+        }
+
+        [TestMethod]
+        public void US11_3_2_FindNoConflictsOnRoom()
+        {
+            List<Scheme> schemes = TestOtherSchemes();
+            List<Room> rooms = TestRooms();
+            Assert.AreEqual(10, schemes[0].LessonBlocks.Count);
+
+            SchedulingService.ScheduleLesson(1, 1, 1, new DateTime(2014, 6, 4), 3, schemes, rooms);
+
+            Assert.AreEqual(11, schemes[0].LessonBlocks.Count);
+        }
+
+        //[TestMethod]
+        //[ExpectedException(typeof(Exception))]
+        //public void CreateLessonBlockWithNoComplications()
+        //{
+        //    List<Scheme> schemes = TestOtherSchemes();
+        //    List<Room> rooms = TestRooms();
+
+        //    LessonBlock lessonBlock = SchedulingService.ScheduleLesson(
+        //        schemes[0].Id,
+        //        schemes[0].SubjectDistBlocks[0].Subject.Id,
+        //        rooms[0].Id,
+        //        new DateTime(2014, 6, 23),
+        //        0,
+        //        schemes,
+        //        rooms);
+
+        //    Assert.IsNotNull(lessonBlock);
+
+        //    // fails, throw exception
+        //    lessonBlock = SchedulingService.ScheduleLesson(
+        //        schemes[0].Id,
+        //        schemes[0].SubjectDistBlocks[0].Subject.Id,
+        //        rooms[0].Id,
+        //        new DateTime(2014, 6, 20),
+        //        2,
+        //        schemes,
+        //        rooms);
+        //}
+
+
+        [TestMethod]
+        public void US11_4_1_FindConflictOnOptionalSchedule()
+        {
+            Assert.IsFalse(true);
+        }
+
+        [TestMethod]
+        public void US11_4_2_FindNoConflictOnOptionalSchedule()
+        {
+            Assert.IsFalse(true);
+        }
+
+        [TestMethod]
+        public void US11_5_1_DeleteSeveralLessonBlocks()
         {
             List<Scheme> schemes = TestOtherSchemes();
 
@@ -185,31 +191,51 @@ namespace SkemaSystem.Tests.Features.scheduling
 
             string lessonIds = "1,2,10,11"; // 11 doesn't exists, but shouldn't conflict
 
-            bool result = SchedulingService.DeleteLessons(schemes[0].Id, lessonIds, schemes);
-
-            Assert.IsTrue(result);
+            SchedulingService.DeleteLessons(schemes[0].Id, lessonIds, schemes);
 
             Assert.AreEqual(7, schemes[0].LessonBlocks.Count);
         }
 
         [TestMethod]
-        public void RelocateSeveralLessonBlocks()
+        public void US11_6_1_RelocateSeveralLessonBlocksWithComplications()
         {
             List<Scheme> schemes = TestOtherSchemes();
             List<Room> rooms = TestRooms();
 
             string lessonIds = "1,2,10,11"; // 11 doesn't exists, but shouldn't conflict
+                                            // 2, should conflict.
 
-            bool result = SchedulingService.RelocateLesson(schemes[0].Id, lessonIds, rooms[2].Id, schemes, rooms);
 
-            Assert.IsTrue(result);
+            SchedulingService.RelocateLesson(schemes[1].Id, lessonIds, rooms[0].Id, schemes, rooms);
 
-            // this lesson can't be relocated to room[1], because its in use
-            lessonIds = "1";
+            LessonBlock lesson1 = schemes[1].LessonBlocks.Find(l => l.Id == 1);
+            LessonBlock lesson2 = schemes[1].LessonBlocks.Find(l => l.Id == 2);
+            LessonBlock lesson10 = schemes[1].LessonBlocks.Find(l => l.Id == 10);
+            LessonBlock lesson11 = schemes[1].LessonBlocks.Find(l => l.Id == 11);
 
-            result = SchedulingService.RelocateLesson(schemes[0].Id, lessonIds, rooms[1].Id, schemes, rooms);
+            Assert.AreEqual("A2.13" ,lesson1.Room.RoomName);
+            Assert.AreEqual("A2.13", lesson2.Room.RoomName);
+            Assert.AreEqual("A2.13", lesson10.Room.RoomName);
+        }
 
-            Assert.IsFalse(result);
+        [TestMethod]
+        public void US11_6_2_RelocateSeveralLessonBlocksWithoutComplications()
+        {
+            List<Scheme> schemes = TestOtherSchemes();
+            List<Room> rooms = TestRooms();
+
+            string lessonIds = "1,3,10,11"; // 11 doesn't exists, but shouldn't conflict
+
+            SchedulingService.RelocateLesson(schemes[1].Id, lessonIds, rooms[0].Id, schemes, rooms);
+
+            LessonBlock lesson1 = schemes[1].LessonBlocks.Find(l => l.Id == 1);
+            LessonBlock lesson3 = schemes[1].LessonBlocks.Find(l => l.Id == 3);
+            LessonBlock lesson10 = schemes[1].LessonBlocks.Find(l => l.Id == 10);
+            LessonBlock lesson11 = schemes[1].LessonBlocks.Find(l => l.Id == 11);
+
+            Assert.AreEqual("A1.12", lesson1.Room.RoomName);
+            Assert.AreEqual("A1.12", lesson3.Room.RoomName);
+            Assert.AreEqual("A1.12", lesson10.Room.RoomName);
         }
 
         private static Scheme Testdata()
@@ -284,7 +310,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                     },
                     new LessonBlock(){ 
                         BlockNumber = 2,
-                        Date = new DateTime(2014, 6, 20),
+                        Date = new DateTime(2014, 6, 2),
                         Room = TestRooms()[0],
                         Subject = new Subject(){ Name = "SD"},
                         Teacher = TestTeacher()[0]
@@ -292,6 +318,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                 },
                 Semester = null,
                 SubjectDistBlocks = null,
+                ConflictSchemes = new List<Scheme>()
             };
         }
 
@@ -378,8 +405,8 @@ namespace SkemaSystem.Tests.Features.scheduling
                         },
                         new LessonBlock(){ 
                             Id = 10,
-                            BlockNumber = 2,
-                            Date = new DateTime(2014, 6, 20),
+                            BlockNumber = 1,
+                            Date = new DateTime(2014, 6, 2),
                             Room = TestRooms()[0],
                             Subject = new Subject(){ Name = "SD"},
                             Teacher = TestTeacher()[0]
@@ -393,6 +420,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                             Teacher = TestTeacher()[0] 
                         }
                     },
+                    ConflictSchemes = new List<Scheme>()
                 },
                 new Scheme()
                 {
@@ -401,11 +429,27 @@ namespace SkemaSystem.Tests.Features.scheduling
                         ClassName = "12t fake"
                     },
                     Semester = null,
-                    SubjectDistBlocks = new List<SubjectDistBlock>(),
+                    SubjectDistBlocks = new List<SubjectDistBlock>(){
+                        new SubjectDistBlock() {
+                            Id = 1,
+                            Subject = new Subject(){ Id = 1, Name = "SD" },
+                            Teacher = TestTeacher()[0] 
+                        }
+                    },
                     LessonBlocks = new List<LessonBlock>() { 
                         new LessonBlock()
                         {
+                            BlockNumber = 0,
+                            Id = 1,
+                            Date = new DateTime(2014, 6, 2),
+                            Room = TestRooms()[1],
+                            Subject = new Subject() { Name = "SD" },
+                            Teacher = TestTeacher()[0]
+                        },
+                        new LessonBlock()
+                        {
                             BlockNumber = 1,
+                            Id = 2,
                             Date = new DateTime(2014, 6, 2),
                             Room = TestRooms()[1],
                             Subject = new Subject() { Name = "SD" },
@@ -414,14 +458,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                         new LessonBlock()
                         {
                             BlockNumber = 0,
-                            Date = new DateTime(2014, 6, 2),
-                            Room = TestRooms()[1],
-                            Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[0]
-                        },
-                        new LessonBlock()
-                        {
-                            BlockNumber = 0,
+                            Id = 3,
                             Date = new DateTime(2014, 6, 3),
                             Room = TestRooms()[1],
                             Subject = new Subject() { Name = "SD" },
@@ -430,6 +467,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                         new LessonBlock()
                         {
                             BlockNumber = 1,
+                            Id = 4,
                             Date = new DateTime(2014, 6, 3),
                             Room = TestRooms()[1],
                             Subject = new Subject() { Name = "SD" },
@@ -438,6 +476,7 @@ namespace SkemaSystem.Tests.Features.scheduling
                         new LessonBlock()
                         {
                             BlockNumber = 0,
+                            Id = 5,
                             Date = new DateTime(2014, 6, 4),
                             Room = TestRooms()[1],
                             Subject = new Subject() { Name = "SD" },
@@ -446,44 +485,50 @@ namespace SkemaSystem.Tests.Features.scheduling
                         new LessonBlock()
                         {
                             BlockNumber = 1,
+                            Id = 6,
                             Date = new DateTime(2014, 6, 4),
                             Room = TestRooms()[1],
                             Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[0]
+                            Teacher = TestTeacher()[1]
                         },
                         new LessonBlock()
                         {
                             BlockNumber = 0,
+                            Id = 7,
                             Date = new DateTime(2014, 6, 5),
                             Room = TestRooms()[1],
                             Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[0]
+                            Teacher = TestTeacher()[1]
                         },
                         new LessonBlock()
                         {
                             BlockNumber = 1,
+                            Id = 8,
                             Date = new DateTime(2014, 6, 5),
                             Room = TestRooms()[1],
                             Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[0]
+                            Teacher = TestTeacher()[1]
                         },
                         new LessonBlock()
                         {
                             BlockNumber = 2,
-                            Date = new DateTime(2014, 5, 28),
+                            Id = 9,
+                            Date = new DateTime(2014, 6, 6),
                             Room = TestRooms()[1],
                             Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[0]
+                            Teacher = TestTeacher()[1]
                         },
                         new LessonBlock()
                         {
                             BlockNumber = 0,
-                            Date = new DateTime(2014, 5, 26),
+                            Id = 10,
+                            Date = new DateTime(2014, 6, 6),
                             Room = TestRooms()[1],
                             Subject = new Subject() { Name = "SD" },
                             Teacher = TestTeacher()[1]
                         }
-                    }
+                    }, 
+                    ConflictSchemes = new List<Scheme>(),
                 }
             };
         }
