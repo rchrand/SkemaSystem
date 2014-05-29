@@ -176,21 +176,25 @@ namespace SkemaSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
+
             Scheme _scheme = db.Schemes.Single(x => x.Id == scheme);
-            
-            DateTime startDate = new DateTime(2014, 5, 25);
-
-            Scheme data = _scheme;
-
-            TableViewModel tvm = new TableViewModel() { ClassName = _scheme.ClassModel.ClassName, StartDate = SchedulingService.CalculateStartDate(startDate), TableCells = SchedulingService.buildScheme(startDate, data) };
 
             SchemeViewModel model = new SchemeViewModel();
-            model.Classname = _scheme.ClassModel.ClassName;
-            model.Schemes.Add(tvm);
-            if (scheme == 2)
+            if (scheme != null)
             {
-                model.Schemes.Add(tvm);
+                ICollection<Dictionary<int, List<LessonBlock>>> tableCellsList = SchedulingService.AllSchemes(_scheme);
+
+                DateTime currentWeekStartDate = SchedulingService.CalculateStartDate(_scheme.SemesterStart);
+                foreach (Dictionary<int, List<LessonBlock>> tableCells in tableCellsList)
+                {
+                    TableViewModel tvm = new TableViewModel() { StartDate = currentWeekStartDate, TableCells = tableCells };
+                    model.Schemes.Add(tvm);
+                    currentWeekStartDate = currentWeekStartDate.AddDays(7);
+                }
+
+                model.Classname = _scheme.ClassModel.ClassName;
             }
+
             return PartialView("_SchemePartial", model);
         }
 
