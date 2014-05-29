@@ -1,0 +1,18 @@
+﻿<div class="form-group">
+    <label class="control-label col-md-3">Muligheder:</label>
+    <div class="col-md-9">
+        @if (ViewBag.suggestions != null && ((List<DateTime>) ViewBag.suggestions).Count > 0) {
+        <select id="reschedule-options" name="option" class="form-control">
+            <option value="">- Vælg mulighed -</option>
+            @foreach (DateTime date in ViewBag.suggestions)
+            {
+                <option value="@date">@date</option>
+            }
+        </select>
+        }
+        else
+        {
+            <span class="help-block">Ingen muligheder fundet.</span>
+        }
+    </div>
+</div>
