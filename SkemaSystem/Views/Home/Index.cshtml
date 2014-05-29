@@ -1,14 +1,36 @@
 ﻿@model SkemaSystem.Models.ViewModels.SchemeViewModel
 
 @{
-    ViewBag.Title = "Forsiden";
+    ViewBag.Title = "Skemavisning";
+}
+
+@section Subheader {
+    <div class="row">
+        <div class="col-sm-3">
+            <label class="control-label">Skema</label>
+            <form action="@Url.Action("ChangeScheme")" method="get" data-schemesys-ajax="true" data-schemesys-target="#schemeDiv">
+                <select class="form-control" onchange="$(this.form).submit();" name="schemeId">
+                    <option value="">- Vælg skema -</option>
+                    @foreach (KeyValuePair<string, List<SkemaSystem.Models.Scheme>> group in ViewBag.schemeGroups)
+                    {
+                        <optgroup label="@(group.Key)">
+                            @foreach (var scheme in group.Value)
+                            {
+                                <option value="@scheme.Id">@(scheme.ClassModel.ClassName) (@(scheme.Semester.Number). semester)</option>
+                            }
+                        </optgroup>
+                    }
+                </select>
+            </form>
+        </div>
+    </div>
 }
 
 <div class="row">
     <div class="col-md-12">
         <h1>Skemavisning</h1>
         
-        @Html.Partial("_SchemePartial", @Model);
-
+        <div id="schemeDiv">
+        </div>
     </div>
 </div>

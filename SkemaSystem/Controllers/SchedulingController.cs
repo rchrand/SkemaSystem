@@ -166,7 +166,6 @@ namespace SkemaSystem.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
 
-
             SchemeViewModel model = new SchemeViewModel();
 
             Scheme _scheme = db.Schemes.Single(x => x.Id == scheme);
