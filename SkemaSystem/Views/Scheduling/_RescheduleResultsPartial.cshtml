@@ -1,12 +1,16 @@
 ﻿<div class="form-group">
     <label class="control-label col-md-3">Muligheder:</label>
     <div class="col-md-9">
-        @if (ViewBag.suggestions != null && ((List<DateTime>) ViewBag.suggestions).Count > 0) {
+        @if (ViewBag.suggestions != null && ((Dictionary<DateTime, int>)ViewBag.suggestions).Count > 0)
+        {
         <select id="reschedule-options" name="option" class="form-control">
             <option value="">- Vælg mulighed -</option>
-            @foreach (DateTime date in ViewBag.suggestions)
+            @foreach (KeyValuePair<DateTime, int> pair in ViewBag.suggestions)
             {
-                <option value="@date">@date</option>
+                string time = @pair.Value == 0 ? "08:30:00" : @pair.Value == 1 ? "10:30:00" : @pair.Value == 2 ? "12:30:00" : "14:30:00";
+                DateTime date = pair.Key.Date + TimeSpan.Parse(time);
+                
+                <option value="@date.ToString()">@date.ToString()</option>
             }
         </select>
         }
