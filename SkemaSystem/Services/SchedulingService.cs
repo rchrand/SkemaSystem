@@ -19,6 +19,22 @@ namespace SkemaSystem.Services
             dic.Add(3, new List<TableCellViewModel>() { null, new TableCellViewModel() { Teacher = db.Teachers.FirstOrDefault(), SubjectName = "SD", Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } } });
          */
 
+        public static ICollection<Dictionary<int, List<LessonBlock>>> AllMergedSchemes(List<Scheme> schemes)
+        {
+            Scheme mainScheme = schemes.Where(x=>x.ClassModel != null).FirstOrDefault();
+
+            Scheme mergedScheme = new Scheme { ClassModel = mainScheme.ClassModel, Semester = mainScheme.Semester, SemesterStart = mainScheme.SemesterStart, SemesterFinish = mainScheme.SemesterFinish, YearString = mainScheme.YearString, LessonBlocks = new List<LessonBlock>() };
+
+            foreach (Scheme s in schemes)
+            {
+                foreach (LessonBlock lb in s.LessonBlocks) {
+                    mergedScheme.LessonBlocks.Add(lb);
+                }
+            }
+
+            return AllSchemes(mergedScheme);
+        }
+
         public static ICollection<Dictionary<int, List<LessonBlock>>> AllSchemes(Scheme s) {
             List<Dictionary<int, List<LessonBlock>>> result = new List<Dictionary<int, List<LessonBlock>>>();
             DateTime currentDate = CalculateStartDate(s.SemesterStart);
@@ -125,6 +141,20 @@ namespace SkemaSystem.Services
                 //return true;
                 throw new Exception("Underviseren er ikke ledig på det pågældende tidspunkt. (" + schemes.First(s => s.LessonBlocks.Contains(blocks.First())).ClassModel.ClassName + ")");
             }
+
+
+            if (scheme.ConflictSchemes.Any(x => x.LessonBlocks.Any(y => y.Date.Equals(lessonBlock.Date) && y.BlockNumber.Equals(lessonBlock.BlockNumber))))
+            {
+                if (scheme.ClassModel == null)
+                {
+                    throw new Exception("Klassen laver noget andet på dette tidspunkt.");
+                }
+                else
+                {
+                    throw new Exception("Denne blok konflikter med en eller flere af klassens valgfag.");
+                }
+            }
+
 
             /*blocks = schemes.SelectMany(s => s.LessonBlocks).Where(l => l.Date.Equals(lessonBlock.Date) && l.BlockNumber.Equals(lessonBlock.BlockNumber) && l.Room.Id.Equals(lessonBlock.Room.Id));
 

@@ -14,19 +14,24 @@ namespace SkemaSystem.Controllers
 {
 
     [RouteArea("Admin", AreaPrefix = "admin")]
-    [RoutePrefix("optionalSubjects")]
+    [RoutePrefix("{education}/optionalSubjects")]
     [Route("{action=index}/{id?}")]
+    [Authorize(Roles = "Admin,Master")]
     public class OptionalSubjectsController : BaseController
     {
 
         [Route("")]
-        public ActionResult Index()
+        public ActionResult Index(string education)
         {
-            return View(db.Schemes.Where(x => x.ClassModel == null)); // Show a list of schemes without classes => that means it is optional subjects! (valgfag in danish)
+            Education edu = db.Educations.Where(x=>x.Name.Equals(education)).FirstOrDefault();
+            
+            return View(edu.Schemes.Where(x => x.ClassModel == null)); // Show a list of schemes without classes => that means it is optional subjects! (valgfag in danish)
         }
 
-        public ActionResult Create()
+        public ActionResult Create(string education)
         {
+            Education edu = db.Educations.Where(x => x.Name.Equals(education)).FirstOrDefault();
+
             HashSet<string> years = new HashSet<string>();
             foreach (Scheme scheme in db.Schemes)
             {
@@ -36,19 +41,21 @@ namespace SkemaSystem.Controllers
             ViewBag.Years = years;
 
             ViewBag.Education = (from e in db.Educations
-                                 where e.Name.Equals("DMU")
+                                 where e.Name.Equals(edu.Name)
                                  select e).SingleOrDefault();
 
             ViewBag.Subjects = from s in db.Subjects
-                               where s.OptionalSubject
+                               where s.OptionalSubject && s.Education.Id == edu.Id
                                select s;
 
             return View();
         }
 
         [HttpPost]
-        public ActionResult Create(FormCollection form)
+        public ActionResult Create(FormCollection form, string education)
         {
+            Education edu = db.Educations.Where(x => x.Name.Equals(education)).FirstOrDefault();
+
             if (string.IsNullOrEmpty(form["semester"]) || string.IsNullOrEmpty(form["name"]) || string.IsNullOrEmpty(form["year"]))
             {
                 // If any of the required fields are empty!
@@ -104,14 +111,8 @@ namespace SkemaSystem.Controllers
             Scheme randomScheme = db.Schemes.Where(x => x.YearString.Equals(year) && x.Semester.Id == semester.Id).FirstOrDefault();
             if (randomScheme != null)
             {
-                //List<ConflictScheme> cSchemeList = new List<ConflictScheme>();
-
-                    //cSchemeList.Add(new ConflictScheme { scheme = conflictSchemes });
-
-                    Scheme newScheme = new Scheme { Name = name, OptionalSubjectBlockList = optionalSubjectBlocks, ConflictSchemes = conflictSchemes, Semester = semester, SemesterStart = randomScheme.SemesterStart, SemesterFinish = randomScheme.SemesterFinish, YearString = "" };
-
-                //List<Scheme> temp = new List<Scheme>();
-                //temp.Add(newScheme);
+                Scheme newScheme = new Scheme { Name = name, OptionalSubjectBlockList = optionalSubjectBlocks, ConflictSchemes = conflictSchemes, Semester = semester, SemesterStart = randomScheme.SemesterStart, SemesterFinish = randomScheme.SemesterFinish, YearString = "" };
+                edu.Schemes.Add(newScheme);
 
                 foreach (Scheme otherScheme in conflictSchemes)
                 {
@@ -139,25 +140,28 @@ namespace SkemaSystem.Controllers
             return result;
         }
 
-        public ActionResult UpdateConflictsWith(string year, string semester)
+        public ActionResult UpdateConflictsWith(string year, string semester, string education)
         {
+            Education edu = db.Educations.Where(x => x.Name.Equals(education)).FirstOrDefault();
+
             int semesterId = Int32.Parse(semester);
-            var schemes = from s in db.Schemes
+            var schemes = from s in edu.Schemes
                           where s.Semester.Id == semesterId && s.YearString.Equals(year)
                           select s;
 
             return PartialView("_ConflictSchemes", schemes);
         }
 
-        public ActionResult CreateOptionalSubject(string name)
+        public ActionResult CreateOptionalSubject(string name, string education)
         {
+            Education edu = db.Educations.Where(x => x.Name.Equals(education)).FirstOrDefault();
 
             Subject su = new Subject { Name = name, OptionalSubject = true, Education = db.Educations.Where(x => x.Name.Equals("DMU")).SingleOrDefault() };
             db.Subjects.Add(su);
             db.SaveChanges();
 
             ViewBag.Subjects = from s in db.Subjects
-                               where s.OptionalSubject
+                               where s.OptionalSubject && s.Education.Id == edu.Id
                                select s;
 
             return PartialView("_OptionalSubjectsList");
@@ -187,28 +191,32 @@ namespace SkemaSystem.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, string education)
         {
+            Education edu = db.Educations.Where(x => x.Name.Equals(education)).FirstOrDefault();
+
             Scheme scheme = db.Schemes.Find(id);
             if (scheme == null)
             {
                 return HttpNotFound();
             }
 
-            ViewBag.Schemes = from s in db.Schemes
+            ViewBag.Schemes = from s in edu.Schemes
                           where s.Semester.Id == scheme.Semester.Id && s.YearString.Equals(scheme.YearString)
                           select s;
 
             ViewBag.Subjects = from s in db.Subjects
-                               where s.OptionalSubject
+                               where s.OptionalSubject && s.Education.Id == edu.Id
                                select s;
 
             return View(scheme);
         }
 
         [HttpPost]
-        public ActionResult Edit(FormCollection form)
+        public ActionResult Edit(FormCollection form, string education)
         {
+            Education edu = db.Educations.Where(x => x.Name.Equals(education)).FirstOrDefault();
+
             int schemeId = Int32.Parse(form["schemeId"]);
             Scheme scheme = db.Schemes.SingleOrDefault(x => x.Id == schemeId);
             Semester semester = scheme.Semester; // ONLY to get the value from the database!

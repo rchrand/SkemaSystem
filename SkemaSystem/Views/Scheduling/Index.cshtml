@@ -9,13 +9,19 @@
             <form action="@Url.Action("ChangeSubjectDropDown")" method="get" id="scheme-selector" data-action-subject="@Url.Action("ChangeSubjectDropDown")" data-action-scheme="@Url.Action("ChangeScheme")">
                 <select class="form-control" onchange="$(this.form).submit();" name="scheme">
                     <option value="">- Vælg skema -</option>
-                    @foreach (KeyValuePair<string, List<SkemaSystem.Models.Scheme>> group in ViewBag.schemeGroups)
+                    @foreach (KeyValuePair<string, List<List<SkemaSystem.Models.Scheme>>> group in ViewBag.schemeGroups)
                     {
                         <optgroup label="@(group.Key)">
-                            @foreach (var scheme in group.Value)
+                            @foreach (var scheme in group.Value[0])
                             {
                                 <option value="@scheme.Id">@(scheme.ClassModel.ClassName) (@(scheme.Semester.Number). semester)</option>
                             }
+                            <optgroup label="Valgfag @(group.Key)" style="margin-left:10px;">
+                                @foreach (var scheme in group.Value[1])
+                                {
+                                    <option value="@scheme.Id">@(scheme.Name) (@(scheme.Semester.Number). semester)</option>
+                                }
+                            </optgroup>
                         </optgroup>
                     }
                 </select>
