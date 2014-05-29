@@ -338,6 +338,7 @@
     <Content Include="Views\OptionalSubjects\Edit.cshtml" />
     <Content Include="Views\OptionalSubjects\_OptionalSubjectsListEdit.cshtml" />
     <Content Include="Views\Scheduling\_RescheduleResultsPartial.cshtml" />
+    <Content Include="Views\Home\_OptionalSubjects.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />

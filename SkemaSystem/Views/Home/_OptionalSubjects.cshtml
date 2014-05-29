@@ -1,0 +1,64 @@
+﻿@model IEnumerable<SkemaSystem.Models.Scheme>
+
+<script type="text/javascript">
+    $(document).on('submit', "#mergeSchemes", function () {
+        var $form = $(this);
+
+        $.ajax({
+            url: $form.attr("action"),
+            type: $form.attr("method"),
+            dataType: 'json',
+            data: $form.serialize()
+        }).done(function (response) {
+            try {
+                if (response.success) {
+                    // Activate all checkboxes!
+                    $("input[type='checkbox']").removeAttr("disabled").prop("disabled", false);
+
+                    response.deactivate_schemes.forEach(function (value) {
+                        $("#checkbox" + value).prop("disabled", true);
+                    });
+                }
+            } catch (exception) {
+                alert("Der skete desværre en fejl, vi beklager.");
+            }
+        });
+
+        $.ajax({
+            url: $form.attr("data-action-schemes"),
+            type: $form.attr("method"),
+            data: $form.serialize()
+        }).done(function (response) {
+            $('#schemes').html(response);
+        });
+
+
+        return false;
+    });
+</script>
+
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <label class="control-label">Inkludér valgfag</label>
+    </div>
+</div>
+<div class="row">
+    <form action="@Url.Action("LockAndUnlockCheckboxes")" method="post" id="mergeSchemes" data-action-schemes="@Url.Action("MergeWithOptionalSubjects")">
+        <input type="hidden" name="schemeId" value="@ViewBag.schemeId" />
+
+        @foreach (SkemaSystem.Models.Scheme s in @Model)
+        {
+            <div class="col-sm-3">
+                <table style="border:none;">
+                    <tr>
+                        <td style="padding:0px;border:none;">@s.Name</td>
+                        <td style="padding:0px;border:none;"><input type="checkbox" name="includeOptionalSubject" value="@(s.Id)" style="margin-top:10px;" id="checkbox@(s.Id)" onclick="$(this.form).submit();" /></td>
+                    </tr>
+                </table>
+            </div>
+        }
+    </form>
+</div>
+

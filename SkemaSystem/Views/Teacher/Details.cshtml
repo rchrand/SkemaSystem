@@ -1,21 +1,20 @@
 ﻿@model SkemaSystem.Models.Teacher
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detaljer";
 }
 
 @section Subheader {
     @Html.Partial("_AdminTabsPartial")
 }
 
-<h2>Details</h2>
+<h2>Detaljer</h2>
 
 <div>
-    <h4>Teacher</h4>
 	<hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            Navn
         </dt>
 
         <dd>
@@ -23,17 +22,16 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Educations)
+            Uddannelser
         </dt>
 
         <dd>
-            @*@Html.DisplayFor(model => model.Educations)*@
             @Html.Raw(string.Join(", ", @Model.Educations.Select(s => string.Format("{0}", s.Name))))
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Ændre", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Tilbage til læreroversigten", "Index")
 </p>

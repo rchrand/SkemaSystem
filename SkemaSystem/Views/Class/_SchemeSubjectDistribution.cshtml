@@ -34,7 +34,7 @@
                 <select class="form-control" name="add_subject" id="add_subject">
                     @foreach (var semesterSubject in Model.Semester.Blocks)
                     {
-                        <option value="@semesterSubject.Subject.Id" @((ViewBag.add_subject != null && ViewBag.add_subject == @semesterSubject.Subject.Id) ? "selected" : "")>@semesterSubject.Subject.Name</option>
+                        <option value="@semesterSubject.Subject.Id" @((ViewBag.add_subject != null && ViewBag.add_subject == @semesterSubject.Subject.Id) ? "selected" : "")>@semesterSubject.Subject.Name (i alt @semesterSubject.BlocksCount)</option>
                     }
                 </select>
             </div>
