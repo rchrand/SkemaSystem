@@ -411,5 +411,30 @@ namespace SkemaSystem.Controllers
             }
             return result;
         }
+
+        private List<Teacher> FindFreeTeachers(string blockids)
+        {
+            int[] ids = ConvertStringArraytoInt(blockids.Split(','));
+            
+            var blocks = (from l in db.LessonBlocks
+                         where ids.Contains(l.Id)
+                         select l).ToList();
+
+            List<Teacher> teachers = db.Teachers.ToList();
+
+            foreach (var item in blocks)
+	        {
+                var lessons = (from l in db.LessonBlocks
+                               where l.Date == item.Date
+                               where l.BlockNumber == item.BlockNumber
+                               select l).ToList();
+                foreach (var item2 in lessons)
+                {
+                    if (teachers.Contains(item2.Teacher))
+                        teachers.Remove(item2.Teacher);
+                }
+	        }
+            return teachers;
+        }
 	}
 }
