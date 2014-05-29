@@ -1,4 +1,6 @@
 ﻿using SkemaSystem.Models;
+using SkemaSystem.Models.ViewModels;
+using SkemaSystem.Services;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -15,14 +17,26 @@ namespace SkemaSystem.Controllers
         [Route("{education?}")]
         public ActionResult Index(string education)
         {
-            if (education != null)
+            if (education == null)
+                return RedirectToAction("Index", new { education = db.Educations.FirstOrDefault().Name });
+
+            Education edu = db.Educations.SingleOrDefault(x => x.Name.Equals(education));
+
+            SchemeViewModel model = new SchemeViewModel();
+
+            Scheme scheme = edu.Schemes.FirstOrDefault();
+
+            ICollection<Dictionary<int, List<LessonBlock>>> tableCellsList = SchedulingService.AllSchemes(scheme);
+
+            DateTime currentWeekStartDate = SchedulingService.CalculateStartDate(scheme.SemesterStart);
+            foreach (Dictionary<int, List<LessonBlock>> tableCells in tableCellsList)
             {
-                //RedirectToAction("Index", "Education");
+                TableViewModel tvm = new TableViewModel() { StartDate = currentWeekStartDate, TableCells = tableCells };
+                model.Schemes.Add(tvm);
+                currentWeekStartDate = currentWeekStartDate.AddDays(7);
             }
-            var model =
-                from t in db.Teachers
-                orderby t.Name ascending
-                select t;
+
+            model.Classname = scheme.ClassModel.ClassName;
 
             return View(model);
         }
