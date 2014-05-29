@@ -29,7 +29,7 @@ namespace SkemaSystem.Services
         /// <param name="blocks"></param>
         /// <returns></returns>
 
-        public List<DateTime> FindAHoleInScheme(Scheme mainScheme, List<LessonBlock> conflictLessons, List<LessonBlock> blocks, DateTime Date)
+        public Dictionary<DateTime, int> FindAHoleInScheme(Scheme mainScheme, List<LessonBlock> conflictLessons, List<LessonBlock> blocks, DateTime Date)
         {
             //List the blocknumbers to be removed
             List<int> blockNumbersToBeMoved = getBlockNumbersToBeMoved(blocks);
@@ -38,7 +38,7 @@ namespace SkemaSystem.Services
 
             //Lists for the mainscheme's lessons and for available blocks to be returned
             List<LessonBlock> occupiedBlocks = getLessonBlocks(mainScheme.LessonBlocks, currentDay);
-            List<DateTime> availableBlocks = new List<DateTime>();
+            Dictionary<DateTime, int> availableBlocks = new Dictionary<DateTime, int>();
 
             int found = 0;
             while (found != 3)
@@ -72,16 +72,9 @@ namespace SkemaSystem.Services
                         {
                             DateTime dt = currentDay;
 
-                            int blockNumber = 0;// blocksToBeOccupied.First();
+                            //Adds the date and starting block for replacement
+                            availableBlocks.Add(dt, 0); // dt   
 
-                            Debug.WriteLine(blockNumber);
-
-                            string time = blockNumber == 0 ? "08:30:00" : blockNumber == 1 ? "10:30:00" : blockNumber == 2 ? "12:30:00" : "14:30:00";
-
-                            DateTime test;
-                            test = dt.Date + TimeSpan.Parse(time);
-
-                            availableBlocks.Add(dt); // dt
                             found++;
                         }
                     }
@@ -106,7 +99,7 @@ namespace SkemaSystem.Services
         /// <param name="conflictLessons"></param>
         /// <param name="blocks"></param>
         /// <returns></returns>
-        public List<DateTime> setLessonBehindOwnLesson(Scheme mainScheme, List<LessonBlock> conflictLessons, List<LessonBlock> blocks, DateTime date)
+        public Dictionary<DateTime, int> setLessonBehindOwnLesson(Scheme mainScheme, List<LessonBlock> conflictLessons, List<LessonBlock> blocks, DateTime date)
         {
             //List the blocknumbers to be removed
             List<int> blockNumbersToBeMoved = getBlockNumbersToBeMoved(blocks);
@@ -115,7 +108,7 @@ namespace SkemaSystem.Services
 
             //Lists for the mainscheme's lessons and for available blocks to be returned
             List<LessonBlock> occupiedBlocks = getLessonBlocks(mainScheme.LessonBlocks, currentDay);
-            List<DateTime> availableBlocks = new List<DateTime>();
+            Dictionary<DateTime, int> availableBlocks = new Dictionary<DateTime, int>();
 
             int found = 0;
             while (found != 3)
@@ -148,28 +141,58 @@ namespace SkemaSystem.Services
 
                         //Check the blocknumbers which was free for moving lessonblock with the conflict lessons
                         bool valid = true;
+                        List<LessonBlock> conflictsCurrentDay = new List<LessonBlock>();
                         foreach (var item in conflictLessons)
                         {
-                            if (item.Date == currentDay && blocksToBeOccupied.Contains(item.BlockNumber))
+                            if (item.Date == currentDay)
                             {
-                                valid = false;
-                                break;
+                                conflictsCurrentDay.Add(item);
+                                if(blocksToBeOccupied.Contains(item.BlockNumber))
+                                {
+                                    valid = false;
+                                    break;
+                                }
                             }
                         }
                         if (valid)
                         {
                             DateTime dt = currentDay;
 
-                            int blockNumber = blocksToBeOccupied.First();
+                            //int blockNumber = blocksToBeOccupied.First();
 
-                            Debug.WriteLine(blockNumber);
+                            //Debug.WriteLine(blockNumber);
 
-                            string time = blockNumber == 0 ? "08:30:00" : blockNumber == 1 ? "10:30:00" : blockNumber == 2 ? "12:30:00" : "14:30:00";
+                            //string time = blockNumber == 0 ? "08:30:00" : blockNumber == 1 ? "10:30:00" : blockNumber == 2 ? "12:30:00" : "14:30:00";
 
-                            DateTime test;
-                            test = dt.Date + TimeSpan.Parse(time);
+                            //DateTime test;
+                            //test = dt.Date + TimeSpan.Parse(time);
+
+                            int blocknumber = 0;
+                            while(blocknumber < 4)
+                            {
+                                //Checks if blocknumber is occoupied
+                                if(currentBlocks.Where(x => x.BlockNumber == blocknumber).Count() == 0 &&
+                                   conflictsCurrentDay.Where(x => x.BlockNumber == blocknumber).Count() == 0)
+                                {
+                                    bool validBlock = true;
+                                    for (int i = 1; i < blockNumbersToBeMoved.Count(); i++)
+                                    {
+                                        if(currentBlocks.Where(x => x.BlockNumber == (blocknumber+i)).Count() != 0 &&
+                                        conflictsCurrentDay.Where(x => x.BlockNumber == blocknumber+i).Count() != 0)
+                                        {
+                                            validBlock = false;
+                                        }
+                                    }
+                                    if(validBlock)
+                                    {
+                                        availableBlocks.Add(dt, blocknumber);
+                                        blocknumber = 4;
+                                    }
+                                }
+                                blocknumber++;
+                            }
                             
-                            availableBlocks.Add(test); // dt
+                             // dt
                             found++;
                         }
                     }
@@ -196,7 +219,7 @@ namespace SkemaSystem.Services
         /// <param name="otherTeacher"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        public List<DateTime> switchWithOtherTeacher(Scheme mainScheme, List<LessonBlock> conflictLessons, List<LessonBlock> blocks, Teacher otherTeacher, DateTime date)
+        public Dictionary<DateTime, int> switchWithOtherTeacher(Scheme mainScheme, List<LessonBlock> conflictLessons, List<LessonBlock> blocks, Teacher otherTeacher, DateTime date)
         {
             List<int> blockNumbersToBeMoved = getBlockNumbersToBeMoved(blocks);
 
@@ -204,12 +227,13 @@ namespace SkemaSystem.Services
 
             //Lists for the mainscheme's lessons and for available blocks to be returned
             List<LessonBlock> occupiedBlocks = getLessonBlocks(mainScheme.LessonBlocks, currentDay);
-            List<DateTime> availableBlocks = new List<DateTime>();
+            Dictionary<DateTime, int> availableBlocks = new Dictionary<DateTime, int>();
 
             int found = 0;
             while (found != 3)
             {
                 List<LessonBlock> currentBlocks = new List<LessonBlock>();
+                List<LessonBlock> conflictsCurrentDay = new List<LessonBlock>();
 
                 //Gets the blocks with match for currentDay and have the right teacher. If it's the wrong teacher list gets cleared
                 foreach (LessonBlock item in occupiedBlocks)
@@ -224,6 +248,7 @@ namespace SkemaSystem.Services
                     {
                         if (item.Date == currentDay && item.Teacher == blocks[0].Teacher)
                         {
+                            conflictsCurrentDay.Add(item);
                             foreach (var item2 in currentBlocks)
                             {
                                 if (item.BlockNumber == item2.BlockNumber)
@@ -238,16 +263,31 @@ namespace SkemaSystem.Services
                     {
                         DateTime dt = currentDay;
 
-                        int blockNumber = 0;// blocksToBeOccupied.First();
+                        int blocknumber = 0;
+                        while (blocknumber < 4)
+                        {
+                            //Checks if blocknumber is occoupied
+                            if (currentBlocks.Where(x => x.BlockNumber == blocknumber).Count() == 1 &&
+                               conflictsCurrentDay.Where(x => x.BlockNumber == blocknumber).Count() == 0)
+                            {
+                                bool validBlock = true;
+                                for (int i = 1; i < blockNumbersToBeMoved.Count(); i++)
+                                {
+                                    if (currentBlocks.Where(x => x.BlockNumber == (blocknumber + i)).Count() != 1 &&
+                                    conflictsCurrentDay.Where(x => x.BlockNumber == blocknumber + i).Count() != 0)
+                                    {
+                                        validBlock = false;
+                                    }
+                                }
+                                if (validBlock)
+                                {
+                                    availableBlocks.Add(dt, blocknumber);
+                                    blocknumber = 4;
+                                }
+                            }
+                            blocknumber++;
+                        }
 
-                        Debug.WriteLine(blockNumber);
-
-                        string time = blockNumber == 0 ? "08:30:00" : blockNumber == 1 ? "10:30:00" : blockNumber == 2 ? "12:30:00" : "14:30:00";
-
-                        DateTime test;
-                        test = dt.Date + TimeSpan.Parse(time);
-
-                        availableBlocks.Add(dt); // dt
                         found++;
                     }
                 }

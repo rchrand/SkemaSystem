@@ -56,7 +56,7 @@ namespace SkemaSystem.Services
 
             DateTime endDate = startDate.AddDays(4);
 
-            IEnumerable<LessonBlock> blocks = scheme.LessonBlocks.Where(l => l.Date >= startDate && l.Date <= endDate);
+            IEnumerable<LessonBlock> blocks = scheme.LessonBlocks.Where(l => l.Date.Date >= startDate.Date && l.Date.Date <= endDate.Date);
 
             foreach (var block in blocks)
             {
@@ -205,7 +205,7 @@ namespace SkemaSystem.Services
             LessonBlock lesson = new LessonBlock()
             {
                 BlockNumber = blockNumber,
-                Date = date,
+                Date = date.Date,
                 Room = room,
                 Subject = subject,
                 Teacher = teacher

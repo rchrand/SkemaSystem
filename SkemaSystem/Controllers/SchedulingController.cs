@@ -148,13 +148,15 @@ namespace SkemaSystem.Controllers
             {
                 if (SchedulingService.DeleteLessons(schemeId, lessonIds, db.Schemes))
                 {
-                    /*string[] ids = lessonIds.Split(',');
+                    string[] ids = lessonIds.Split(',');
 
                     foreach (string id in ids)
                     {
                         int _id = Int32.Parse(id);
-                        db.Entry<LessonBlock>(db.LessonBlocks.Single(l => l.Id == _id)).State = EntityState.Deleted;
-                    }*/
+                        LessonBlock lesson = db.LessonBlocks.Single(l => l.Id == _id);
+
+                        db.LessonBlocks.Remove(lesson);
+                    }
                     db.SaveChanges();
                     scope.Complete();
                 }
@@ -241,7 +243,7 @@ namespace SkemaSystem.Controllers
         [Route("reschedule"), HttpPost]
         public ActionResult Reschedule(string method, string blockIds, int? chosenTeacherId, DateTime option)
         {
-            string time = "12:30:00";// option.TimeOfDay.ToString();
+            string time = option.TimeOfDay.ToString();
 
             int blockNumber = time == "08:30:00" ? 0 : time == "10:30:00" ? 1 : time == "12:30:00" ? 2 : 3;
 
@@ -264,14 +266,23 @@ namespace SkemaSystem.Controllers
                 {
                     var blocks = choosenBlocks.ToList();
 
+                    SchedulingService.DeleteLessons(mainScheme.Id, blockIds, db.Schemes);
+
                     for (int i = 0; i < blocks.Count; i++)
                     {
-                        var subject = mainScheme.SubjectDistBlocks.Single(s => s.Subject.Id.Equals(blocks[i].Subject.Id));
+                        int roomId = blocks[i].Room.Id;
+                        int subjectId = blocks[i].Subject.Id;
 
-                        SchedulingService.ScheduleLesson(mainScheme.Id, subject.Id, blocks[i].Room.Id, option, blockNumber, db.Schemes, db.Rooms);
+                        db.LessonBlocks.Remove(blocks[i]);
+
+                        var subject = mainScheme.SubjectDistBlocks.Single(s => s.Subject.Id.Equals(subjectId));
+
+                        SchedulingService.ScheduleLesson(mainScheme.Id, subject.Id, roomId, option, blockNumber, db.Schemes, db.Rooms);
                         blockNumber++;
                     }
-                    if (SchedulingService.DeleteLessons(mainScheme.Id, blockIds, db.Schemes))
+                    db.SaveChanges();
+                    scope.Complete();
+                    /*if (SchedulingService.DeleteLessons(mainScheme.Id, blockIds, db.Schemes))
                     {
                         foreach (string id in block)
                         {
@@ -284,7 +295,7 @@ namespace SkemaSystem.Controllers
                     else
                     {
                         scope.Dispose();
-                    }
+                    }*/
                 }
                 catch (Exception e)
                 {
@@ -331,7 +342,7 @@ namespace SkemaSystem.Controllers
 
             //Original, out commented for testing
             //List<DateTime> availableDates = service.FindAHoleInScheme(mainScheme, conflictLessons, choosenBlocks.ToList(), DateTime.Today < mainScheme.SemesterStart ? mainScheme.SemesterStart : DateTime.Today);
-            List<DateTime> availableDates = service.FindAHoleInScheme(mainScheme, conflictLessons, choosenBlocks.ToList(), new DateTime(2014,5,26));
+            Dictionary<DateTime, int> availableDates = service.FindAHoleInScheme(mainScheme, conflictLessons, choosenBlocks.ToList(), new DateTime(2014,5,26));
 
             //******************************
             // Do something with the availableDates
@@ -370,7 +381,7 @@ namespace SkemaSystem.Controllers
 
             ConflictService service = new ConflictService();
 
-            List<DateTime> availableDates = service.setLessonBehindOwnLesson(mainScheme, conflictLessons, choosenBlocks.ToList(), new DateTime(2014, 5, 26));
+            Dictionary<DateTime, int> availableDates = service.setLessonBehindOwnLesson(mainScheme, conflictLessons, choosenBlocks.ToList(), new DateTime(2014, 5, 26));
 
             //******************************
             // Do something with the availableDates
@@ -419,7 +430,7 @@ namespace SkemaSystem.Controllers
 
             ConflictService service = new ConflictService();
 
-            List<DateTime> availableDates = service.switchWithOtherTeacher(mainScheme, conflictLessons, choosenBlocks.ToList(), otherTeacher, DateTime.Today);
+            Dictionary<DateTime, int> availableDates = service.switchWithOtherTeacher(mainScheme, conflictLessons, choosenBlocks.ToList(), otherTeacher, new DateTime(2014, 5, 26));
 
             //******************************
             // Do something with the availableDates
@@ -439,6 +450,31 @@ namespace SkemaSystem.Controllers
                 result[i] = (item[i].Equals("")) ? 0 : Int32.Parse(item[i]);
             }
             return result;
+        }
+
+        private List<Teacher> FindFreeTeachers(string blockids)
+        {
+            int[] ids = ConvertStringArraytoInt(blockids.Split(','));
+            
+            var blocks = (from l in db.LessonBlocks
+                         where ids.Contains(l.Id)
+                         select l).ToList();
+
+            List<Teacher> teachers = db.Teachers.ToList();
+
+            foreach (var item in blocks)
+	        {
+                var lessons = (from l in db.LessonBlocks
+                               where l.Date == item.Date
+                               where l.BlockNumber == item.BlockNumber
+                               select l).ToList();
+                foreach (var item2 in lessons)
+                {
+                    if (teachers.Contains(item2.Teacher))
+                        teachers.Remove(item2.Teacher);
+                }
+	        }
+            return teachers;
         }
 	}
 }
