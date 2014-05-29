@@ -125,6 +125,13 @@ namespace SkemaSystem.Controllers
             {
                 if (SchedulingService.DeleteLessons(schemeId, lessonIds, db.Schemes))
                 {
+                    /*string[] ids = lessonIds.Split(',');
+
+                    foreach (string id in ids)
+                    {
+                        int _id = Int32.Parse(id);
+                        db.Entry<LessonBlock>(db.LessonBlocks.Single(l => l.Id == _id)).State = EntityState.Deleted;
+                    }*/
                     db.SaveChanges();
                     scope.Complete();
                 }
@@ -187,7 +194,79 @@ namespace SkemaSystem.Controllers
             return PartialView("_SchemePartial", model);
         }
 
-        public ActionResult FindAHoleInScheme(string blockIdsString)
+        [Route("reschedule")]
+        public ActionResult Reschedule(string method, string blockIds, int? chosenTeacherId)
+        {
+            switch (method)
+            {
+                case "hole":
+                    return FindAHoleInScheme(blockIds);
+                case "behind":
+                    return SetLessonBehindOwnLesson(blockIds);
+                case "teacher":
+                    return SwitchWithOtherTeacher(blockIds, (int) chosenTeacherId);
+            }
+            return PartialView("_RescheduleResultsPartial");
+        }
+
+        [Route("reschedule"), HttpPost]
+        public ActionResult Reschedule(string method, string blockIds, int? chosenTeacherId, DateTime option)
+        {
+            string time = "12:30:00";// option.TimeOfDay.ToString();
+
+            int blockNumber = time == "08:30:00" ? 0 : time == "10:30:00" ? 1 : time == "12:30:00" ? 2 : 3;
+
+            string[] block = blockIds.Split(',');
+            int[] ids = ConvertStringArraytoInt(block);
+
+            var choosenBlocks = db.LessonBlocks.Where(lb => ids.Contains(lb.Id));
+
+            var mainScheme = db.Schemes.Where(sc => sc.LessonBlocks.Any(l => l.Id == choosenBlocks.FirstOrDefault().Id)).SingleOrDefault();
+            
+            TransactionOptions options = new TransactionOptions
+            {
+                IsolationLevel = System.Transactions.IsolationLevel.RepeatableRead,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, options))
+            {
+                try
+                {
+                    var blocks = choosenBlocks.ToList();
+
+                    for (int i = 0; i < blocks.Count; i++)
+                    {
+                        var subject = mainScheme.SubjectDistBlocks.Single(s => s.Subject.Id.Equals(blocks[i].Subject.Id));
+
+                        SchedulingService.ScheduleLesson(mainScheme.Id, subject.Id, blocks[i].Room.Id, option, blockNumber, db.Schemes, db.Rooms);
+                        blockNumber++;
+                    }
+                    if (SchedulingService.DeleteLessons(mainScheme.Id, blockIds, db.Schemes))
+                    {
+                        foreach (string id in block)
+                        {
+                            int _id = Int32.Parse(id);
+                            db.Entry<LessonBlock>(db.LessonBlocks.Single(l => l.Id == _id)).State = EntityState.Deleted;
+                        }
+                        db.SaveChanges();
+                        scope.Complete();
+                    }
+                    else
+                    {
+                        scope.Dispose();
+                    }
+                }
+                catch (Exception e)
+                {
+                    scope.Dispose();
+                    return Json(new { message = e.Message });
+                }
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+        private ActionResult FindAHoleInScheme(string blockIdsString)
         {
             string[] block = blockIdsString.Split(',');
             int[] blockIds = ConvertStringArraytoInt(block);
@@ -199,7 +278,7 @@ namespace SkemaSystem.Controllers
 
             //******************************
             // Get the mainScheme
-            var mainScheme = db.Schemes.Where(sc => sc.LessonBlocks.FirstOrDefault().Id == choosenBlocks.FirstOrDefault().Id).SingleOrDefault();
+            var mainScheme = db.Schemes.Where(sc => sc.LessonBlocks.Any(l => l.Id == choosenBlocks.FirstOrDefault().Id)).SingleOrDefault();
             //******************************
 
             //******************************
@@ -230,10 +309,12 @@ namespace SkemaSystem.Controllers
 
             //******************************
 
-            return null;
+            ViewBag.suggestions = availableDates;
+
+            return PartialView("_RescheduleResultsPartial");
         }
 
-        public ActionResult SetLessonBehindOwnLesson(string blockIdsString)
+        private ActionResult SetLessonBehindOwnLesson(string blockIdsString)
         {
             string[] block = blockIdsString.Split(',');
             int[] blockIds = ConvertStringArraytoInt(block);
@@ -245,7 +326,7 @@ namespace SkemaSystem.Controllers
 
             //******************************
             // Get the mainScheme
-            var mainScheme = db.Schemes.Where(sc => sc.LessonBlocks.FirstOrDefault().Id == choosenBlocks.FirstOrDefault().Id).SingleOrDefault();
+            var mainScheme = db.Schemes.Where(sc => sc.LessonBlocks.Any(l => l.Id == choosenBlocks.FirstOrDefault().Id)).SingleOrDefault();
             //Scheme mainScheme = (from s in db.Schemes
             //                    where s.LessonBlocks.Contains(choosenBlocks[0])
             //                    select s).FirstOrDefault();
@@ -267,10 +348,12 @@ namespace SkemaSystem.Controllers
 
             //******************************
 
-            return null;
+            ViewBag.suggestions = availableDates;
+
+            return PartialView("_RescheduleResultsPartial");
         }
 
-        public ActionResult SwitchWithOtherTeacher(string blockIdsString, string choosenTeacherId)
+        private ActionResult SwitchWithOtherTeacher(string blockIdsString, int chosenTeacherId)
         {
             string[] block = blockIdsString.Split(',');
             int[] blockIds = ConvertStringArraytoInt(block);
@@ -282,7 +365,8 @@ namespace SkemaSystem.Controllers
 
             //******************************
             // Get the mainScheme
-            var mainScheme = db.Schemes.Where(sc => sc.LessonBlocks.FirstOrDefault().Id == choosenBlocks.FirstOrDefault().Id).SingleOrDefault();
+            //var mainScheme = db.Schemes.Where(sc => sc.LessonBlocks.FirstOrDefault().Id == choosenBlocks.FirstOrDefault().Id).SingleOrDefault();
+            var mainScheme = db.Schemes.Where(sc => sc.LessonBlocks.Any(l => l.Id == choosenBlocks.FirstOrDefault().Id)).SingleOrDefault();
             //Scheme mainScheme = (from s in db.Schemes
             //                    where s.LessonBlocks.Contains(choosenBlocks[0])
             //                    select s).FirstOrDefault();
@@ -290,7 +374,7 @@ namespace SkemaSystem.Controllers
 
             //******************************
             // Get the teacher object
-            int id = Convert.ToInt32(choosenTeacherId);
+            int id = Convert.ToInt32(chosenTeacherId);
             var otherTeacher = db.Teachers.Where(x => x.Id == id).SingleOrDefault();
             //var otherTeacher = (from t in db.Teachers
             //                        where t.Id == Convert.ToInt16(choosenTeacherId)
@@ -313,7 +397,9 @@ namespace SkemaSystem.Controllers
 
             //******************************
 
-            return null;
+            ViewBag.suggestions = availableDates;
+
+            return PartialView("_RescheduleResultsPartial");
         }
 
         private int[] ConvertStringArraytoInt(string[] item)

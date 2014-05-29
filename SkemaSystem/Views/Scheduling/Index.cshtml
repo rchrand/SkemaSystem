@@ -187,22 +187,36 @@
                 form.find('select#reschedule-method').change(function () {
                     var method = $(this).children('option:selected').val();
 
+                    form.find('#reschedule-results').html('');
+                    $('#reschedule-teacher').hide();
+                    button.prop('disabled', true);
+
                     if (method == "teacher") {
                         $('#reschedule-teacher option:first').prop('selected', true);
                         $('#reschedule-teacher').show();
                         button.prop('disabled', true);
 
+                        form.find('#reschedule-teacher select').unbind('change');
+
                         $('#reschedule-teacher').find('select').change(function () {
                             var teacher = $(this).children('option:selected').val();
 
-                            button.prop('disabled', teacher == '');
+                            form.find('#reschedule-results').html('');
+                            button.prop('disabled', true);
+
+                            //button.prop('disabled', teacher == '');
+
+                            if (teacher != '') {
+                                reschedule(ids);
+                            }
                         });
                     } else if (method == '') {
                         $('#reschedule-teacher').hide();
                         button.prop('disabled', true);
                     } else {
-                        $('#reschedule-teacher').hide();
-                        button.prop('disabled', false);
+                        //$('#reschedule-teacher').hide();
+                        //button.prop('disabled', false);
+                        reschedule(ids);
                     }
                 });
 
@@ -216,8 +230,55 @@
 
         function unbindReschedule() {
             var form = $('#reschedule form');
+
+            form.unbind('submit');
+
             form.find('select#reschedule-method').unbind('change');
             form.find('#reschedule-teacher select').unbind('change');
+            form.find('#reschedule-options').unbind('change');
+
+            form.find('select#reschedule-method option:first').prop('selected', true);
+            form.find('#reschedule-teacher select option:first').prop('selected', true);
+
+            form.find('#reschedule-results').html('');
+            $('#reschedule-teacher').hide();
+        }
+
+        function reschedule(ids) {
+            var form = $('#reschedule form');
+
+            form.unbind('submit');
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("reschedule")',
+                data: 'blockIds=' + ids.join(',') + '&' + form.serialize(),
+                success: function (response) {
+                    form.find('#reschedule-results').html(response).find('#reschedule-options').change(function () {
+                        var option = $(this).children('option:selected').val();
+                        
+                        form.find('input[type="submit"]').prop('disabled', option.length == 0);
+
+                        form.submit(function () {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("reschedule")',
+                                data: 'blockIds=' + ids.join(',') + '&' + form.serialize(),
+                                success: function (response) {
+                                    $('form#scheme-selector').submit();
+
+                                    $('#overlay').fadeOut('fast');
+                                    $('#reschedule').fadeOut('fast');
+
+                                    unbindReschedule();
+                                }
+                            });
+
+                            return false;
+                        });
+                    });
+                }
+            });
         }
     </script>
 }
@@ -250,7 +311,7 @@
         <div class="form-group">
             <label class="control-label col-md-3">Metode:</label>
             <div class="col-md-9">
-                <select id="reschedule-method" class="form-control">
+                <select id="reschedule-method" name="method" class="form-control">
                     <option value="">- Vælg metode -</option>
                     <option value="hole">Find hul i skema</option>
                     <option value="behind">Flyt i forlængelse af egne timer</option>
@@ -261,7 +322,7 @@
         <div id="reschedule-teacher" class="form-group" style="display:none;">
             <label class="control-label col-md-3">Byt med:</label>
             <div class="col-md-9">
-                @Html.DropDownList("reschedule-teacher-select", new SelectList(ViewBag.teachers, "Value", "Text"), "- Vælg lærer -", new { @class = "form-control" })
+                @Html.DropDownList("chosenTeacherId", new SelectList(ViewBag.teachers, "Value", "Text"), "- Vælg lærer -", new { @class = "form-control" })
                 @*<select class="form-control">
                     <option>- Vælg lærer -</option>
                     <option value="hole">Find hul i skema</option>

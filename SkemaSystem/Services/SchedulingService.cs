@@ -155,6 +155,7 @@ namespace SkemaSystem.Services
             Room room = rooms.Single(r => r.Id.Equals(roomId));
 
             SubjectDistBlock sdb = scheme.SubjectDistBlocks.Single(s => s.Id.Equals(subjectId));
+            //SubjectDistBlock sdb = scheme.SubjectDistBlocks.Single(s => s.Subject.Id.Equals(subjectId));
 
             Subject subject = sdb.Subject;
 

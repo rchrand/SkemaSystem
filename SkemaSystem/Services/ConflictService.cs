@@ -1,6 +1,7 @@
 ﻿using SkemaSystem.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -69,7 +70,17 @@ namespace SkemaSystem.Services
                         if (valid)
                         {
                             DateTime dt = currentDay;
-                            availableBlocks.Add(dt);
+
+                            int blockNumber = 0;// blocksToBeOccupied.First();
+
+                            Debug.WriteLine(blockNumber);
+
+                            string time = blockNumber == 0 ? "08:30:00" : blockNumber == 1 ? "10:30:00" : blockNumber == 2 ? "12:30:00" : "14:30:00";
+
+                            DateTime test;
+                            test = dt.Date + TimeSpan.Parse(time);
+
+                            availableBlocks.Add(dt); // dt
                             found++;
                         }
                     }
@@ -147,7 +158,17 @@ namespace SkemaSystem.Services
                         if (valid)
                         {
                             DateTime dt = currentDay;
-                            availableBlocks.Add(dt);
+
+                            int blockNumber = blocksToBeOccupied.First();
+
+                            Debug.WriteLine(blockNumber);
+
+                            string time = blockNumber == 0 ? "08:30:00" : blockNumber == 1 ? "10:30:00" : blockNumber == 2 ? "12:30:00" : "14:30:00";
+
+                            DateTime test;
+                            test = dt.Date + TimeSpan.Parse(time);
+                            
+                            availableBlocks.Add(test); // dt
                             found++;
                         }
                     }
@@ -215,7 +236,17 @@ namespace SkemaSystem.Services
                     if (valid)
                     {
                         DateTime dt = currentDay;
-                        availableBlocks.Add(dt);
+
+                        int blockNumber = 0;// blocksToBeOccupied.First();
+
+                        Debug.WriteLine(blockNumber);
+
+                        string time = blockNumber == 0 ? "08:30:00" : blockNumber == 1 ? "10:30:00" : blockNumber == 2 ? "12:30:00" : "14:30:00";
+
+                        DateTime test;
+                        test = dt.Date + TimeSpan.Parse(time);
+
+                        availableBlocks.Add(dt); // dt
                         found++;
                     }
                 }

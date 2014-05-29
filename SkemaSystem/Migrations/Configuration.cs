@@ -86,7 +86,7 @@ namespace SkemaSystem.Migrations
 
             c1.Education = e1;
             c2.Education = e1;
-            
+
             context.Educations.AddOrUpdate(
                 e => e.Id,
                 e1, e2
@@ -180,7 +180,7 @@ namespace SkemaSystem.Migrations
                 lb2_1, lb2_2,
                 lb3_1, lb3_2, lb3_3,
                 lb4_1, lb4_2, lb4_3, lb4_4,
-                lb5_1, lb5_2, 
+                lb5_1, lb5_2,
                 lb6_1, lb6_2, lb6_3,
                 lb7_1, lb7_2,
 
@@ -188,7 +188,9 @@ namespace SkemaSystem.Migrations
                 lb_3_2, lb_3_3
             );
 
-            Scheme mainScheme = new Scheme { Semester = s1, Id = 100, ClassModel = model1, LessonBlocks = list, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 4) };
+            SubjectDistBlock sdb_1 = new SubjectDistBlock() { Id = 1, BlocksCount = 10, Subject = su2, Teacher = t5 };
+
+            Scheme mainScheme = new Scheme { Semester = s1, Id = 100, ClassModel = model1, LessonBlocks = list, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 4), SubjectDistBlocks = new List<SubjectDistBlock>() { sdb_1 } };
             Scheme conflictScheme = new Scheme { Semester = s1, Id = 101, ClassModel = model2, LessonBlocks = listConflict, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 4) };
 
             context.Schemes.AddOrUpdate(
