@@ -139,7 +139,8 @@ namespace SkemaSystem.Services
             if (blocks.Count() > 0)
             {
                 //return true;
-                throw new Exception("Underviseren er ikke ledig på det pågældende tidspunkt. (" + schemes.First(s => s.LessonBlocks.Contains(blocks.First())).ClassModel.ClassName + ")");
+                Scheme conflictingScheme = schemes.First(s => s.LessonBlocks.Contains(blocks.First()));
+                throw new Exception("Underviseren er ikke ledig på det pågældende tidspunkt. (" + ((conflictingScheme.ClassModel != null) ? conflictingScheme.ClassModel.ClassName : conflictingScheme.Name) + ")");
             }
 
 
