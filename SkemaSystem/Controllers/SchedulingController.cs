@@ -39,13 +39,36 @@ namespace SkemaSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
-            IEnumerable<SelectListItem> schemes = from s in db.Schemes
-                                                  select new SelectListItem { Text = s.ClassModel.ClassName + " " + SqlFunctions.StringConvert((double)s.Semester.Number).Trim() + ". semester", Value = SqlFunctions.StringConvert((double)s.Id).Trim() };
-            ViewBag.schemes = schemes;
 
-            IEnumerable<SelectListItem> educations = from e in db.Educations
-                                                     select new SelectListItem { Text = e.Name, Value = SqlFunctions.StringConvert((double)e.Id).Trim() };
-            ViewBag.educations = educations;
+            // Creating af grouped collection of schemes! Grouped by year - ordered by a bunch of things!
+            var schemeGroupsQuery = from s in _education.Schemes
+                                    where s.ClassModel != null
+                                    orderby s.SemesterStart descending, s.Semester.Number descending, s.ClassModel.ClassName ascending
+                                    group s by s.YearString into g
+                                    select new { Year = g.Key, Schemes = g };
+
+            Dictionary<string, List<Scheme>> schemeGrouped = new Dictionary<string, List<Scheme>>();
+
+            foreach (var g in schemeGroupsQuery)
+            {
+                List<Scheme> tempList = new List<Scheme>();
+                foreach (var n in g.Schemes)
+                {
+                    tempList.Add(n);
+                }
+
+                string year = (g.Year.Contains("F")) ? g.Year.Replace("F", "Forår ") : g.Year.Replace("E", "Efterår ");
+                schemeGrouped.Add(year, tempList);
+            }
+            ViewBag.schemeGroups = schemeGrouped;
+
+            //IEnumerable<SelectListItem> schemes = from s in db.Schemes
+            //                                      select new SelectListItem { Text = s.ClassModel.ClassName + " " + SqlFunctions.StringConvert((double)s.Semester.Number).Trim() + ". semester", Value = SqlFunctions.StringConvert((double)s.Id).Trim() };
+            //ViewBag.schemes = schemes;
+
+            //IEnumerable<SelectListItem> educations = from e in db.Educations
+            //                                         select new SelectListItem { Text = e.Name, Value = SqlFunctions.StringConvert((double)e.Id).Trim() };
+            //ViewBag.educations = educations;
 
             IEnumerable<SelectListItem> rooms = from r in db.Rooms
                                                      select new SelectListItem { Text = r.RoomName, Value = SqlFunctions.StringConvert((double)r.Id).Trim() };
@@ -180,7 +203,7 @@ namespace SkemaSystem.Controllers
             Scheme _scheme = db.Schemes.Single(x => x.Id == scheme);
 
             SchemeViewModel model = new SchemeViewModel();
-            if (scheme != null)
+            if (_scheme != null)
             {
                 ICollection<Dictionary<int, List<LessonBlock>>> tableCellsList = SchedulingService.AllSchemes(_scheme);
 
@@ -193,6 +216,8 @@ namespace SkemaSystem.Controllers
                 }
 
                 model.Classname = _scheme.ClassModel.ClassName;
+                model.SemesterNumber = _scheme.Semester.Number;
+                model.Year = (_scheme.YearString.Contains("F")) ? _scheme.YearString.Replace("F", "Forår ") : _scheme.YearString.Replace("E", "Efterår ");
             }
 
             return PartialView("_SchemePartial", model);

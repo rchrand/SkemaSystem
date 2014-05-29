@@ -67,6 +67,8 @@ namespace SkemaSystem.Controllers
                 }
 
                 model.Classname = scheme.ClassModel.ClassName;
+                model.SemesterNumber = scheme.Semester.Number;
+                model.Year = (scheme.YearString.Contains("F")) ? scheme.YearString.Replace("F", "Forår ") : scheme.YearString.Replace("E", "Efterår ");
             }
             return PartialView("_SchemePartial", model);
         }
