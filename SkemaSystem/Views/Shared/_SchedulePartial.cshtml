@@ -1,6 +1,8 @@
 ﻿@model SkemaSystem.Models.ViewModels.TableViewModel
-
-<table class="table scheme editable">
+@{
+    string editable = (ViewContext.RouteData.DataTokens.ContainsKey("area") != null && ViewContext.RouteData.DataTokens["area"].Equals("Admin")) ? "editable" : "";
+}
+<table class="table scheme @(editable)">
     <thead>
         <tr>
             <th>

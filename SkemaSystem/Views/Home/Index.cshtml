@@ -1,17 +1,38 @@
-﻿@model IEnumerable<SkemaSystem.Models.Teacher>
+﻿@model SkemaSystem.Models.ViewModels.SchemeViewModel
 
 @{
-    ViewBag.Title = "Forsiden";
+    ViewBag.Title = "Skemavisning";
 }
 
-@*<div class="jumbotron">
-    <h1>Velkommen til det nye Skema!, nu på github og Appharbor og mig!</h1>
-    <h2>Eitt</h2>
-</div>*@
+@section Subheader {
+    <div class="row">
+        <div class="col-sm-3">
+            <form method="get" id="scheme-selector" data-action-subject="@Url.Action("ChangeOptionalSubjects")" data-action-scheme="@Url.Action("ChangeScheme")">
+                <label class="control-label">Skema</label>
+                <select class="form-control" onchange="$(this.form).submit();" name="schemeId">
+                    <option value="">- Vælg skema -</option>
+                    @foreach (KeyValuePair<string, List<SkemaSystem.Models.Scheme>> group in ViewBag.schemeGroups)
+                    {
+                        <optgroup label="@(group.Key)">
+                            @foreach (var scheme in group.Value)
+                            {
+                                <option value="@scheme.Id">@(scheme.ClassModel.ClassName) (@(scheme.Semester.Number). semester)</option>
+                            }
+                        </optgroup>
+                    }
+                </select>
+            </form>
+        </div>
+
+        <div class="col-sm-9" id="subject-selector">
+        </div>
+    </div>
+}
 
 <div class="row">
     <div class="col-md-12">
-        <h1>Skemavisning</h1>
-        
+        <div id="schemes">
+
+        </div>
     </div>
 </div>

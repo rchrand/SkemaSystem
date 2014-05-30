@@ -39,13 +39,36 @@ namespace SkemaSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
-            IEnumerable<SelectListItem> schemes = from s in db.Schemes
-                                                  select new SelectListItem { Text = s.ClassModel.ClassName + " " + SqlFunctions.StringConvert((double)s.Semester.Number).Trim() + ". semester", Value = SqlFunctions.StringConvert((double)s.Id).Trim() };
-            ViewBag.schemes = schemes;
 
-            IEnumerable<SelectListItem> educations = from e in db.Educations
-                                                     select new SelectListItem { Text = e.Name, Value = SqlFunctions.StringConvert((double)e.Id).Trim() };
-            ViewBag.educations = educations;
+            // Creating af grouped collection of schemes! Grouped by year - ordered by a bunch of things!
+            var schemeGroupsQuery = from s in _education.Schemes
+                                    where s.ClassModel != null
+                                    orderby s.SemesterStart descending, s.Semester.Number descending, s.ClassModel.ClassName ascending
+                                    group s by s.YearString into g
+                                    select new { Year = g.Key, Schemes = g };
+
+            var optionalSubjects = _education.Schemes.Where(x=>x.ClassModel == null); // All optional subjects for this education!
+
+            Dictionary<string, List<List<Scheme>>> schemeGrouped = new Dictionary<string, List<List<Scheme>>>();
+
+            foreach (var g in schemeGroupsQuery)
+            {
+                List<List<Scheme>> overallList = new List<List<Scheme>>();
+
+                List<Scheme> mainSchemes = new List<Scheme>();
+                foreach (var n in g.Schemes)
+                {
+                    mainSchemes.Add(n);
+                }
+                overallList.Add(mainSchemes);
+
+                List<Scheme> optionalSubjectList = optionalSubjects.Where(x => x.YearString.Equals(g.Year) && mainSchemes.Any(s => s.Semester.Id == x.Semester.Id)).ToList();
+                overallList.Add(optionalSubjectList); // Optional subjects!
+
+                string year = (g.Year.Contains("F")) ? g.Year.Replace("F", "Forår ") : g.Year.Replace("E", "Efterår ");
+                schemeGrouped.Add(year, overallList);
+            }
+            ViewBag.schemeGroups = schemeGrouped;
 
             IEnumerable<SelectListItem> rooms = from r in db.Rooms
                                                      select new SelectListItem { Text = r.RoomName, Value = SqlFunctions.StringConvert((double)r.Id).Trim() };
@@ -178,21 +201,27 @@ namespace SkemaSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
+
             Scheme _scheme = db.Schemes.Single(x => x.Id == scheme);
-            
-            DateTime startDate = new DateTime(2014, 5, 25);
-
-            Scheme data = _scheme;
-
-            TableViewModel tvm = new TableViewModel() { ClassName = _scheme.ClassModel.ClassName, StartDate = SchedulingService.CalculateStartDate(startDate), TableCells = SchedulingService.buildScheme(startDate, data) };
 
             SchemeViewModel model = new SchemeViewModel();
-            model.Classname = _scheme.ClassModel.ClassName;
-            model.Schemes.Add(tvm);
-            if (scheme == 2)
+            if (_scheme != null)
             {
-                model.Schemes.Add(tvm);
+                ICollection<Dictionary<int, List<LessonBlock>>> tableCellsList = SchedulingService.AllSchemes(_scheme);
+
+                DateTime currentWeekStartDate = SchedulingService.CalculateStartDate(_scheme.SemesterStart);
+                foreach (Dictionary<int, List<LessonBlock>> tableCells in tableCellsList)
+                {
+                    TableViewModel tvm = new TableViewModel() { StartDate = currentWeekStartDate, TableCells = tableCells };
+                    model.Schemes.Add(tvm);
+                    currentWeekStartDate = currentWeekStartDate.AddDays(7);
+                }
+
+                model.Classname = (_scheme.ClassModel != null) ? _scheme.ClassModel.ClassName : _scheme.Name;
+                model.SemesterNumber = _scheme.Semester.Number;
+                model.Year = (_scheme.YearString.Contains("F")) ? _scheme.YearString.Replace("F", "Forår ") : _scheme.YearString.Replace("E", "Efterår ");
             }
+
             return PartialView("_SchemePartial", model);
         }
 

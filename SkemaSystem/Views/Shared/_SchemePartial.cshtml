@@ -1,6 +1,6 @@
 ﻿@model SkemaSystem.Models.ViewModels.SchemeViewModel
 
-<h1>@Model.Classname</h1>
+<h1>Skema for @(Model.Classname) - @(Model.Year) - @(Model.SemesterNumber). semester</h1>
 
 @foreach (var scheme in Model.Schemes) {
     @Html.Partial("_SchedulePartial", scheme);

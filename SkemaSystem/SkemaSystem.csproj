@@ -264,6 +264,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.contextMenu.js" />
+    <Content Include="Scripts\jquery.sticky.js" />
     <Content Include="Scripts\jquery.ui.position.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
@@ -287,7 +288,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Account\Login.cshtml" />
@@ -321,9 +321,9 @@
     <Content Include="Views\Room\Details.cshtml" />
     <Content Include="Views\Scheduling\Index.cshtml" />
     <Content Include="Views\Scheduling\_SubjectDropDown.cshtml" />
-    <Content Include="Views\Scheduling\_SchedulePartial.cshtml" />
-    <Content Include="Views\Scheduling\_SchemePartial.cshtml" />
-    <Content Include="Views\Scheduling\_LessonBlockPartial.cshtml" />
+    <Content Include="Views\Shared\_SchedulePartial.cshtml" />
+    <Content Include="Views\Shared\_SchemePartial.cshtml" />
+    <Content Include="Views\Shared\_LessonBlockPartial.cshtml" />
     <Content Include="Views\Class\CreateSemester.cshtml" />
     <Content Include="Views\Scheduling\Redirect.cshtml" />
     <Content Include="Views\Shared\_AdminTabsPartial.cshtml" />
@@ -338,6 +338,7 @@
     <Content Include="Views\OptionalSubjects\Edit.cshtml" />
     <Content Include="Views\OptionalSubjects\_OptionalSubjectsListEdit.cshtml" />
     <Content Include="Views\Scheduling\_RescheduleResultsPartial.cshtml" />
+    <Content Include="Views\Home\_OptionalSubjects.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />

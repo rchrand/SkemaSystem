@@ -1,6 +1,9 @@
 ﻿(function ($) {
     $(document).ready(function () {
-        jQuery.fn.extend({
+        $(".subheader").sticky({ topSpacing: 0 });
+
+        /*jQuery.fn.extend({
+            
             toggleVisibility: function () {
                 return this.each(function () {
                     if ($(this).css('visibility') == 'hidden') {
@@ -10,7 +13,7 @@
                     }
                 });
             }
-        });
+        });*/
 
         var ajaxSemesterFormSubmit = function () {
 
@@ -20,7 +23,6 @@
                 type: $form.attr("method"),
                 data: $form.serialize()
             };
-
             $.ajax(options).done(function (data) {
                 var $target = $($form.attr("data-schemesys-target"));
                 $target.html(data);
@@ -35,7 +37,6 @@
 
         $(document).on('submit', 'form#scheme-selector', function () {
             var form = $(this);
-
             $.ajax({
                 url: form.attr("data-action-subject"),
                 type: form.attr("method"),

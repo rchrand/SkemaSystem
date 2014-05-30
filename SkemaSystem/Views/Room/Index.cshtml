@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<SkemaSystem.Models.Room>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Lokaler";
 }
 
 @section Subheader {
@@ -9,12 +9,12 @@
 }
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Opret ny", "Create")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.RoomName)
+           Lokale navn
         </th>
         <th></th>
     </tr>
@@ -26,9 +26,9 @@
                 @Html.DisplayFor(modelItem => item.RoomName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Ændre", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Detaljer", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Slet", "Delete", new { id = item.Id })
             </td>
         </tr>
     }

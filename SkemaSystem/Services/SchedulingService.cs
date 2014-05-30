@@ -19,6 +19,33 @@ namespace SkemaSystem.Services
             dic.Add(3, new List<TableCellViewModel>() { null, new TableCellViewModel() { Teacher = db.Teachers.FirstOrDefault(), SubjectName = "SD", Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } } });
          */
 
+        public static ICollection<Dictionary<int, List<LessonBlock>>> AllMergedSchemes(List<Scheme> schemes)
+        {
+            Scheme mainScheme = schemes.Where(x=>x.ClassModel != null).FirstOrDefault();
+
+            Scheme mergedScheme = new Scheme { ClassModel = mainScheme.ClassModel, Semester = mainScheme.Semester, SemesterStart = mainScheme.SemesterStart, SemesterFinish = mainScheme.SemesterFinish, YearString = mainScheme.YearString, LessonBlocks = new List<LessonBlock>() };
+
+            foreach (Scheme s in schemes)
+            {
+                foreach (LessonBlock lb in s.LessonBlocks) {
+                    mergedScheme.LessonBlocks.Add(lb);
+                }
+            }
+
+            return AllSchemes(mergedScheme);
+        }
+
+        public static ICollection<Dictionary<int, List<LessonBlock>>> AllSchemes(Scheme s) {
+            List<Dictionary<int, List<LessonBlock>>> result = new List<Dictionary<int, List<LessonBlock>>>();
+            DateTime currentDate = CalculateStartDate(s.SemesterStart);
+            while (currentDate <= s.SemesterFinish)
+            {
+                result.Add(buildScheme(currentDate, s)); // Add the scheme to the result
+                currentDate = currentDate.AddDays(7); // Same weekday, next week!
+            }
+            return result;
+        }
+
         public static Dictionary<int, List<LessonBlock>> buildScheme(DateTime startDate, Scheme scheme)
         {
             SkeamSystemDb db = new SkeamSystemDb();
@@ -112,8 +139,23 @@ namespace SkemaSystem.Services
             if (blocks.Count() > 0)
             {
                 //return true;
-                throw new Exception("Underviseren er ikke ledig på det pågældende tidspunkt. (" + schemes.First(s => s.LessonBlocks.Contains(blocks.First())).ClassModel.ClassName + ")");
+                Scheme conflictingScheme = schemes.First(s => s.LessonBlocks.Contains(blocks.First()));
+                throw new Exception("Underviseren er ikke ledig på det pågældende tidspunkt. (" + ((conflictingScheme.ClassModel != null) ? conflictingScheme.ClassModel.ClassName : conflictingScheme.Name) + ")");
             }
+
+
+            if (scheme.ConflictSchemes.Any(x => x.LessonBlocks.Any(y => y.Date.Equals(lessonBlock.Date) && y.BlockNumber.Equals(lessonBlock.BlockNumber))))
+            {
+                if (scheme.ClassModel == null)
+                {
+                    throw new Exception("Klassen laver noget andet på dette tidspunkt.");
+                }
+                else
+                {
+                    throw new Exception("Denne blok konflikter med en eller flere af klassens valgfag.");
+                }
+            }
+
 
             /*blocks = schemes.SelectMany(s => s.LessonBlocks).Where(l => l.Date.Equals(lessonBlock.Date) && l.BlockNumber.Equals(lessonBlock.BlockNumber) && l.Room.Id.Equals(lessonBlock.Room.Id));
 

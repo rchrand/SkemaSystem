@@ -9,6 +9,8 @@ namespace SkemaSystem.Models.ViewModels
     {
         public ICollection<TableViewModel> Schemes { get; set; }
         public string Classname { get; set; }
+        public int SemesterNumber { get; set; }
+        public string Year { get; set; }
 
         public SchemeViewModel()
         {
