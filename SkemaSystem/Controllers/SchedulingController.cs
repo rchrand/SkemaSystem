@@ -277,6 +277,18 @@ namespace SkemaSystem.Controllers
 
                         var subject = mainScheme.SubjectDistBlocks.Single(s => s.Subject.Id.Equals(subjectId));
 
+                        if (method.Equals("teacher"))
+                        {
+                            var _block = db.LessonBlocks.Single(l => l.Teacher.Id == chosenTeacherId && DbFunctions.TruncateTime(l.Date) == option.Date && l.BlockNumber == blockNumber);
+
+                            var _roomId = _block.Room.Id;
+                            var _subjectId = mainScheme.SubjectDistBlocks.Single(s => s.Subject.Id.Equals(_block.Subject.Id)).Id;
+
+                            db.LessonBlocks.Remove(_block);
+
+                            SchedulingService.ScheduleLesson(mainScheme.Id, _subjectId, _roomId, blocks[i].Date.Date, blocks[i].BlockNumber, db.Schemes, db.Rooms);
+                        }
+
                         SchedulingService.ScheduleLesson(mainScheme.Id, subject.Id, roomId, option, blockNumber, db.Schemes, db.Rooms);
                         blockNumber++;
                     }

@@ -135,6 +135,12 @@
             var schemeId = $('#scheme-selector select option:selected').val();
             var ids = [];
 
+            if (cells.length == 0) {
+                alert('Du har ikke valgt nogle blokke.');
+                $('#bulk-selector select option:first').prop('selected', true);
+                return;
+            }
+
             $.each(cells, function (index, element) {
                 ids.push($(element).attr('data-lesson-id'));
             });
@@ -191,6 +197,28 @@
                 });
             } else if (action == "reschedule") {
                 // TODO if muliple cells chosen, they must be in row
+                if (cells.length > 1) {
+                    var connected = true;
+                    $.each(cells, function (index, element) {
+                        var cell = $(element);
+
+                        var index = cell.index() - 1;
+                        var row = cell.closest('tr');
+
+                        var prev = row.prev('tr').find('> td:eq(' + index + ').selected').length;
+                        var next = row.next('tr').find('> td:eq(' + index + ').selected').length;
+
+                        if (!prev && !next) {
+                            connected = false;
+                            return;
+                        }
+                    });
+                    if (!connected) {
+                        alert('Du kan kun flytte sammenhængende blokke. Ønsker du at flytte blokke over flere dage, skal det gøres over flere omgange.');
+                        $('#bulk-selector select option:first').prop('selected', true);
+                        return;
+                    }
+                }
 
                 var form = $('#reschedule form');
 
