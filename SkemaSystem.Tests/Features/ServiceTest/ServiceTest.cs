@@ -17,7 +17,7 @@ namespace SkemaSystem.Tests.Features.ServiceTest
         {
             Semester semester1 = new Semester { Id = 1, Number = 1 };
             Semester semester2 = new Semester { Id = 2, Number = 2 };
-            Education education = new Education { Name = "DMU", Semesters = new List<Semester> { semester1, semester2 }, NumberOfSemesters = 2 };
+            Education education = new Education { Name = "DMU", Semesters = new List<Semester> { semester1, semester2 }, NumberOfSemesters = 2, Schemes = new List<Scheme>()};
             ClassModel model = new ClassModel { Education = education, ClassName = "12T" };
 
             DateTime start = DateTime.Today;
@@ -178,17 +178,17 @@ namespace SkemaSystem.Tests.Features.ServiceTest
             List<LessonBlock> blocks = new List<LessonBlock> { lb0_1, lb0_2 };
             Dictionary<DateTime, int> availableBlocks = service.setLessonBehindOwnLesson(mainScheme, listConflict, blocks, new DateTime(2014, 5, 26));
 
-            DateTime date = new DateTime(2014, 6, 9);
+            DateTime date = new DateTime(2014, 5, 26);
             Assert.AreEqual(1, availableBlocks[date]);
-            date = new DateTime(2014, 6, 9);
+            date = new DateTime(2014, 5, 30);
             Assert.AreEqual(2, availableBlocks[date]);
-            date = new DateTime(2014, 6, 9);
+            date = new DateTime(2014, 6, 2);
             Assert.AreEqual(1, availableBlocks[date]);
 
             blocks = new List<LessonBlock> { lb0_1, lb0_2, lb0_3 };
             availableBlocks = service.setLessonBehindOwnLesson(mainScheme, listConflict, blocks, new DateTime(2014, 5, 26));
 
-            date = new DateTime(2014, 6, 9);
+            date = new DateTime(2014, 6, 2);
             Assert.AreEqual(1, availableBlocks[date]);
             Assert.AreEqual(1, availableBlocks.Count());
         }
@@ -274,7 +274,7 @@ namespace SkemaSystem.Tests.Features.ServiceTest
             date = new DateTime(2014, 5, 29);
             Assert.AreEqual(1, availableBlocks[date]);
             date = new DateTime(2014, 6, 2);
-            Assert.AreEqual(2, availableBlocks[date]);
+            Assert.AreEqual(0, availableBlocks[date]);
         }
     }
 }

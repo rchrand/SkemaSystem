@@ -127,7 +127,7 @@ namespace SkemaSystem.Services
                 if (currentBlocks.Count != 0)
                 {
                     //Check if total blocks is less or equal with 4
-                    if (currentBlocks.OrderBy(x => x.BlockNumber).Last().BlockNumber + blockNumbersToBeMoved.Count <= 4)
+                    if (currentBlocks.OrderBy(x => x.BlockNumber).Last().BlockNumber + blockNumbersToBeMoved.Count <= 3)
                     {
                         List<int> blocksToBeOccupied = new List<int>();
 
