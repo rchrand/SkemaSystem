@@ -118,9 +118,9 @@ namespace SkemaSystem.Services
                 //Gets the blocks with match for currentDay and have the right teacher. If it's the wrong teacher list gets cleared
                 foreach (LessonBlock item in occupiedBlocks)
                 {
-                    if (item.Date == currentDay && item.Teacher == blocks[0].Teacher)
+                    if (item.Date == currentDay && item.Subject.Teacher == blocks[0].Subject.Teacher)
                         currentBlocks.Add(item);
-                    else if (item.Date == currentDay && item.Teacher != blocks[0].Teacher)
+                    else if (item.Date == currentDay && item.Subject.Teacher != blocks[0].Subject.Teacher)
                         currentBlocks.Clear();
                 }
 
@@ -238,7 +238,7 @@ namespace SkemaSystem.Services
                 //Gets the blocks with match for currentDay and have the right teacher. If it's the wrong teacher list gets cleared
                 foreach (LessonBlock item in occupiedBlocks)
                 {
-                    if (item.Date == currentDay && item.Teacher == otherTeacher)
+                    if (item.Date == currentDay && item.Subject.Teacher == otherTeacher)
                         currentBlocks.Add(item);
                 }
                 if (currentBlocks.Count >= blockNumbersToBeMoved.Count)
@@ -246,7 +246,7 @@ namespace SkemaSystem.Services
                     bool valid = true;
                     foreach (var item in conflictLessons)
                     {
-                        if (item.Date == currentDay && item.Teacher == blocks[0].Teacher)
+                        if (item.Date == currentDay && item.Subject.Teacher == blocks[0].Subject.Teacher)
                         {
                             conflictsCurrentDay.Add(item);
                             foreach (var item2 in currentBlocks)

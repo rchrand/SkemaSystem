@@ -133,7 +133,7 @@ namespace SkemaSystem.Services
             }
 
             // find blocks in all schemes, where date, blocknumber and teacher match with lessonBlock
-            IEnumerable<LessonBlock> blocks = schemes.SelectMany(s => s.LessonBlocks).Where(l => l.Date.Equals(lessonBlock.Date) && l.BlockNumber.Equals(lessonBlock.BlockNumber) && l.Teacher.Id.Equals(lessonBlock.Teacher.Id));
+            IEnumerable<LessonBlock> blocks = schemes.SelectMany(s => s.LessonBlocks).Where(l => l.Date.Equals(lessonBlock.Date) && l.BlockNumber.Equals(lessonBlock.BlockNumber) && l.Subject.Teacher.Id.Equals(lessonBlock.Subject.Teacher.Id));
             
             // if we found any block, conflict
             if (blocks.Count() > 0)
@@ -208,8 +208,8 @@ namespace SkemaSystem.Services
                 BlockNumber = blockNumber,
                 Date = date.Date,
                 Room = room,
-                Subject = subject,
-                Teacher = teacher
+                Subject = sdb/*, subject
+                Teacher = teacher*/
             };
 
             bool conflicting = SchedulingService.IsConflicting(scheme, lesson, rooms, schemes); // throws expcetion if conflicting

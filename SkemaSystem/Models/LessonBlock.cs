@@ -12,7 +12,7 @@ namespace SkemaSystem.Models
         public int Id { get; set; }
 
         [Required]
-        public virtual Subject Subject { get; set; }
+        public virtual SubjectDistBlock Subject { get; set; }
 
         //Only the date!
         [Required]
@@ -22,8 +22,8 @@ namespace SkemaSystem.Models
         [Required]
         public int BlockNumber { get; set; }
 
-        [Required]
-        public virtual Teacher Teacher { get; set; }
+        /*[Required]
+        public virtual Teacher Teacher { get; set; }*/
 
         [Required]
         public virtual Room Room { get; set; }

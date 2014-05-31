@@ -31,7 +31,7 @@ namespace SkemaSystem.Tests.Features.ServiceTest
             Assert.AreEqual(finish, model.ActiveSchemes[0].SemesterFinish);
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void TestFindAHole()
         {
             ClassModel model1 = new ClassModel();
@@ -275,6 +275,6 @@ namespace SkemaSystem.Tests.Features.ServiceTest
             Assert.AreEqual(1, availableBlocks[date]);
             date = new DateTime(2014, 6, 2);
             Assert.AreEqual(2, availableBlocks[date]);
-        }
+        }*/
     }
 }

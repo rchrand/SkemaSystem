@@ -275,21 +275,21 @@ namespace SkemaSystem.Controllers
 
                         db.LessonBlocks.Remove(blocks[i]);
 
-                        var subject = mainScheme.SubjectDistBlocks.Single(s => s.Subject.Id.Equals(subjectId));
+                        //var subject = mainScheme.SubjectDistBlocks.Single(s => s.Subject.Id.Equals(subjectId));
 
                         if (method.Equals("teacher"))
                         {
-                            var _block = db.LessonBlocks.Single(l => l.Teacher.Id == chosenTeacherId && DbFunctions.TruncateTime(l.Date) == option.Date && l.BlockNumber == blockNumber);
+                            var _block = db.LessonBlocks.Single(l => l.Subject.Teacher.Id == chosenTeacherId && DbFunctions.TruncateTime(l.Date) == option.Date && l.BlockNumber == blockNumber);
 
                             var _roomId = _block.Room.Id;
-                            var _subjectId = mainScheme.SubjectDistBlocks.Single(s => s.Subject.Id.Equals(_block.Subject.Id)).Id;
+                            var _subjectId = _block.Subject.Id; // mainScheme.SubjectDistBlocks.Single(s => s.Subject.Id.Equals(_block.Subject.Id)).Id;
 
                             db.LessonBlocks.Remove(_block);
 
                             SchedulingService.ScheduleLesson(mainScheme.Id, _subjectId, _roomId, blocks[i].Date.Date, blocks[i].BlockNumber, db.Schemes, db.Rooms);
                         }
 
-                        SchedulingService.ScheduleLesson(mainScheme.Id, subject.Id, roomId, option, blockNumber, db.Schemes, db.Rooms);
+                        SchedulingService.ScheduleLesson(mainScheme.Id, subjectId, roomId, option, blockNumber, db.Schemes, db.Rooms);
                         blockNumber++;
                     }
                     db.SaveChanges();
@@ -341,7 +341,7 @@ namespace SkemaSystem.Controllers
                 conflictLessons.AddRange(item.LessonBlocks);
             }
             var teacherConflicts = (from x in db.LessonBlocks
-                                    where choosenBlocks.FirstOrDefault().Teacher.Id == x.Teacher.Id
+                                    where choosenBlocks.FirstOrDefault().Subject.Teacher.Id == x.Subject.Teacher.Id
                                     select x).ToList();
             foreach (var item in teacherConflicts)
             {
@@ -387,7 +387,7 @@ namespace SkemaSystem.Controllers
             //******************************
             // Gets the lessonblocks which may conflict
             List<LessonBlock> conflictLessons = (from x in db.LessonBlocks
-                                                 where choosenBlocks.FirstOrDefault().Teacher.Id == x.Teacher.Id
+                                                 where choosenBlocks.FirstOrDefault().Subject.Teacher.Id == x.Subject.Teacher.Id
                                                 select x).ToList();
             //******************************
 
@@ -435,7 +435,7 @@ namespace SkemaSystem.Controllers
 
             // Gets the lessonblocks which may conflict
             List<LessonBlock> conflictLessons = (from x in db.LessonBlocks
-                                                 where choosenBlocks.FirstOrDefault().Teacher.Id == x.Teacher.Id
+                                                 where choosenBlocks.FirstOrDefault().Subject.Teacher.Id == x.Subject.Teacher.Id
                                                  //where otherTeacher.Id == x.Teacher.Id
                                                 select x).ToList();
             //******************************
@@ -482,8 +482,8 @@ namespace SkemaSystem.Controllers
                                select l).ToList();
                 foreach (var item2 in lessons)
                 {
-                    if (teachers.Contains(item2.Teacher))
-                        teachers.Remove(item2.Teacher);
+                    if (teachers.Contains(item2.Subject.Teacher))
+                        teachers.Remove(item2.Subject.Teacher);
                 }
 	        }
             return teachers;
