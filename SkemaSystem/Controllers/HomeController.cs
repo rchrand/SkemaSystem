@@ -18,7 +18,7 @@ namespace SkemaSystem.Controllers
         public ActionResult Index(string education)
         {
             if (education == null)
-                return RedirectToAction("Index", new { education = db.Educations.FirstOrDefault().Name });
+                return RedirectToAction("Index", new { education = db.Educations.FirstOrDefault().Name.ToLower() });
 
             Education edu = db.Educations.SingleOrDefault(x => x.Name.Equals(education));
 
