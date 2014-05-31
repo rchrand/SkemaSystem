@@ -51,14 +51,15 @@ namespace SkemaSystem.Controllers
 
         // GET: /Classes/Create
         [Route("create")]
-        public ActionResult Create()
+        public ActionResult Create(string education)
         {
-            IEnumerable<SelectListItem> items = from s in db.Educations.ToList()
-                                                select new SelectListItem { Text = s.Name, Value = s.Id.ToString() };
+            Education edu = db.Educations.Where(x=>x.Name.Equals(education)).FirstOrDefault();           
+            //IEnumerable<SelectListItem> items = from s in db.Educations.ToList()
+            //                                    select new SelectListItem { Text = s.Name, Value = s.Id.ToString() };
+            //ViewBag.EducationId = edu.Id;
+            //ViewBag.Educations = items;
 
-            ViewBag.Educations = items;
-
-            return View(new ClassViewModel());
+            return View(new ClassViewModel { Education = edu.Id });
         }
 
         // POST: /Classes/Create

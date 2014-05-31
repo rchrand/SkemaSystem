@@ -16,12 +16,15 @@
                             {
                                 <option value="@scheme.Id">@(scheme.ClassModel.ClassName) (@(scheme.Semester.Number). semester)</option>
                             }
-                            <optgroup label="Valgfag @(group.Key)" style="margin-left:10px;">
-                                @foreach (var scheme in group.Value[1])
-                                {
-                                    <option value="@scheme.Id">@(scheme.Name) (@(scheme.Semester.Number). semester)</option>
-                                }
-                            </optgroup>
+                            @if (group.Value[1].Count() > 0)
+                            {
+                                <optgroup label="Valgfag @(group.Key)" style="margin-left:10px;">
+                                    @foreach (var scheme in group.Value[1])
+                                    {
+                                        <option value="@scheme.Id">@(scheme.Name) (@(scheme.Semester.Number). semester)</option>
+                                    }
+                                </optgroup>
+                            }
                         </optgroup>
                     }
                 </select>
