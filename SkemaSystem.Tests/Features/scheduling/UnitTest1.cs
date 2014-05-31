@@ -10,7 +10,7 @@ namespace SkemaSystem.Tests.Features.scheduling
     [TestClass]
     public class UnitTest1
     {
-        /*[TestMethod]
+        [TestMethod]
         public void dimensionsIsCreated()
         {
             Dictionary<int, List<LessonBlock>> dic = SchedulingService.buildScheme(new DateTime(2014, 5, 27), Testdata());
@@ -35,7 +35,7 @@ namespace SkemaSystem.Tests.Features.scheduling
 
             Assert.IsNull(dic[1][1]);
             Assert.IsNotNull(dic[0][1]);
-        }*/
+        }
 
         /*
          * this test is assuring that when a date which is 
@@ -43,7 +43,7 @@ namespace SkemaSystem.Tests.Features.scheduling
          * still gets blocks for the dates whole week.
          * */
 
-        /*[TestMethod]
+        [TestMethod]
         public void AllwaysStartingAtMonday()
         {
             //Date is not a monday
@@ -63,20 +63,27 @@ namespace SkemaSystem.Tests.Features.scheduling
             dic = SchedulingService.buildScheme(new DateTime(2014, 5, 30), Testdata());
 
             Assert.IsNotNull(dic[0]);
-        }*/
+        }
 
-        /*[TestMethod]
+        [TestMethod]
         [ExpectedException(typeof(Exception))]
         public void FindConflictsOnDateAndBlockNumber()
         {
+            SubjectDistBlock sdb = new SubjectDistBlock()
+            {
+                Subject = new Subject() { Name = "SD" },
+                Teacher = new Teacher() { Name = "testHanne" }
+            };
+
             //If theres a conflict on date and blocknumber on the same scheme.
             bool conflict = SchedulingService.IsConflicting(TestOtherSchemes()[0], new LessonBlock()
             {
                 BlockNumber = 0,
                 Date = new DateTime(2014, 5, 26),
                 Room = new Room() { Id = -1, RoomName = "temproom"},
-                Subject = new Subject() { Name = "SD" },
-                Teacher = new Teacher() { Name = "testHanne"}
+                /*Subject = new Subject() { Name = "SD" },
+                Teacher = new Teacher() { Name = "testHanne"}*/
+                Subject = sdb
             }, TestRooms(), TestOtherSchemes());
 
             Assert.IsTrue(conflict);
@@ -86,8 +93,9 @@ namespace SkemaSystem.Tests.Features.scheduling
                 BlockNumber = 3,
                 Date = new DateTime(2014, 5, 26),
                 Room = new Room() { Id = -1, RoomName = "temproom"},
-                Subject = new Subject() { Name = "SD" },
-                Teacher = new Teacher() { Name = "testHanne" }
+                /*Subject = new Subject() { Name = "SD" },
+                Teacher = new Teacher() { Name = "testHanne" }*/
+                Subject = sdb
             }, TestRooms(), TestOtherSchemes());
 
             //If teacher is available at the same time.
@@ -101,13 +109,20 @@ namespace SkemaSystem.Tests.Features.scheduling
         [ExpectedException(typeof(Exception))]
         public void FindConflictOnTeacher()
         {
+            SubjectDistBlock sdb = new SubjectDistBlock()
+            {
+                Subject = new Subject() { Name = "SD" },
+                Teacher = TestTeacher()[0]
+            };
+
             bool conflict = SchedulingService.IsConflicting(Testdata(), new LessonBlock()
             {
                 BlockNumber = 1,
                 Date = new DateTime(2014, 6, 2),
                 Room = TestRooms()[0],
-                Subject = new Subject() { Name = "SD" },
-                Teacher = TestTeacher()[0]
+                /*Subject = new Subject() { Name = "SD" },
+                Teacher = TestTeacher()[0]*/
+                Subject = sdb
             }, TestRooms(), TestOtherSchemes());
 
             Assert.IsTrue(conflict);
@@ -117,8 +132,9 @@ namespace SkemaSystem.Tests.Features.scheduling
                 BlockNumber = 3,
                 Date = new DateTime(2014, 5, 26),
                 Room = TestRooms()[0],
-                Subject = new Subject() { Name = "SD" },
-                Teacher = TestTeacher()[0]
+                /*Subject = new Subject() { Name = "SD" },
+                Teacher = TestTeacher()[0]*/
+                Subject = sdb
             }, TestRooms(), TestOtherSchemes());
         }
 
@@ -126,13 +142,20 @@ namespace SkemaSystem.Tests.Features.scheduling
         [ExpectedException(typeof(Exception))]
         public void FindConflictOnRoom()
         {
+            SubjectDistBlock sdb = new SubjectDistBlock()
+            {
+                Subject = new Subject() { Name = "SD" },
+                Teacher = new Teacher() { Id = -1, Name = "Dummy" }
+            };
+
             bool conflict = SchedulingService.IsConflicting(Testdata(), new LessonBlock()
             {
                 BlockNumber = 1,
                 Date = new DateTime(2014, 6, 4),
                 Room = TestRooms()[1],
-                Subject = new Subject() { Name = "SD" },
-                Teacher = new Teacher() { Id = -1, Name = "Dummy" }
+                /*Subject = new Subject() { Name = "SD" },
+                Teacher = new Teacher() { Id = -1, Name = "Dummy" }*/
+                Subject = sdb
             }, TestRooms(), TestOtherSchemes());
 
             Assert.IsTrue(conflict); 
@@ -142,12 +165,13 @@ namespace SkemaSystem.Tests.Features.scheduling
                 BlockNumber = 3,
                 Date = new DateTime(2014, 5, 26),
                 Room = TestRooms()[0],
-                Subject = new Subject() { Name = "SD" },
-                Teacher = new Teacher() { Id = -1, Name = "Dummy" }
+                /*Subject = new Subject() { Name = "SD" },
+                Teacher = new Teacher() { Id = -1, Name = "Dummy" }*/
+                Subject = sdb
             }, TestRooms(), TestOtherSchemes());
-        }*/
+        }
 
-        /*[TestMethod]
+        [TestMethod]
         [ExpectedException(typeof(Exception))]
         public void CreateLessonBlockWithNoComplications()
         {
@@ -210,10 +234,13 @@ namespace SkemaSystem.Tests.Features.scheduling
             result = SchedulingService.RelocateLesson(schemes[0].Id, lessonIds, rooms[1].Id, schemes, rooms);
 
             Assert.IsFalse(result);
-        }*/
+        }
 
-        /*private static Scheme Testdata()
+        private static Scheme Testdata()
         {
+            Subject s = new Subject() { Name = "SD" };
+            SubjectDistBlock sdb1 = new SubjectDistBlock() { Teacher = TestTeacher()[0], Subject = s };
+
             return new Scheme()
             {
                 ConflictSchemes = new List<Scheme>(),
@@ -224,80 +251,74 @@ namespace SkemaSystem.Tests.Features.scheduling
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 26),
                         Room = TestRooms()[0],
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = TestTeacher()[0]
+                        Subject = sdb1
                     },
                     new LessonBlock(){ 
                         BlockNumber = 1,
                         Date = new DateTime(2014, 5, 26),
                         Room = TestRooms()[0],
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = TestTeacher()[0]
+                        Subject = sdb1
                     },
                     new LessonBlock(){ 
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 27),
                         Room = TestRooms()[0],
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = TestTeacher()[0]
+                        Subject = sdb1
                     },
                     new LessonBlock(){ 
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 28),
                         Room = TestRooms()[0],
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = TestTeacher()[0]
+                        Subject = sdb1
                     },
                     new LessonBlock(){ 
                         BlockNumber = 1,
                         Date = new DateTime(2014, 5, 28),
                         Room = TestRooms()[0],
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = TestTeacher()[0]
+                        Subject = sdb1
                     },
                     new LessonBlock(){ 
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 29),
                         Room = TestRooms()[0],
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = TestTeacher()[0]
+                        Subject = sdb1
                     },
                     new LessonBlock(){ 
                         BlockNumber = 1,
                         Date = new DateTime(2014, 5, 29),
                         Room = TestRooms()[0],
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = TestTeacher()[0]
+                        Subject = sdb1
                     },
                     new LessonBlock(){ 
                         BlockNumber = 0,
                         Date = new DateTime(2014, 5, 30),
                         Room = TestRooms()[0],
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = TestTeacher()[0]
+                        Subject = sdb1
                     },
                     new LessonBlock(){ 
                         BlockNumber = 1,
                         Date = new DateTime(2014, 5, 30),
                         Room = TestRooms()[0],
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = TestTeacher()[0]
+                        Subject = sdb1
                     },
                     new LessonBlock(){ 
                         BlockNumber = 2,
                         Date = new DateTime(2014, 6, 20),
                         Room = TestRooms()[0],
-                        Subject = new Subject(){ Name = "SD"},
-                        Teacher = TestTeacher()[0]
+                        Subject = sdb1
                     },
                 },
                 Semester = null,
-                SubjectDistBlocks = null,
+                SubjectDistBlocks = new List<SubjectDistBlock>() { sdb1 },
             };
         }
 
         private static List<Scheme> TestOtherSchemes()
         {
+            Subject s = new Subject() { Name = "SD" };
+            SubjectDistBlock sdb1 = new SubjectDistBlock() { Teacher = TestTeacher()[0], Subject = s };
+            SubjectDistBlock sdb2 = new SubjectDistBlock() { Teacher = TestTeacher()[1], Subject = s };
+
             return new List<Scheme>()
             {
                 new Scheme()
@@ -311,89 +332,75 @@ namespace SkemaSystem.Tests.Features.scheduling
                             BlockNumber = 0,
                             Date = new DateTime(2014, 5, 26),
                             Room = TestRooms()[0],
-                            Subject = new Subject(){ Name = "SD"},
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock() {
                             Id = 2,
                             BlockNumber = 1,
                             Date = new DateTime(2014, 5, 26),
                             Room = TestRooms()[0],
-                            Subject = new Subject(){ Name = "SD"},
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock(){ 
                             Id = 3,
                             BlockNumber = 0,
                             Date = new DateTime(2014, 5, 27),
                             Room = TestRooms()[0],
-                            Subject = new Subject(){ Name = "SD"},
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock(){ 
                             Id = 4,
                             BlockNumber = 0,
                             Date = new DateTime(2014, 5, 28),
                             Room = TestRooms()[0],
-                            Subject = new Subject(){ Name = "SD"},
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock(){ 
                             Id = 5,
                             BlockNumber = 1,
                             Date = new DateTime(2014, 5, 28),
                             Room = TestRooms()[0],
-                            Subject = new Subject(){ Name = "SD"},
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock(){ 
                             Id = 6,
                             BlockNumber = 0,
                             Date = new DateTime(2014, 5, 29),
                             Room = TestRooms()[0],
-                            Subject = new Subject(){ Name = "SD"},
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock(){ 
                             Id = 7,
                             BlockNumber = 1,
                             Date = new DateTime(2014, 5, 29),
                             Room = TestRooms()[0],
-                            Subject = new Subject(){ Name = "SD"},
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock(){ 
                             Id = 8,
                             BlockNumber = 0,
                             Date = new DateTime(2014, 5, 30),
                             Room = TestRooms()[0],
-                            Subject = new Subject(){ Name = "SD"},
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock(){ 
                             Id = 9,
                             BlockNumber = 1,
                             Date = new DateTime(2014, 5, 30),
                             Room = TestRooms()[0],
-                            Subject = new Subject(){ Name = "SD"},
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock(){ 
                             Id = 10,
                             BlockNumber = 2,
                             Date = new DateTime(2014, 6, 20),
                             Room = TestRooms()[0],
-                            Subject = new Subject(){ Name = "SD"},
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                     },
                     Semester = null,
                     SubjectDistBlocks = new List<SubjectDistBlock>() {
-                        new SubjectDistBlock() {
-                            Id = 1,
-                            Subject = new Subject(){ Id = 1, Name = "SD" },
-                            Teacher = TestTeacher()[0] 
-                        }
+                        sdb1
                     },
                 },
                 new Scheme()
@@ -404,92 +411,82 @@ namespace SkemaSystem.Tests.Features.scheduling
                         ClassName = "12t fake"
                     },
                     Semester = null,
-                    SubjectDistBlocks = new List<SubjectDistBlock>(),
+                    SubjectDistBlocks = new List<SubjectDistBlock>() { sdb1, sdb2 },
                     LessonBlocks = new List<LessonBlock>() { 
                         new LessonBlock()
                         {
                             BlockNumber = 1,
                             Date = new DateTime(2014, 6, 2),
                             Room = TestRooms()[1],
-                            Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock()
                         {
                             BlockNumber = 0,
                             Date = new DateTime(2014, 6, 2),
                             Room = TestRooms()[1],
-                            Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock()
                         {
                             BlockNumber = 0,
                             Date = new DateTime(2014, 6, 3),
                             Room = TestRooms()[1],
-                            Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock()
                         {
                             BlockNumber = 1,
                             Date = new DateTime(2014, 6, 3),
                             Room = TestRooms()[1],
-                            Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock()
                         {
                             BlockNumber = 0,
                             Date = new DateTime(2014, 6, 4),
                             Room = TestRooms()[1],
-                            Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock()
                         {
                             BlockNumber = 1,
                             Date = new DateTime(2014, 6, 4),
                             Room = TestRooms()[1],
-                            Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock()
                         {
                             BlockNumber = 0,
                             Date = new DateTime(2014, 6, 5),
                             Room = TestRooms()[1],
-                            Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock()
                         {
                             BlockNumber = 1,
                             Date = new DateTime(2014, 6, 5),
                             Room = TestRooms()[1],
-                            Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock()
                         {
                             BlockNumber = 2,
                             Date = new DateTime(2014, 5, 28),
                             Room = TestRooms()[1],
-                            Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[0]
+                            Subject = sdb1
                         },
                         new LessonBlock()
                         {
                             BlockNumber = 0,
                             Date = new DateTime(2014, 5, 26),
                             Room = TestRooms()[1],
-                            Subject = new Subject() { Name = "SD" },
-                            Teacher = TestTeacher()[1]
+                            Subject = sdb2
                         }
                     }
                 }
             };
-        }*/
+        }
         
 
         private static List<Teacher> TestTeacher()
