@@ -20,7 +20,7 @@
 <body>
     <header>
         <div>
-            <div id="logo">SKEMASYS</div>
+            <div id="logo">@Html.ActionLink("SKEMASYS", "Index", "Home", new { area = "" }, new { @style = "color:#FFF!important; text-decoration:none!important;" })</div>
             <nav class="subnav">
                 <ul>
                     @Html.Partial("_LoginPartial")

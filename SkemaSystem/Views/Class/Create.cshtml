@@ -25,16 +25,17 @@
                 @Html.ValidationMessageFor(model => model.ClassModel.ClassName)
             </div>
         </div>
-        <div class="form-group">
+        <input type="hidden" id="Education" name="Education" value="@Model.Education" />
+        @*<div class="form-group">
             <div class="col-sm-2">
                 @Html.LabelFor(model => model.Education, "Uddannelse:", htmlAttributes: new { @class = "control-label" })
             </div>
             <div class="col-sm-4">
                 @Html.DropDownListFor(model => model.Education, new SelectList(@ViewBag.Educations, "Value", "Text"), "- Vælg uddannelse -", new { @class = "form-control" })
-                @*@Html.DropDownList("Education", new SelectList(@ViewBag.Educations, "Value", "Text"), "- Vælg uddannelse -", new { @class = "form-control" })*@
+                @Html.DropDownList("Education", new SelectList(@ViewBag.Educations, "Value", "Text"), "- Vælg uddannelse -", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Education)
             </div>
-        </div>
+        </div>*@
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">

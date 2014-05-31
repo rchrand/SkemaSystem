@@ -59,9 +59,9 @@ namespace SkemaSystem.Migrations
             Semester s3 = new Semester { Id = 3, Number = 3, Blocks = ssdbList3 };
             Semester s4 = new Semester { Id = 4, Number = 4, Blocks = ssdbList4 };
 
-            Scheme sch1 = new Scheme { ClassModel = c1, Semester = s1, Id = 1 };
-            Scheme sch2 = new Scheme { ClassModel = c1, Semester = s2, Id = 2 };
-            Scheme sch3 = new Scheme { ClassModel = c2, Semester = s1, Id = 3 };
+            Scheme sch1 = new Scheme { ClassModel = c1, Semester = s1, Id = 1, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 15) };
+            Scheme sch2 = new Scheme { ClassModel = c1, Semester = s2, Id = 2, SemesterStart = new DateTime(2015, 5, 26), SemesterFinish = new DateTime(2015, 6, 15) };
+            Scheme sch3 = new Scheme { ClassModel = c2, Semester = s1, Id = 3, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 15) };
 
             Room r1 = new Room { Id = 1, RoomName = "SH-A1.13" };
             Room r2 = new Room { Id = 2, RoomName = "SH-A1.8" };
@@ -86,12 +86,6 @@ namespace SkemaSystem.Migrations
 
             c1.Education = e1;
             c2.Education = e1;
-
-            context.Educations.AddOrUpdate(
-                e => e.Id,
-                e1, e2
-
-            );
 
             context.Teachers.AddOrUpdate(
                 t => t.Id,
@@ -374,6 +368,25 @@ namespace SkemaSystem.Migrations
             context.Schemes.AddOrUpdate(
                 x => x.Id,
                 mainScheme300, conflictScheme300
+            );
+
+            List<Scheme> eduSchemes = new List<Scheme>();
+            eduSchemes.Add(sch1);
+            eduSchemes.Add(sch2);
+            eduSchemes.Add(sch3);
+            eduSchemes.Add(conflictScheme);
+            eduSchemes.Add(conflictScheme201);
+            eduSchemes.Add(conflictScheme300);
+            eduSchemes.Add(mainScheme);
+            eduSchemes.Add(mainScheme200);
+            eduSchemes.Add(mainScheme300);
+
+            e1.Schemes = eduSchemes;
+
+            context.Educations.AddOrUpdate(
+                e => e.Id,
+                e1, e2
+
             );
         }
     }

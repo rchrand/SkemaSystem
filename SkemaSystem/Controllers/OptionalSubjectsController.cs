@@ -125,7 +125,7 @@ namespace SkemaSystem.Controllers
 
             // random scheme to get the startdate and enddate of this particular semester!
             // If the randomScheme is empty, then we aren't able to start an optionalSubject! Error message has to be shown!
-            Scheme randomScheme = db.Schemes.Where(x => x.YearString.Equals(year) && x.Semester.Id == semester.Id).FirstOrDefault();
+            Scheme randomScheme = conflictSchemes.FirstOrDefault(x=>x.ClassModel != null);
             if (randomScheme != null)
             {
                 Scheme newScheme = new Scheme { Name = name, OptionalSubjectBlockList = optionalSubjectBlocks, ConflictSchemes = conflictSchemes, Semester = semester, SemesterStart = randomScheme.SemesterStart, SemesterFinish = randomScheme.SemesterFinish, YearString = "" };
