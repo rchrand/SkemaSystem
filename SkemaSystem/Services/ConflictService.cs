@@ -147,7 +147,7 @@ namespace SkemaSystem.Services
                             if (item.Date == currentDay)
                             {
                                 conflictsCurrentDay.Add(item);
-                                if(blocksToBeOccupied.Contains(item.BlockNumber))
+                                if (blocksToBeOccupied.Contains(item.BlockNumber))
                                 {
                                     valid = false;
                                     break;
@@ -156,43 +156,29 @@ namespace SkemaSystem.Services
                         }
                         if (valid)
                         {
-                            DateTime dt = currentDay;
-
-                            //int blockNumber = blocksToBeOccupied.First();
-
-                            //Debug.WriteLine(blockNumber);
-
-                            //string time = blockNumber == 0 ? "08:30:00" : blockNumber == 1 ? "10:30:00" : blockNumber == 2 ? "12:30:00" : "14:30:00";
-
-                            //DateTime test;
-                            //test = dt.Date + TimeSpan.Parse(time);
-
                             int blocknumber = 0;
-                            while(blocknumber < 4)
+                            while (blocknumber < 4)
                             {
-                                //Checks if blocknumber is occoupied
-                                if(currentBlocks.Where(x => x.BlockNumber == blocknumber).Count() == 0 &&
-                                   conflictsCurrentDay.Where(x => x.BlockNumber == blocknumber).Count() == 0)
+                                if (currentBlocks.Where(x => x.BlockNumber == blocknumber).Count() == 1)
                                 {
                                     bool validBlock = true;
-                                    for (int i = 1; i < blockNumbersToBeMoved.Count(); i++)
+                                    for (int i = 1; i <= blockNumbersToBeMoved.Count(); i++)
                                     {
-                                        if(currentBlocks.Where(x => x.BlockNumber == (blocknumber+i)).Count() != 0 &&
-                                        conflictsCurrentDay.Where(x => x.BlockNumber == blocknumber+i).Count() != 0)
+                                        if (currentBlocks.Where(x => x.BlockNumber == (blocknumber + i)).Count() != 0 ||
+                                            conflictsCurrentDay.Where(x => x.BlockNumber == blocknumber + i).Count() != 0)
                                         {
                                             validBlock = false;
+                                            break;
                                         }
                                     }
-                                    if(validBlock)
+                                    if (validBlock)
                                     {
-                                        availableBlocks.Add(dt, blocknumber);
+                                        availableBlocks.Add(currentDay, blocknumber + 1);
                                         blocknumber = 4;
                                     }
                                 }
                                 blocknumber++;
                             }
-                            
-                             // dt
                             found++;
                         }
                     }
@@ -332,6 +318,7 @@ namespace SkemaSystem.Services
                 if (item.Date >= currentDay)
                     freeBloacks.Add(item);
             }
+            freeBloacks = freeBloacks.OrderBy(x => x.Date).ThenBy(x => x.BlockNumber).ToList();
             return freeBloacks;
         }
     }
