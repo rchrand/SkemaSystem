@@ -1,0 +1,19 @@
+﻿<div class="form-group">
+    <label class="control-label col-md-3">Byt med:</label>
+    <div class="col-md-9">
+        @if (ViewBag.teachers != null && ((List<SkemaSystem.Models.Teacher>)ViewBag.teachers).Count > 0)
+        {
+            <select name="chosenTeacherId" class="form-control">
+                <option value="">- Vælg lærer -</option>
+                @foreach (SkemaSystem.Models.Teacher teacher in ViewBag.teachers)
+                {
+                    <option value="@teacher.Id">@teacher.Name</option>
+                }
+            </select>
+        }
+        else
+        {
+            <span class="help-block">Ingen muligheder fundet.</span>
+        }
+    </div>
+</div>

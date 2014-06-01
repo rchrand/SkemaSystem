@@ -236,30 +236,38 @@
                     var method = $(this).children('option:selected').val();
 
                     form.find('#reschedule-results').html('');
-                    $('#reschedule-teacher').hide();
+                    $('#reschedule-teacher').html(''); // hide();
                     button.prop('disabled', true);
 
                     if (method == "teacher") {
-                        $('#reschedule-teacher option:first').prop('selected', true);
-                        $('#reschedule-teacher').show();
-                        button.prop('disabled', true);
+                        $.ajax({
+                            type: 'GET',
+                            url: '@Url.Action("free_teachers")',
+                            data: 'blockids=' + ids.join(','),
+                            success: function (response) {
+                                $('#reschedule-teacher').html(response);
+                                $('#reschedule-teacher option:first').prop('selected', true);
+                                //$('#reschedule-teacher').show();
+                                button.prop('disabled', true);
 
-                        form.find('#reschedule-teacher select').unbind('change');
+                                form.find('#reschedule-teacher select').unbind('change');
 
-                        $('#reschedule-teacher').find('select').change(function () {
-                            var teacher = $(this).children('option:selected').val();
+                                $('#reschedule-teacher').find('select').change(function () {
+                                    var teacher = $(this).children('option:selected').val();
 
-                            form.find('#reschedule-results').html('');
-                            button.prop('disabled', true);
+                                    form.find('#reschedule-results').html('');
+                                    button.prop('disabled', true);
 
-                            //button.prop('disabled', teacher == '');
+                                    //button.prop('disabled', teacher == '');
 
-                            if (teacher != '') {
-                                reschedule(ids);
+                                    if (teacher != '') {
+                                        reschedule(ids);
+                                    }
+                                });
                             }
                         });
                     } else if (method == '') {
-                        $('#reschedule-teacher').hide();
+                        $('#reschedule-teacher').html('');//hide();
                         button.prop('disabled', true);
                     } else {
                         //$('#reschedule-teacher').hide();
@@ -289,7 +297,7 @@
             form.find('#reschedule-teacher select option:first').prop('selected', true);
 
             form.find('#reschedule-results').html('');
-            $('#reschedule-teacher').hide();
+            $('#reschedule-teacher').html('');//hide();
         }
 
         function reschedule(ids) {
@@ -367,17 +375,11 @@
                 </select>
             </div>
         </div>
-        <div id="reschedule-teacher" class="form-group" style="display:none;">
-            <label class="control-label col-md-3">Byt med:</label>
+        <div id="reschedule-teacher">
+            @*<label class="control-label col-md-3">Byt med:</label>
             <div class="col-md-9">
                 @Html.DropDownList("chosenTeacherId", new SelectList(ViewBag.teachers, "Value", "Text"), "- Vælg lærer -", new { @class = "form-control" })
-                @*<select class="form-control">
-                    <option>- Vælg lærer -</option>
-                    <option value="hole">Find hul i skema</option>
-                    <option value="behind">Flyt i forlængelse af egne timer</option>
-                    <option value="teacher">Byt med lærer</option>
-                </select>*@
-            </div>
+            </div>*@
         </div>
 
         <div id="reschedule-results"></div>
