@@ -464,7 +464,8 @@ namespace SkemaSystem.Controllers
             return result;
         }
 
-        private List<Teacher> FindFreeTeachers(string blockids)
+        [Route("free_teachers")]
+        public ActionResult FindFreeTeachers(string blockids)
         {
             int[] ids = ConvertStringArraytoInt(blockids.Split(','));
             
@@ -485,8 +486,11 @@ namespace SkemaSystem.Controllers
                     if (teachers.Contains(item2.Subject.Teacher))
                         teachers.Remove(item2.Subject.Teacher);
                 }
-	        }
-            return teachers;
+            }
+
+            ViewBag.teachers = teachers;
+
+            return PartialView("_RescheduleTeachersPartial");
         }
 	}
 }
