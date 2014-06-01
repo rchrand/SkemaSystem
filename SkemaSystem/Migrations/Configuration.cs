@@ -5,6 +5,7 @@ namespace SkemaSystem.Migrations
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.Diagnostics;
     using System.Linq;
     using System.Web.Security;
 
@@ -58,9 +59,9 @@ namespace SkemaSystem.Migrations
             Semester s3 = new Semester { Id = 3, Number = 3, Blocks = ssdbList3 };
             Semester s4 = new Semester { Id = 4, Number = 4, Blocks = ssdbList4 };
 
-            Scheme sch1 = new Scheme { ClassModel = c1, Semester = s1, Id = 1 };
-            Scheme sch2 = new Scheme { ClassModel = c1, Semester = s2, Id = 2 };
-            Scheme sch3 = new Scheme { ClassModel = c2, Semester = s1, Id = 3 };
+            Scheme sch1 = new Scheme { ClassModel = c1, Semester = s1, Id = 1, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 4), YearString = "" };
+            Scheme sch2 = new Scheme { ClassModel = c1, Semester = s2, Id = 2, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 4), YearString = "" };
+            Scheme sch3 = new Scheme { ClassModel = c2, Semester = s1, Id = 3, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 4), YearString = "" };
 
             Room r1 = new Room { Id = 1, RoomName = "SH-A1.13" };
             Room r2 = new Room { Id = 2, RoomName = "SH-A1.8" };
@@ -127,10 +128,10 @@ namespace SkemaSystem.Migrations
                 lb7_1, lb7_2
             };
 
-            Scheme mainScheme = new Scheme { Semester = s1, Id = 100, ClassModel = c1, LessonBlocks = list, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 4), SubjectDistBlocks = new List<SubjectDistBlock>() { sdb_1, sdb_2, sdb_3 } };
+            Scheme mainScheme = new Scheme { Semester = s1, Id = 100, ClassModel = c1, LessonBlocks = list, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 4), SubjectDistBlocks = new List<SubjectDistBlock>() { sdb_1, sdb_2, sdb_3 }, YearString = "" };
 
             e1.Schemes = new List<Scheme>() {
-                mainScheme
+                mainScheme, sch1, sch2, sch3
             };
 
             context.Educations.AddOrUpdate(
@@ -173,7 +174,7 @@ namespace SkemaSystem.Migrations
                 lb6_1, lb6_2, lb6_3,
                 lb7_1, lb7_2
             );
-            
+
             context.Schemes.AddOrUpdate(
                 x => x.Id,
                 mainScheme
