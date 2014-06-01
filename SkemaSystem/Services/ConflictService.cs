@@ -81,7 +81,7 @@ namespace SkemaSystem.Services
                 }
                 currentDay = currentDay.AddDays(1);
                 //Stops the while loop if currentDay = 
-                if (currentDay == mainScheme.SemesterFinish)
+                if (currentDay == mainScheme.SemesterFinish.AddDays(1))
                 {
                     found = 3;
                 }
@@ -113,81 +113,85 @@ namespace SkemaSystem.Services
             int found = 0;
             while (found != 3)
             {
-                List<LessonBlock> currentBlocks = new List<LessonBlock>();
-
-                //Gets the blocks with match for currentDay and have the right teacher. If it's the wrong teacher list gets cleared
-                foreach (LessonBlock item in occupiedBlocks)
+                if (currentDay != blocks[0].Date)
                 {
-                    if (item.Date == currentDay && item.Subject.Teacher == blocks[0].Subject.Teacher)
-                        currentBlocks.Add(item);
-                    else if (item.Date == currentDay && item.Subject.Teacher != blocks[0].Subject.Teacher)
-                        currentBlocks.Clear();
-                }
+                    List<LessonBlock> currentBlocks = new List<LessonBlock>();
 
-                if (currentBlocks.Count != 0)
-                {
-                    //Check if total blocks is less or equal with 4
-                    if (currentBlocks.OrderBy(x => x.BlockNumber).Last().BlockNumber + blockNumbersToBeMoved.Count <= 3)
+                    //Gets the blocks with match for currentDay and have the right teacher. If it's the wrong teacher list gets cleared
+                    foreach (LessonBlock item in occupiedBlocks)
                     {
-                        List<int> blocksToBeOccupied = new List<int>();
+                        if (item.Date == currentDay && item.Subject.Teacher == blocks[0].Subject.Teacher)
+                            currentBlocks.Add(item);
+                        else if (item.Date == currentDay && item.Subject.Teacher != blocks[0].Subject.Teacher)
+                            currentBlocks.Clear();
+                    }
 
-                        //Lists the blocknumbers which is free for moving lessonblocks
-                        int z = 1;
-                        foreach (var item2 in blockNumbersToBeMoved)
+                    if (currentBlocks.Count != 0)
+                    {
+                        //Check if total blocks is less or equal with 4
+                        if (currentBlocks.OrderBy(x => x.BlockNumber).Last().BlockNumber + blockNumbersToBeMoved.Count <= 3)
                         {
-                            blocksToBeOccupied.Add(currentBlocks.Last().BlockNumber + z);
-                            z++;
-                        }
+                            List<int> blocksToBeOccupied = new List<int>();
 
-                        //Check the blocknumbers which was free for moving lessonblock with the conflict lessons
-                        bool valid = true;
-                        List<LessonBlock> conflictsCurrentDay = new List<LessonBlock>();
-                        foreach (var item in conflictLessons)
-                        {
-                            if (item.Date == currentDay)
+                            //Lists the blocknumbers which is free for moving lessonblocks
+                            int z = 1;
+                            foreach (var item2 in blockNumbersToBeMoved)
                             {
-                                conflictsCurrentDay.Add(item);
-                                if (blocksToBeOccupied.Contains(item.BlockNumber))
+                                blocksToBeOccupied.Add(currentBlocks.Last().BlockNumber + z);
+                                z++;
+                            }
+
+                            //Check the blocknumbers which was free for moving lessonblock with the conflict lessons
+                            bool valid = true;
+                            List<LessonBlock> conflictsCurrentDay = new List<LessonBlock>();
+                            foreach (var item in conflictLessons)
+                            {
+                                if (item.Date == currentDay)
                                 {
-                                    valid = false;
-                                    break;
+                                    conflictsCurrentDay.Add(item);
+                                    if (blocksToBeOccupied.Contains(item.BlockNumber))
+                                    {
+                                        valid = false;
+                                        break;
+                                    }
                                 }
                             }
-                        }
-                        if (valid)
-                        {
-                            int blocknumber = 0;
-                            while (blocknumber < 4)
+                            if (valid)
                             {
-                                if (currentBlocks.Where(x => x.BlockNumber == blocknumber).Count() == 1)
+                                int blocknumber = 0;
+                                while (blocknumber < 4)
                                 {
-                                    bool validBlock = true;
-                                    for (int i = 1; i <= blockNumbersToBeMoved.Count(); i++)
+                                    if (currentBlocks.Where(x => x.BlockNumber == blocknumber).Count() == 1)
                                     {
-                                        if (currentBlocks.Where(x => x.BlockNumber == (blocknumber + i)).Count() != 0 ||
-                                            conflictsCurrentDay.Where(x => x.BlockNumber == blocknumber + i).Count() != 0)
+                                        bool validBlock = true;
+                                        for (int i = 1; i <= blockNumbersToBeMoved.Count(); i++)
                                         {
-                                            validBlock = false;
-                                            break;
+                                            if (currentBlocks.Where(x => x.BlockNumber == (blocknumber + i)).Count() != 0 ||
+                                                conflictsCurrentDay.Where(x => x.BlockNumber == blocknumber + i).Count() != 0)
+                                            {
+                                                validBlock = false;
+                                                break;
+                                            }
+                                        }
+                                        if (validBlock)
+                                        {
+                                            availableBlocks.Add(currentDay, blocknumber + 1);
+                                            blocknumber = 4;
                                         }
                                     }
-                                    if (validBlock)
-                                    {
-                                        availableBlocks.Add(currentDay, blocknumber + 1);
-                                        blocknumber = 4;
-                                    }
+                                    blocknumber++;
                                 }
-                                blocknumber++;
+                                found++;
                             }
-                            found++;
                         }
+                    }
+
+                    if (currentDay == mainScheme.SemesterFinish.AddDays(1))
+                    {
+                        found = 3;
                     }
                 }
                 currentDay = currentDay.AddDays(1);
-                if (currentDay == mainScheme.SemesterFinish)
-                {
-                    found = 3;
-                }
             }
             return availableBlocks;
         }
@@ -218,71 +222,75 @@ namespace SkemaSystem.Services
             int found = 0;
             while (found != 3)
             {
-                List<LessonBlock> currentBlocks = new List<LessonBlock>();
-                List<LessonBlock> conflictsCurrentDay = new List<LessonBlock>();
+                if (currentDay != blocks[0].Date)
+                {
+                    List<LessonBlock> currentBlocks = new List<LessonBlock>();
+                    List<LessonBlock> conflictsCurrentDay = new List<LessonBlock>();
 
-                //Gets the blocks with match for currentDay and have the right teacher. If it's the wrong teacher list gets cleared
-                foreach (LessonBlock item in occupiedBlocks)
-                {
-                    if (item.Date == currentDay && item.Subject.Teacher == otherTeacher)
-                        currentBlocks.Add(item);
-                }
-                if (currentBlocks.Count >= blockNumbersToBeMoved.Count)
-                {
-                    bool valid = true;
-                    foreach (var item in conflictLessons)
+                    //Gets the blocks with match for currentDay and have the right teacher. If it's the wrong teacher list gets cleared
+                    foreach (LessonBlock item in occupiedBlocks)
                     {
-                        if (item.Date == currentDay && item.Subject.Teacher == blocks[0].Subject.Teacher)
-                        {
-                            conflictsCurrentDay.Add(item);
-                            foreach (var item2 in currentBlocks)
-                            {
-                                if (item.BlockNumber == item2.BlockNumber)
-                                {
-                                    valid = false;
-                                    break;
-                                }
-                            }
-                        }
+                        if (item.Date == currentDay && item.Subject.Teacher == otherTeacher)
+                            currentBlocks.Add(item);
                     }
-                    if (valid)
+                    if (currentBlocks.Count >= blockNumbersToBeMoved.Count)
                     {
-                        DateTime dt = currentDay;
-
-                        int blocknumber = 0;
-                        while (blocknumber < 4)
+                        bool valid = true;
+                        foreach (var item in conflictLessons)
                         {
-                            //Checks if blocknumber is occoupied
-                            if (currentBlocks.Where(x => x.BlockNumber == blocknumber).Count() == 1 &&
-                               conflictsCurrentDay.Where(x => x.BlockNumber == blocknumber).Count() == 0)
+                            if (item.Date == currentDay && item.Subject.Teacher == blocks[0].Subject.Teacher)
                             {
-                                bool validBlock = true;
-                                for (int i = 1; i < blockNumbersToBeMoved.Count(); i++)
+                                conflictsCurrentDay.Add(item);
+                                foreach (var item2 in currentBlocks)
                                 {
-                                    if (currentBlocks.Where(x => x.BlockNumber == (blocknumber + i)).Count() != 1 &&
-                                    conflictsCurrentDay.Where(x => x.BlockNumber == blocknumber + i).Count() != 0)
+                                    if (item.BlockNumber == item2.BlockNumber)
                                     {
-                                        validBlock = false;
+                                        valid = false;
+                                        break;
                                     }
                                 }
-                                if (validBlock)
-                                {
-                                    availableBlocks.Add(dt, blocknumber);
-                                    blocknumber = 4;
-                                }
                             }
-                            blocknumber++;
                         }
+                        if (valid)
+                        {
+                            DateTime dt = currentDay;
 
-                        found++;
+                            int blocknumber = 0;
+                            while (blocknumber < 4)
+                            {
+                                //Checks if blocknumber is occoupied
+                                if (currentBlocks.Where(x => x.BlockNumber == blocknumber).Count() == 1 &&
+                                   conflictsCurrentDay.Where(x => x.BlockNumber == blocknumber).Count() == 0)
+                                {
+                                    bool validBlock = true;
+                                    for (int i = 1; i < blockNumbersToBeMoved.Count(); i++)
+                                    {
+                                        if (currentBlocks.Where(x => x.BlockNumber == (blocknumber + i)).Count() != 1 &&
+                                        conflictsCurrentDay.Where(x => x.BlockNumber == blocknumber + i).Count() != 0)
+                                        {
+                                            validBlock = false;
+                                        }
+                                    }
+                                    if (validBlock)
+                                    {
+                                        availableBlocks.Add(dt, blocknumber);
+                                        blocknumber = 4;
+                                    }
+                                }
+                                blocknumber++;
+                            }
+
+                            found++;
+                        }
+                    }
+
+                    //Stops the while loop if currentDay = 
+                    if (currentDay == mainScheme.SemesterFinish.AddDays(1))
+                    {
+                        found = 3;
                     }
                 }
                 currentDay = currentDay.AddDays(1);
-                //Stops the while loop if currentDay = 
-                if (currentDay == mainScheme.SemesterFinish)
-                {
-                    found = 3;
-                }
             }
             return availableBlocks;
         }
