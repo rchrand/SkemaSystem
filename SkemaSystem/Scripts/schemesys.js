@@ -61,5 +61,13 @@
                 window.location.href = '/admin/login';
             }
         });
+
+        $("input[type=date]").datepicker({
+            dateFormat: "dd/mm/yy",
+            dayNamesMin: ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør'],
+            monthNames: ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "July", "August", "September", "Oktober", "November", "December"],
+            nextText: "Næste",
+            prevText: "Forrige"
+        });
     });
 })(jQuery);
