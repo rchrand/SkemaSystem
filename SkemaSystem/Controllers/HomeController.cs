@@ -24,7 +24,7 @@ namespace SkemaSystem.Controllers
 
             // Creating af grouped collection of schemes! Grouped by year - ordered by a bunch of things!
             var schemeGroupsQuery = from s in edu.Schemes
-                                    where s.ClassModel != null && (s.SemesterStart - DateTime.Now).TotalDays < 30
+                                    where s.ClassModel != null
                                     orderby s.SemesterStart descending, s.Semester.Number descending, s.ClassModel.ClassName ascending
                                     group s by s.YearString into g
                                     select new { Year = g.Key, Schemes = g };
@@ -101,7 +101,6 @@ namespace SkemaSystem.Controllers
                     addedIds.Remove(s1.Id);
                 }
             }
-
 
             return Json(new { success = true, deactivate_schemes = addedIds.ToArray()});
         }

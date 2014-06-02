@@ -197,24 +197,31 @@ namespace SkemaSystem.Services
         public static bool RelocateLesson(int schemeId, string lessonIds, int roomId, IEnumerable<Scheme> schemes, IEnumerable<Room> rooms)
         {
             // TODO check permissions
-            
+
             Scheme scheme = schemes.Single(s => s.Id.Equals(schemeId));
 
             string[] ids = lessonIds.Split(',');
 
-            IEnumerable<LessonBlock> blocks = scheme.LessonBlocks.Where(l => ids.Contains(l.Id.ToString()));
+            IEnumerable<LessonBlock> blocks = new List<LessonBlock>(scheme.LessonBlocks.Where(l => ids.Contains(l.Id.ToString())));
 
             Room room = rooms.Single(r => r.Id.Equals(roomId));
 
             foreach (var block in blocks)
             {
-                block.Room = room;
-
-                if (!SchedulingService.IsRoomAvailable(schemes, block, scheme))
+                LessonBlock tempBlock = new LessonBlock()
+                {
+                    BlockNumber = block.BlockNumber,
+                    Date = block.Date,
+                    Id = block.Id,
+                    Room = room,
+                    Subject = block.Subject
+                };
+                if (!SchedulingService.IsRoomAvailable(schemes, tempBlock, scheme))
                 {
                     return false;
                 }
             }
+            blocks.ToList().ForEach(b => b.Room = room);
 
             return true;
         }

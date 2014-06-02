@@ -11,7 +11,8 @@ namespace SkemaSystem
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include("~/Scripts/jquery-{version}.js",
                                                                       "~/Scripts/jquery.validate*",
                                                                       "~/Scripts/modernizr-*",
-                                                                      "~/Scripts/jquery.sticky.js"));
+                                                                      "~/Scripts/jquery.sticky.js",
+                                                                      "~/Scripts/jquery-ui-{version}.custom.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/scripts/backend").Include("~/Scripts/jquery.ui.position.js",
                                                                       "~/Scripts/jquery.contextMenu.js"));

@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using SkemaSystem.Models;
 using SkemaSystem.Models.ViewModels;
+using System.Globalization;
 
 namespace SkemaSystem.Controllers
 {
@@ -256,7 +257,7 @@ namespace SkemaSystem.Controllers
 
                 int semesterNumber = item.ActiveSchemes.Count;
 
-                service.setNewSemesterForClass(item, semesters[semesterNumber], Convert.ToDateTime(start[semesterNumber]), Convert.ToDateTime(finish[semesterNumber]));
+                service.setNewSemesterForClass(item, semesters[semesterNumber], Convert.ToDateTime(start[semesterNumber], new CultureInfo("da-DK")), Convert.ToDateTime(finish[semesterNumber], new CultureInfo("da-DK")));
             }
 
             db.SaveChanges();

@@ -14,7 +14,7 @@
                 if (response.success) {
                     // Activate all checkboxes!
                     $("input[type='checkbox']").removeAttr("disabled").prop("disabled", false);
-
+                    alert(response.deactivate_schemes);
                     response.deactivate_schemes.forEach(function (value) {
                         $("#checkbox" + value).prop("disabled", true);
                     });

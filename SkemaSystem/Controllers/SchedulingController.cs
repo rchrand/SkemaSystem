@@ -310,7 +310,16 @@ namespace SkemaSystem.Controllers
             ConflictService service = new ConflictService();
 
             //Original, out commented for testing
-            Dictionary<DateTime, int> availableDates = service.FindAHoleInScheme(mainScheme, conflictLessons, choosenBlocks.ToList(), new DateTime(2014,5,26));
+            DateTime time;
+            if (DateTime.Today < mainScheme.SemesterStart)
+            {
+                time = mainScheme.SemesterStart;
+            }
+            else
+            {
+                time = DateTime.Today;
+            }
+            Dictionary<DateTime, int> availableDates = service.FindAHoleInScheme(mainScheme, conflictLessons, choosenBlocks.ToList(), time);
 
             //******************************
             // Do something with the availableDates
@@ -349,7 +358,17 @@ namespace SkemaSystem.Controllers
 
             ConflictService service = new ConflictService();
 
-            Dictionary<DateTime, int> availableDates = service.setLessonBehindOwnLesson(mainScheme, conflictLessons, choosenBlocks.ToList(), new DateTime(2014, 5, 26));
+
+            DateTime time;
+            if (DateTime.Today < mainScheme.SemesterStart)
+            {
+                time = mainScheme.SemesterStart;
+            }
+            else
+            {
+                time = DateTime.Today;
+            }
+            Dictionary<DateTime, int> availableDates = service.setLessonBehindOwnLesson(mainScheme, conflictLessons, choosenBlocks.ToList(), time);
 
             //******************************
             // Do something with the availableDates
@@ -398,7 +417,17 @@ namespace SkemaSystem.Controllers
 
             ConflictService service = new ConflictService();
 
-            Dictionary<DateTime, int> availableDates = service.switchWithOtherTeacher(mainScheme, conflictLessons, choosenBlocks.ToList(), otherTeacher, new DateTime(2014, 5, 26));
+
+            DateTime time;
+            if (DateTime.Today < mainScheme.SemesterStart)
+            {
+                time = mainScheme.SemesterStart;
+            }
+            else
+            {
+                time = DateTime.Today;
+            }
+            Dictionary<DateTime, int> availableDates = service.switchWithOtherTeacher(mainScheme, conflictLessons, choosenBlocks.ToList(), otherTeacher, time);
 
             //******************************
             // Do something with the availableDates
