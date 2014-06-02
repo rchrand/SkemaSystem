@@ -149,7 +149,7 @@
             });
 
             if (action == 'delete') {
-                var prompt = (cells.length == 1) ? 'Er du sikker på, at du vil blokken?' : 'Er du sikker på, at du vil slette alle valgte blokke?';
+                var prompt = (cells.length == 1) ? 'Er du sikker på, at du vil slette blokken?' : 'Er du sikker på, at du vil slette alle valgte blokke?';
                 
                 if (confirm(prompt)) {
                     $.ajax({
@@ -202,11 +202,26 @@
                 // TODO if muliple cells chosen, they must be in row
                 if (cells.length > 1) {
                     var connected = true;
+                    var lastIndex, lastScheme;
                     $.each(cells, function (index, element) {
                         var cell = $(element);
 
                         var index = cell.index() - 1;
                         var row = cell.closest('tr');
+
+                        if (lastIndex != undefined && lastIndex != index) {
+                            connected = false;
+                            return;
+                        }
+                        lastIndex = index;
+
+                        var scheme = cell.closest('table');
+
+                        if (lastScheme != undefined && lastScheme != scheme[0]) {
+                            connected = false;
+                            return;
+                        }
+                        lastScheme = scheme[0];
 
                         var prev = row.prev('tr').find('> td:eq(' + index + ').selected').length;
                         var next = row.next('tr').find('> td:eq(' + index + ').selected').length;
