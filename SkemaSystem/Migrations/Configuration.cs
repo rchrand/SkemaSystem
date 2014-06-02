@@ -59,10 +59,6 @@ namespace SkemaSystem.Migrations
             Semester s3 = new Semester { Id = 3, Number = 3, Blocks = ssdbList3 };
             Semester s4 = new Semester { Id = 4, Number = 4, Blocks = ssdbList4 };
 
-            Scheme sch1 = new Scheme { ClassModel = c1, Semester = s1, Id = 1, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 4), YearString = "" };
-            Scheme sch2 = new Scheme { ClassModel = c1, Semester = s2, Id = 2, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 4), YearString = "" };
-            Scheme sch3 = new Scheme { ClassModel = c2, Semester = s1, Id = 3, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 4), YearString = "" };
-
             Room r1 = new Room { Id = 1, RoomName = "SH-A1.13" };
             Room r2 = new Room { Id = 2, RoomName = "SH-A1.8" };
             Room r3 = new Room { Id = 3, RoomName = "SH-A1.4" };
@@ -88,52 +84,21 @@ namespace SkemaSystem.Migrations
             c2.Education = e1;
 
             //Testdata for TeacherSwitch
-
             SubjectDistBlock sdb_1 = new SubjectDistBlock() { Id = 1, BlocksCount = 10, Subject = su1, Teacher = t1 };
-            SubjectDistBlock sdb_2 = new SubjectDistBlock() { Id = 1, BlocksCount = 10, Subject = su2, Teacher = t2 };
-            SubjectDistBlock sdb_3 = new SubjectDistBlock() { Id = 1, BlocksCount = 10, Subject = su3, Teacher = t3 };
+            SubjectDistBlock sdb_2 = new SubjectDistBlock() { Id = 2, BlocksCount = 10, Subject = su2, Teacher = t2 };
+            SubjectDistBlock sdb_3 = new SubjectDistBlock() { Id = 3, BlocksCount = 10, Subject = su3, Teacher = t3 };
 
-            LessonBlock lb1_1 = new LessonBlock { Id = 101, Date = new DateTime(2014, 5, 26), BlockNumber = 0, Subject = sdb_1, Room = r3 };
-            LessonBlock lb1_2 = new LessonBlock { Id = 102, Date = new DateTime(2014, 5, 26), BlockNumber = 1, Subject = sdb_1, Room = r3 };
+            Scheme sch1 = new Scheme { Id = 1, ClassModel = c1, Semester = s1, SemesterStart = new DateTime(2014, 6, 1), SemesterFinish = new DateTime(2014, 8, 1), SubjectDistBlocks = new List<SubjectDistBlock> { sdb_1, sdb_2, sdb_3 }, YearString = ""};
+            c1.ActiveSchemes.Add(sch1);
 
-            LessonBlock lb2_1 = new LessonBlock { Id = 103, Date = new DateTime(2014, 5, 27), BlockNumber = 0, Subject = sdb_2, Room = r3 };
-            LessonBlock lb2_2 = new LessonBlock { Id = 104, Date = new DateTime(2014, 5, 27), BlockNumber = 1, Subject = sdb_2, Room = r3 };
+            SubjectDistBlock sdb_4 = new SubjectDistBlock() { Id = 4, BlocksCount = 10, Subject = su1, Teacher = t1 };
+            SubjectDistBlock sdb_5 = new SubjectDistBlock() { Id = 5, BlocksCount = 10, Subject = su2, Teacher = t2 };
+            SubjectDistBlock sdb_6 = new SubjectDistBlock() { Id = 6, BlocksCount = 10, Subject = su3, Teacher = t3 };
 
-            LessonBlock lb3_1 = new LessonBlock { Id = 105, Date = new DateTime(2014, 5, 28), BlockNumber = 0, Subject = sdb_2, Room = r3 };
-            LessonBlock lb3_2 = new LessonBlock { Id = 106, Date = new DateTime(2014, 5, 28), BlockNumber = 1, Subject = sdb_2, Room = r3 };
-            LessonBlock lb3_3 = new LessonBlock { Id = 107, Date = new DateTime(2014, 5, 28), BlockNumber = 2, Subject = sdb_1, Room = r3 };
+            Scheme sch2 = new Scheme { Id = 2, ClassModel = c2, Semester = s1, SemesterStart = new DateTime(2014, 6, 1), SemesterFinish = new DateTime(2014, 8, 1), SubjectDistBlocks = new List<SubjectDistBlock> { sdb_4, sdb_5, sdb_6 }, YearString = "" };
+            c1.ActiveSchemes.Add(sch1);
 
-            LessonBlock lb4_1 = new LessonBlock { Id = 108, Date = new DateTime(2014, 5, 29), BlockNumber = 0, Subject = sdb_1, Room = r3 };
-            LessonBlock lb4_2 = new LessonBlock { Id = 109, Date = new DateTime(2014, 5, 29), BlockNumber = 1, Subject = sdb_2, Room = r3 };
-            LessonBlock lb4_3 = new LessonBlock { Id = 110, Date = new DateTime(2014, 5, 29), BlockNumber = 2, Subject = sdb_2, Room = r3 };
-            LessonBlock lb4_4 = new LessonBlock { Id = 111, Date = new DateTime(2014, 5, 29), BlockNumber = 3, Subject = sdb_2, Room = r3 };
-
-            LessonBlock lb5_1 = new LessonBlock { Id = 112, Date = new DateTime(2014, 5, 30), BlockNumber = 0, Subject = sdb_2, Room = r3 };
-            LessonBlock lb5_2 = new LessonBlock { Id = 113, Date = new DateTime(2014, 5, 30), BlockNumber = 1, Subject = sdb_2, Room = r3 };
-
-            LessonBlock lb6_1 = new LessonBlock { Id = 114, Date = new DateTime(2014, 6, 2), BlockNumber = 0, Subject = sdb_2, Room = r3 };
-            LessonBlock lb6_2 = new LessonBlock { Id = 115, Date = new DateTime(2014, 6, 2), BlockNumber = 1, Subject = sdb_2, Room = r3 };
-            LessonBlock lb6_3 = new LessonBlock { Id = 116, Date = new DateTime(2014, 6, 2), BlockNumber = 2, Subject = sdb_2, Room = r3 };
-
-            LessonBlock lb7_1 = new LessonBlock { Id = 117, Date = new DateTime(2014, 6, 3), BlockNumber = 0, Subject = sdb_2, Room = r3 };
-            LessonBlock lb7_2 = new LessonBlock { Id = 118, Date = new DateTime(2014, 6, 3), BlockNumber = 1, Subject = sdb_2, Room = r3 };
-
-            List<LessonBlock> list = new List<LessonBlock> { 
-                lb1_1, lb1_2,
-                lb2_1, lb2_2,
-                lb3_1, lb3_2, lb3_3,
-                lb4_1, lb4_2, lb4_3, lb4_4,
-                lb5_1, lb5_2, 
-                lb6_1, lb6_2, lb6_3,
-                lb7_1, lb7_2
-            };
-
-            Scheme mainScheme = new Scheme { Semester = s1, Id = 100, ClassModel = c1, LessonBlocks = list, SemesterStart = new DateTime(2014, 5, 26), SemesterFinish = new DateTime(2014, 6, 4), SubjectDistBlocks = new List<SubjectDistBlock>() { sdb_1, sdb_2, sdb_3 }, YearString = "" };
-
-            e1.Schemes = new List<Scheme>() {
-                mainScheme, sch1, sch2, sch3
-            };
-
+            e1.Schemes = new List<Scheme> { sch1, sch2 };
             context.Educations.AddOrUpdate(
                 e => e.Id,
                 e1, e2
@@ -162,22 +127,6 @@ namespace SkemaSystem.Migrations
             context.Rooms.AddOrUpdate(
                 r => r.Id,
                 r1, r2, r3
-            );
-
-            context.LessonBlocks.AddOrUpdate(
-                x => x.Id,
-                lb1_1, lb1_2,
-                lb2_1, lb2_2,
-                lb3_1, lb3_2, lb3_3,
-                lb4_1, lb4_2, lb4_3, lb4_4,
-                lb5_1, lb5_2,
-                lb6_1, lb6_2, lb6_3,
-                lb7_1, lb7_2
-            );
-
-            context.Schemes.AddOrUpdate(
-                x => x.Id,
-                mainScheme
             );
         }
     }
