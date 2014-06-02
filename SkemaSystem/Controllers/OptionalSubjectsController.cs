@@ -63,6 +63,11 @@ namespace SkemaSystem.Controllers
                 return View();
                 
             }
+            if (form["subjectBlockCount"] == null)
+            {
+                CreateViewBagError(form, "Du mangler at tilføje minimum ét fag. Dette gøres i formularen til højre.", education);
+                return View();
+            }
 
             string[] subjectBlocksCountArray = form["subjectBlockCount"].Split(',');
             string[] subjectIdArray = form["subjectId"].Split(',');
@@ -169,13 +174,12 @@ namespace SkemaSystem.Controllers
                                where s.OptionalSubject && s.Education.Id == edu.Id
                                select s;
 
-
             ViewBag.Error_Name = form["name"];
             ViewBag.Error_SemesterId = form["semester"];
             ViewBag.Error_Year = form["year"];
 
 
-            if (form["semester"] != null && form["year"] != null)
+            if (!string.IsNullOrEmpty(form["semester"]) && !string.IsNullOrEmpty(form["year"]))
             {
                 int semesterId = Int32.Parse(form["semester"]);
                 List<Scheme> schemes = (from s in edu.Schemes

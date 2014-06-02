@@ -99,6 +99,10 @@ namespace SkemaSystem.Controllers
                 foreach (int id in includeOptionalSubject) {
                     Scheme s1 = db.Schemes.Where(x => x.Id == id).FirstOrDefault();
                     addedIds.Remove(s1.Id);
+                    foreach (Scheme s in s1.ConflictSchemes)
+                    {
+                        addedIds.Remove(s.Id);
+                    }
                 }
             }
 
