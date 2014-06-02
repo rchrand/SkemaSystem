@@ -29,13 +29,12 @@ namespace SkemaSystem.Controllers
 
             return RedirectToAction("Index", new { education = education.Name.ToLower() });
         }
-        // GET: /admin/teachers/
+
         public ActionResult Index()
         {
             return View(db.Teachers.ToList());
         }
 
-        // GET: /admin/teachers/details/5
         [Route("details/{id?}")]
         public ActionResult Details(int? id)
         {
@@ -51,7 +50,6 @@ namespace SkemaSystem.Controllers
             return View(teacher);
         }
 
-        // GET: /admin/teachers/create
         [Route("create")]
         public ActionResult Create()
         {
@@ -64,9 +62,6 @@ namespace SkemaSystem.Controllers
             return View(model);
         }
 
-        // POST: /admin/teachers/create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [ValidateAntiForgeryToken]
         [Route("create"), HttpPost]
         public ActionResult Create(TeacherViewModel result)
@@ -84,7 +79,6 @@ namespace SkemaSystem.Controllers
             return View(result);
         }
 
-        // GET: /admin/teachers/edit/5
         [Route("edit/{id?}")]
         public ActionResult Edit(int? id)
         {
@@ -107,40 +101,34 @@ namespace SkemaSystem.Controllers
             return View(model);
         }
 
-        // POST: /admin/teachers/edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("edit/{id?}")]
         public ActionResult Edit(TeacherViewModel result)
         {
-            // 
             Teacher teacher = result.Teacher;
             List<Education> _educations = GetEducations(result.PostedEducations);
 
             if (ModelState.IsValid)
             {
-                    Teacher _teacher = db.Teachers.FirstOrDefault(t => t.Id == teacher.Id);
-                    _teacher.Name = teacher.Name;
-                    _teacher.Username = teacher.Username;
-                    _teacher.Role = teacher.Role;
-                    //_teacher.Password = teacher.Password; // TODO move to action ChangePassword
-                    Debug.WriteLine("_educations=" + _educations.Count);
-                    if (_teacher.Educations != null)
-                    {
-                        _teacher.Educations.Clear();
-                    }
-                    _teacher.Educations = _educations;
-                    Debug.WriteLine("educations=" + _teacher.Educations.Count);
-                    db.Entry(_teacher).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                Teacher _teacher = db.Teachers.FirstOrDefault(t => t.Id == teacher.Id);
+                _teacher.Name = teacher.Name;
+                _teacher.Username = teacher.Username;
+                _teacher.Role = teacher.Role;
+
+                if (_teacher.Educations != null)
+                {
+                    _teacher.Educations.Clear();
+                }
+                _teacher.Educations = _educations;
+
+                db.Entry(_teacher).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
             }
 
                 return RedirectToAction("index");
         }
 
-        // GET: /admin/teachers/delete/5
         [Route("delete/{id?}")]
         public ActionResult Delete(int? id)
         {
@@ -156,7 +144,6 @@ namespace SkemaSystem.Controllers
             return View(teacher);
         }
 
-        // POST: /admin/teachers/delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Route("delete/{id}")]

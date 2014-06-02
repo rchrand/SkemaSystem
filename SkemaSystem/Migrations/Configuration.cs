@@ -21,11 +21,11 @@ namespace SkemaSystem.Migrations
             Education e1 = new Education { Id = 1, Name = "DMU", NumberOfSemesters = 4 };
             Education e2 = new Education { Id = 2, Name = "MDU", NumberOfSemesters = 6 };
 
-            Teacher t1 = new Teacher { Id = 1, Name = "Hanne Sommer", Username = "eaasommer", Password = "fisk123", Role = Models.Enum.UserRoles.Teacher };
-            Teacher t2 = new Teacher { Id = 2, Name = "Torben Krøjmand", Username = "eaatk", Password = "fisk123", Role = Models.Enum.UserRoles.Teacher };
-            Teacher t3 = new Teacher { Id = 3, Name = "Erik Jacobsen", Username = "eaaej", Password = "fisk123", Role = Models.Enum.UserRoles.Master };
-            Teacher t4 = new Teacher { Id = 4, Name = "Jörn Hujak", Username = "eaajh", Password = "fisk123", Role = Models.Enum.UserRoles.Teacher };
-            Teacher t5 = new Teacher { Id = 5, Name = "Karsten ITO", Username = "eaakarsten", Password = "fisk123", Role = Models.Enum.UserRoles.Teacher };
+            Teacher t1 = new Teacher { Id = 1, Name = "Hanne Sommer", Username = "eaasommer", Password = "fisk123", Role = UserRoles.Teacher };
+            Teacher t2 = new Teacher { Id = 2, Name = "Torben Krøjmand", Username = "eaatk", Password = "fisk123", Role = UserRoles.Teacher };
+            Teacher t3 = new Teacher { Id = 3, Name = "Erik Jacobsen", Username = "eaaej", Password = "fisk123", Role = UserRoles.Master };
+            Teacher t4 = new Teacher { Id = 4, Name = "Jörn Hujak", Username = "eaajh", Password = "fisk123", Role = UserRoles.Teacher };
+            Teacher t5 = new Teacher { Id = 5, Name = "Karsten ITO", Username = "eaakarsten", Password = "fisk123", Role = UserRoles.Teacher };
 
             ClassModel c1 = new ClassModel { Id = 1, ClassName = "12t" };
             ClassModel c2 = new ClassModel { Id = 2, ClassName = "12s" };

@@ -27,13 +27,11 @@ namespace SkemaSystem.Controllers
             return RedirectToAction("Index", new { education = education.Name.ToLower() });
         }
 
-        // GET: /Class/
         public ActionResult Index(string education)
         {
             return View(db.Classes.ToList());
         }
 
-        // GET: /Class/Details/5
         [Route("details/{id?}")]
         public ActionResult Details(int? id)
         {
@@ -49,22 +47,14 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-        // GET: /Classes/Create
         [Route("create")]
         public ActionResult Create(string education)
         {
-            Education edu = db.Educations.Where(x=>x.Name.Equals(education)).FirstOrDefault();           
-            //IEnumerable<SelectListItem> items = from s in db.Educations.ToList()
-            //                                    select new SelectListItem { Text = s.Name, Value = s.Id.ToString() };
-            //ViewBag.EducationId = edu.Id;
-            //ViewBag.Educations = items;
+            Education edu = db.Educations.Where(x=>x.Name.Equals(education)).FirstOrDefault();   
 
             return View(new ClassViewModel { Education = edu.Id });
         }
 
-        // POST: /Classes/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("create")]
@@ -112,9 +102,6 @@ namespace SkemaSystem.Controllers
             return View(model);
         }
 
-        // POST: /Classes/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Route("edit/{id?}")]
         [ValidateAntiForgeryToken]
@@ -139,7 +126,6 @@ namespace SkemaSystem.Controllers
             return View(result);
         }
 
-        // GET: /Classes/Delete/5
         [Route("delete/{id?}")]
         public ActionResult Delete(int? id)
         {
@@ -155,7 +141,6 @@ namespace SkemaSystem.Controllers
             return View(classmodel);
         }
 
-        // POST: /Classes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Route("delete/{id?}")]
@@ -257,7 +242,6 @@ namespace SkemaSystem.Controllers
 
         [HttpPost]
         public ActionResult CreateSemester(string[] semesterId, string[] start, string[] finish)
-        //public ActionResult CreateSemester(string[] semesterId, string[] start, string[] finish, Education education)
         {
             Services.ConflictService service = new Services.ConflictService();
 

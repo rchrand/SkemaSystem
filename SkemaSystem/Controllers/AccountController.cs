@@ -1,5 +1,4 @@
 ﻿using SkemaSystem.Models;
-using SkemaSystem.Models.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +11,10 @@ namespace SkemaSystem.Controllers
     [RouteArea("Admin", AreaPrefix="admin")]
     public class AccountController : BaseController
     {
-        /*
-         * ONLY FOR DEMO PURPOSE
-         */
-
         [Route("{education?}")]
         public ActionResult Index(string education)
         {
-            return View();// Content("<a href='teachers'>Lærere</a><br /><a href='classes'>Klasser</a><br />");
+            return View();
         }
 
         [HttpGet]
@@ -53,17 +48,6 @@ namespace SkemaSystem.Controllers
         {
             FormsAuthentication.SignOut();
             return Redirect("/");
-        }
-
-        [Route("adminonly")]
-        public ContentResult TestingAdminRole()
-        {
-            if (IsRole(UserRoles.Admin))
-            {
-                return Content("Admin,");
-            }
-
-            return Content("Teacher,");
         }
     }
 }

@@ -36,20 +36,11 @@ namespace SkemaSystem
                         using (SkeamSystemDb db = new SkeamSystemDb())
                         {
                             Teacher teacher = db.Teachers.SingleOrDefault(u => u.Username == username);
-
-                            GenericIdentity identity = new GenericIdentity(username, "Forms");
-                            Context.User = new GenericPrincipal(identity, new string[] { teacher.Role.ToString() }); // this is a list of roles.
-
-                            //Session["UserRole"] = teacher.Role;
-
+                            
                             teacher.Identity = new GenericIdentity(username, "Forms");
+
                             HttpContext.Current.User = teacher;
                         }
-                        //let us extract the roles from our own custom cookie
-
-
-                        //Let us set the Pricipal with our user specific details
-                        //HttpContext.Current.User = new System.Security.Principal.GenericPrincipal(new System.Security.Principal.GenericIdentity(username, "Forms"), roles.Split(';'));
                     }
                     catch (Exception)
                     {

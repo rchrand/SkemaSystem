@@ -30,15 +30,9 @@ namespace SkemaSystem.Controllers
             return RedirectToAction("Index", new { education = education.Name.ToLower() });
         }
 
-        //[Route("~/admin/{education?}/scheduling", Name = "Schedule")]
         public ActionResult Index(string education)
         {
             Education _education = db.Educations.FirstOrDefault(e => e.Name.Equals(education));
-
-            if (!IsTeacher())
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-            }
 
             // Creating af grouped collection of schemes! Grouped by year - ordered by a bunch of things!
             var schemeGroupsQuery = from s in _education.Schemes
@@ -86,10 +80,6 @@ namespace SkemaSystem.Controllers
 
         public ActionResult ChangeSubjectDropDown(int scheme)
         {
-            if (!IsTeacher())
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-            }
             ViewBag.SubjectDistBlocks = db.Schemes.Single(x => x.Id == scheme).SubjectDistBlocks;
 
             return PartialView("_SubjectDropDown");
@@ -98,10 +88,6 @@ namespace SkemaSystem.Controllers
         [Route("lesson"), HttpPost]
         public ActionResult ScheduleLesson(int schemeId, int subjectId, int roomId, DateTime date, int blockNumber)
         {
-            if (!IsTeacher())
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-            }
             LessonBlock lesson;
 
             TransactionOptions options = new TransactionOptions
@@ -132,10 +118,6 @@ namespace SkemaSystem.Controllers
         [Route("lesson/delete"), HttpPost]
         public ActionResult DeleteLessons(int schemeId, string lessonIds)
         {
-            if (!IsTeacher())
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-            }
             // TODO check permissions
 
             TransactionOptions options = new TransactionOptions
@@ -167,10 +149,6 @@ namespace SkemaSystem.Controllers
         [Route("lesson/relocate"), HttpPost]
         public ActionResult RelocateLesson(int schemeId, string lessonIds, int roomId)
         {
-            if (!IsTeacher())
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-            }
             // TODO check permissions
 
             TransactionOptions options = new TransactionOptions
@@ -197,11 +175,6 @@ namespace SkemaSystem.Controllers
 
         public ActionResult ChangeScheme(int scheme)
         {
-            if (!IsTeacher())
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-            }
-
             Scheme _scheme = db.Schemes.Single(x => x.Id == scheme);
 
             SchemeViewModel model = new SchemeViewModel();
@@ -275,14 +248,12 @@ namespace SkemaSystem.Controllers
 
                         db.LessonBlocks.Remove(blocks[i]);
 
-                        //var subject = mainScheme.SubjectDistBlocks.Single(s => s.Subject.Id.Equals(subjectId));
-
                         if (method.Equals("teacher"))
                         {
                             var _block = db.LessonBlocks.Single(l => l.Subject.Teacher.Id == chosenTeacherId && DbFunctions.TruncateTime(l.Date) == option.Date && l.BlockNumber == blockNumber);
 
                             var _roomId = _block.Room.Id;
-                            var _subjectId = _block.Subject.Id; // mainScheme.SubjectDistBlocks.Single(s => s.Subject.Id.Equals(_block.Subject.Id)).Id;
+                            var _subjectId = _block.Subject.Id;
 
                             db.LessonBlocks.Remove(_block);
 
@@ -294,20 +265,6 @@ namespace SkemaSystem.Controllers
                     }
                     db.SaveChanges();
                     scope.Complete();
-                    /*if (SchedulingService.DeleteLessons(mainScheme.Id, blockIds, db.Schemes))
-                    {
-                        foreach (string id in block)
-                        {
-                            int _id = Int32.Parse(id);
-                            db.Entry<LessonBlock>(db.LessonBlocks.Single(l => l.Id == _id)).State = EntityState.Deleted;
-                        }
-                        db.SaveChanges();
-                        scope.Complete();
-                    }
-                    else
-                    {
-                        scope.Dispose();
-                    }*/
                 }
                 catch (Exception e)
                 {
@@ -353,7 +310,6 @@ namespace SkemaSystem.Controllers
             ConflictService service = new ConflictService();
 
             //Original, out commented for testing
-            //List<DateTime> availableDates = service.FindAHoleInScheme(mainScheme, conflictLessons, choosenBlocks.ToList(), DateTime.Today < mainScheme.SemesterStart ? mainScheme.SemesterStart : DateTime.Today);
             Dictionary<DateTime, int> availableDates = service.FindAHoleInScheme(mainScheme, conflictLessons, choosenBlocks.ToList(), new DateTime(2014,5,26));
 
             //******************************

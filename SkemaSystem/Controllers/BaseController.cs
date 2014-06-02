@@ -1,5 +1,4 @@
 ﻿using SkemaSystem.Models;
-using SkemaSystem.Models.Enum;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -29,35 +28,6 @@ namespace SkemaSystem.Controllers
         protected virtual new Teacher User
         {
             get { return HttpContext.User as Teacher; }
-        }
-
-        protected bool IsRole(UserRoles role)
-        {
-            return true;
-            /*var user = User.Identity.Name;
-            var username = db.Teachers.SingleOrDefault(t => t.Username == user && t.Role == role);
-
-            if (username != null)
-            {
-                return true;
-            }
-
-            return false;*/
-        }
-
-        protected bool IsTeacher()
-        {
-            return IsRole(UserRoles.Teacher) || IsAdmin();
-        }
-
-        protected bool IsAdmin()
-        {
-            return IsRole(UserRoles.Admin) || IsMaster();
-        }
-
-        protected bool IsMaster()
-        {
-            return IsRole(UserRoles.Master);
         }
 
         protected ActionResult Deny()

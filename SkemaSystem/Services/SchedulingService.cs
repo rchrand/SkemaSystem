@@ -11,14 +11,6 @@ namespace SkemaSystem.Services
 {
     public class SchedulingService
     {
-        /*
-         * Dictionary<int, List<TableCellViewModel>> dic = new Dictionary<int,List<TableCellViewModel>>();
-            dic.Add(0, new List<TableCellViewModel>() { new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { Teacher = db.Teachers.FirstOrDefault(), SubjectName = "SD", Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } } });
-            dic.Add(1, new List<TableCellViewModel>() { new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, null, null, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } } });
-            dic.Add(2, new List<TableCellViewModel>() { new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { Teacher = db.Teachers.FirstOrDefault(), SubjectName = "SD", Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } } });
-            dic.Add(3, new List<TableCellViewModel>() { null, new TableCellViewModel() { Teacher = db.Teachers.FirstOrDefault(), SubjectName = "SD", Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } }, new TableCellViewModel() { SubjectName = "SD", Teacher = db.Teachers.FirstOrDefault(), Room = new Room() { RoomName = "A1.1" } } });
-         */
-
         public static ICollection<Dictionary<int, List<LessonBlock>>> AllMergedSchemes(List<Scheme> schemes)
         {
             Scheme mainScheme = schemes.Where(x=>x.ClassModel != null).FirstOrDefault();
@@ -66,13 +58,7 @@ namespace SkemaSystem.Services
                 {
                     List<LessonBlock> cells = dic[key];
 
-                    cells[((int)block.Date.Date.DayOfWeek) - 1] = block;/*new LessonBlock()
-                    {
-                        BlockNumber = block.BlockNumber,
-                        Room = block.Room,
-                        Subject = block.Subject,
-                        Teacher = block.Teacher
-                    };*/
+                    cells[((int)block.Date.Date.DayOfWeek) - 1] = block;
                     dic[key] = cells;
                 }
                 else
@@ -84,15 +70,7 @@ namespace SkemaSystem.Services
                         null,
                         null
                     };
-                    cells[((int)block.Date.Date.DayOfWeek) - 1] = block;/*new LessonBlock()
-                    {
-                        Id = block.Id,
-                        BlockNumber = block.BlockNumber,
-                        Room = block.Room,
-                        Subject = block.Subject,
-                        Teacher = block.Teacher,
-                        Date = block.Date
-                    };*/
+                    cells[((int)block.Date.Date.DayOfWeek) - 1] = block;
                     dic.Add(key, cells);
                 }
             }
@@ -129,7 +107,6 @@ namespace SkemaSystem.Services
             {
                 // block already existing on current scheme
                 throw new Exception("Der ligger allerede en blok på denne plads.");
-                //return true;
             }
 
             // find blocks in all schemes, where date, blocknumber and teacher match with lessonBlock
@@ -138,7 +115,6 @@ namespace SkemaSystem.Services
             // if we found any block, conflict
             if (blocks.Count() > 0)
             {
-                //return true;
                 Scheme conflictingScheme = schemes.First(s => s.LessonBlocks.Contains(blocks.First()));
                 throw new Exception("Underviseren er ikke ledig på det pågældende tidspunkt. (" + ((conflictingScheme.ClassModel != null) ? conflictingScheme.ClassModel.ClassName : conflictingScheme.Name) + ")");
             }
@@ -155,16 +131,6 @@ namespace SkemaSystem.Services
                     throw new Exception("Denne blok konflikter med en eller flere af klassens valgfag.");
                 }
             }
-
-
-            /*blocks = schemes.SelectMany(s => s.LessonBlocks).Where(l => l.Date.Equals(lessonBlock.Date) && l.BlockNumber.Equals(lessonBlock.BlockNumber) && l.Room.Id.Equals(lessonBlock.Room.Id));
-
-            // if we found any block, conflict
-            if (blocks.Count() > 0)
-            {
-                //return true;
-                throw new Exception("Lokalet er ikke ledigt på det pågældende tidspunkt.");
-            }*/
 
             if (!IsRoomAvailable(schemes, lessonBlock, null))
             {
@@ -197,7 +163,6 @@ namespace SkemaSystem.Services
             Room room = rooms.Single(r => r.Id.Equals(roomId));
 
             SubjectDistBlock sdb = scheme.SubjectDistBlocks.Single(s => s.Id.Equals(subjectId));
-            //SubjectDistBlock sdb = scheme.SubjectDistBlocks.Single(s => s.Subject.Id.Equals(subjectId));
 
             Subject subject = sdb.Subject;
 
@@ -208,8 +173,7 @@ namespace SkemaSystem.Services
                 BlockNumber = blockNumber,
                 Date = date.Date,
                 Room = room,
-                Subject = sdb/*, subject
-                Teacher = teacher*/
+                Subject = sdb
             };
 
             bool conflicting = SchedulingService.IsConflicting(scheme, lesson, rooms, schemes); // throws expcetion if conflicting
@@ -248,7 +212,7 @@ namespace SkemaSystem.Services
 
                 if (!SchedulingService.IsRoomAvailable(schemes, block, scheme))
                 {
-                    return false;// Json(new { message = "Lokalet er ikke ledigt på det pågældende tidspunkt." });
+                    return false;
                 }
             }
 

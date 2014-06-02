@@ -26,13 +26,11 @@ namespace SkemaSystem.Controllers
             return RedirectToAction("Index", new { education = education.Name.ToLower() });
         }
 
-        // GET: /Room/
         public ActionResult Index()
         {
             return View(db.Rooms.ToList());
         }
 
-        // GET: /Room/Details/5
         [Route("details/{id?}")]
         public ActionResult Details(int? id)
         {
@@ -48,16 +46,12 @@ namespace SkemaSystem.Controllers
             return View(room);
         }
 
-        // GET: /Room/Create
         [Route("create")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: /Room/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [ValidateAntiForgeryToken]
         [Route("create"), HttpPost]
         public ActionResult Create([Bind(Include="ID,RoomName")] Room room)
@@ -72,7 +66,6 @@ namespace SkemaSystem.Controllers
             return View(room);
         }
 
-        // GET: /Room/Edit/5
         [Route("edit/{id?}")]
         public ActionResult Edit(int? id)
         {
@@ -88,9 +81,6 @@ namespace SkemaSystem.Controllers
             return View(room);
         }
 
-        // POST: /Room/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("edit/{id?}")]
@@ -105,7 +95,6 @@ namespace SkemaSystem.Controllers
             return View(room);
         }
 
-        // GET: /Room/Delete/5
         [Route("delete/{id?}")]
         public ActionResult Delete(int? id)
         {
@@ -121,7 +110,6 @@ namespace SkemaSystem.Controllers
             return View(room);
         }
 
-        // POST: /Room/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Route("delete/{id?}")]

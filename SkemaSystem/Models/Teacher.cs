@@ -3,14 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
-using SkemaSystem.Models.Enum;
 using System.Security.Principal;
-using SkemaSystem.Models.Interfaces;
+//using SkemaSystem.Models.Interfaces;
 
 namespace SkemaSystem.Models
 {
     // http://stackoverflow.com/questions/1064271/asp-net-mvc-set-custom-iidentity-or-iprincipal
     // http://www.codeproject.com/Articles/578374/AplusBeginner-splusTutorialplusonplusCustomplusF
+
+    public interface ITeacherPrincipal : IPrincipal
+    {
+
+    }
+
+    public enum UserRoles
+    {
+        Annonym, Admin, Teacher, Master
+    }
 
     public class Teacher : ITeacherPrincipal
     {

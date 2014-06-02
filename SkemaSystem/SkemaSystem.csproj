@@ -176,7 +176,6 @@
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Helpers\SimpleCheckbox.cs" />
     <Compile Include="Helpers\UserHelpers.cs" />
-    <Compile Include="HttpModules\SuppressFormsAuthenticationRedirectModule.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ClassModel.cs" />
     <Compile Include="Models\ConflictScheme.cs" />
@@ -186,9 +185,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Enum\UserRoles.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\Interfaces\ITeacherPrincipal.cs" />
     <Compile Include="Models\LessonBlock.cs" />
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\Scheme.cs" />
@@ -208,14 +205,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ConflictService.cs" />
     <Compile Include="Services\SchedulingService.cs" />
-    <Compile Include="Service\Service.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ClassDiagram1.cd" />
     <None Include="Content\jquery.contextMenu.less" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.less" />
     <Content Include="Content\Bootstrap\alerts.less" />
@@ -347,11 +341,7 @@
     <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
-    <None Include="Project_Readme.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

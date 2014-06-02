@@ -23,28 +23,17 @@ namespace SkemaSystem.Controllers
         [Route("")]
         public ActionResult Index()
         {
-            if (!IsMaster())
-            {
-                return Deny();
-            }
             return View(db.Educations.ToList());
         }
-        // GET: /Education/Details/5
-        //[Route("{education}")]
+
         [Route("details/{id?}")]
-        //public ActionResult Details(string name)
         public ActionResult Details(int? id)
         {
-            if (!IsMaster())
-            {
-                return Deny();
-            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             
-            //Education _education = db.Educations.FirstOrDefault(e => e.Name.Equals(name));
             Education _education = db.Educations.Find(id);
             if (_education == null)
             {
@@ -53,28 +42,16 @@ namespace SkemaSystem.Controllers
             return View(_education);
         }
 
-        // GET: /Education/Create
         [Route("create")]
         public ActionResult Create()
         {
-            if (!IsMaster())
-            {
-                return Deny();
-            }
             return View();
         }
 
-        // POST: /Education/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [ValidateAntiForgeryToken]
         [Route("create"), HttpPost]
         public ActionResult Create([Bind(Include="Id,Name,NumberOfSemesters")] Education education)
         {
-            if (!IsMaster())
-            {
-                return Deny();
-            }
             if (ModelState.IsValid && CheckIfNameIsAvailable(education.Name) && CheckIfIdIsAvailable(education.Id))
             {
                 db.Educations.Add(education);
@@ -85,14 +62,9 @@ namespace SkemaSystem.Controllers
             return View(education);
         }
 
-        // GET: /Education/Edit/5
         [Route("edit/{id?}")]
         public ActionResult Edit(int? id)
         {
-            if (!IsMaster())
-            {
-                return Deny();
-            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -105,18 +77,11 @@ namespace SkemaSystem.Controllers
             return View(_education);
         }
 
-        // POST: /Education/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("edit/{id}")]
         public ActionResult Edit([Bind(Include="Id,Name,NumberOfSemesters")] Education education)
         {
-            if (!IsMaster())
-            {
-                return Deny();
-            }
             //needs to check if the new name is already used
             if (ModelState.IsValid)
             {
@@ -128,15 +93,10 @@ namespace SkemaSystem.Controllers
         }
 
 
-        // GET
         [HttpGet]
         [Route("teachers/{id?}")]
         public ActionResult ModifyTeachers(int? id)
         {
-            if (!IsMaster())
-            {
-                return Deny();
-            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -159,15 +119,10 @@ namespace SkemaSystem.Controllers
 
         }
 
-        //POST: 
         [HttpPost]
         [Route("teachers/{id}")]
         public ActionResult ModifyTeachers([Bind(Include = "Education,PostedTeachers")] EducationViewModel result)
         {
-            if (!IsMaster())
-            {
-                return Deny();
-            }
             Education education = result.Education;
             List<Teacher> _teachers = GetTeachers(result.PostedTeachers);
 
@@ -188,15 +143,10 @@ namespace SkemaSystem.Controllers
             return RedirectToAction("index");
         }
 
-        // GET
         [HttpGet]
         [Route("rooms/{id?}")]
         public ActionResult ModifyRooms(int? id)
         {
-            if (!IsMaster())
-            {
-                return Deny();
-            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -219,15 +169,10 @@ namespace SkemaSystem.Controllers
 
         }
 
-        //POST
         [HttpPost]
         [Route("rooms/{id}")]
         public ActionResult ModifyRooms([Bind(Include = "Education,PostedRooms")] EducationViewModel result)
         {
-            if (!IsMaster())
-            {
-                return Deny();
-            }
             Education education = result.Education;
             List<Room> _rooms = GetRooms(result.PostedRooms);
 
@@ -248,19 +193,13 @@ namespace SkemaSystem.Controllers
             return RedirectToAction("index");
         }
 
-        // GET: /Education/Delete/5
         [Route("delete/{id?}")]
         public ActionResult Delete(int? id)
         {
-            if (!IsMaster())
-            {
-                return Deny();
-            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Education education = db.Educations.Find(id);
             Education _education = db.Educations.Find(id);
             if (_education == null)
             {
@@ -269,16 +208,11 @@ namespace SkemaSystem.Controllers
             return View(_education);
         }
 
-        // POST: /Education/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Route("delete/{id}")]
         public ActionResult DeleteConfirmed(int id)
         {
-            if (!IsMaster())
-            {
-                return Deny();
-            }
             Education _education = db.Educations.Find(id);
             db.Educations.Remove(_education);
             db.SaveChanges();
